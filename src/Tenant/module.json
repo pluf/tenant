@@ -1,0 +1,14 @@
+{
+	"name": "Tenant",
+	"version": "2.1.9",
+	"title": "Tenant Management",
+	"permisson": [],
+	"monitor":[{
+		"bean": "tenant",
+		"property": "storage",
+		"title": "Storage size",
+		"description": "Storage size of the tenant.",
+		"function": "Tenant_Monitor::Storage",
+		"level": 1
+	}]
+}

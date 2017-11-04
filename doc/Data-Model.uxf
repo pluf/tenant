@@ -66,16 +66,17 @@
     <id>UMLClass</id>
     <coordinates>
       <x>110</x>
-      <y>320</y>
+      <y>310</y>
       <w>210</w>
-      <h>160</h>
+      <h>170</h>
     </coordinates>
     <panel_attributes>Tenant::Invoice
 --
 +id: long
++title: string
 +description: string
-+due_date: date
 +amount: integer
++due_date: date
 +discount_code: string
 +status: string
 +creation_dtime: datetime
@@ -139,16 +140,15 @@ requester</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>690</x>
-      <y>330</y>
+      <y>350</y>
       <w>210</w>
-      <h>150</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>Tenant::Comment
 --
 +id: long
 +title: string
 +description: string
-+status: string
 +creation_dtime: datetime
 +modif_dtime: datetime</panel_attributes>
     <additional_attributes/>
@@ -173,13 +173,13 @@ author</panel_attributes>
       <x>780</x>
       <y>190</y>
       <w>90</w>
-      <h>160</h>
+      <h>180</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=*
 m2=1
 comments</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -201,12 +201,12 @@ tickets</panel_attributes>
       <x>200</x>
       <y>200</y>
       <w>80</w>
-      <h>140</h>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=*
 m2=1
 invoices</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

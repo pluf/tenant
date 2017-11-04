@@ -30,8 +30,8 @@ class Tenant_Views extends Pluf_Views
 
     /**
      *
-     * @param unknown_type $request            
-     * @param unknown_type $match            
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
      */
     public static function current ($request, $match)
     {
@@ -40,8 +40,8 @@ class Tenant_Views extends Pluf_Views
 
     /**
      *
-     * @param unknown_type $request            
-     * @param unknown_type $match            
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
      */
     public static function update ($request, $match)
     {
@@ -53,8 +53,8 @@ class Tenant_Views extends Pluf_Views
 
     /**
      *
-     * @param unknown_type $request            
-     * @param unknown_type $match            
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
      */
     public static function get ($request, $match)
     {
@@ -63,8 +63,8 @@ class Tenant_Views extends Pluf_Views
 
     /**
      *
-     * @param unknown_type $request            
-     * @param unknown_type $match            
+     * @param Pluf_HTTP_Request $request            
+     * @param array $match            
      */
     public function delete ($request, $match)
     {

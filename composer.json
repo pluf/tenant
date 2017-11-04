@@ -3,6 +3,7 @@
 	"description" : "A pluf module to manage current tenant",
 	"type" : "library",
 	"license" : "MIT",
+	"version" : "2.1.9",
 	"authors" : [{
 			"name" : "Mostafa Barmshory",
 			"email" : "mostafa.barmshory@dpq.co.ir",

@@ -50,9 +50,19 @@ class Tenant_Comment extends Pluf_Model
                 'type' => 'Pluf_DB_Field_Foreignkey',
                 'model' => 'Pluf_User',
                 'blank' => false,
+                'is_null' => false,
                 'editable' => false,
                 'readable' => true,
-                'relate_name' => 'user'
+                'relate_name' => 'author'
+            ),
+            'ticket' => array(
+                'type' => 'Pluf_DB_Field_Foreignkey',
+                'model' => 'Tenant_Ticket',
+                'blank' => false,
+                'is_null' => false,
+                'editable' => false,
+                'readable' => true,
+                'relate_name' => 'ticket'
             )
         );
         

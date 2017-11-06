@@ -1,7 +1,7 @@
 <?php
 use function Composer\Autoload\includeFile;
 
-define ( "MODULE_BASE", dirname ( __FILE__ ) . '/../../src/Tenant' );
+// define ( "MODULE_BASE", dirname ( __FILE__ ) . '/../../src/Tenant' );
 
 $cfg = array();
 $cfg['test'] = false;

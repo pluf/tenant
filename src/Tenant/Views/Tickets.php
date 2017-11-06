@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -16,30 +17,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-return array(
-    array(
-        'regex' => '#^/current$#',
-        'model' => 'Tenant_Views',
-        'method' => 'current',
-        'http-method' => 'GET',
-        'precond' => array()
-    ),
-    array(
-        'regex' => '#^/current$#',
-        'model' => 'Tenant_Views',
-        'method' => 'update',
-        'http-method' => 'POST',
-        'precond' => array(
-            'Pluf_Precondition::ownerRequired'
-        )
-    ),
-    array(
-        'regex' => '#^/current$#',
-        'model' => 'Tenant_Views',
-        'method' => 'delete',
-        'http-method' => 'DELETE',
-        'precond' => array(
-            'Pluf_Precondition::ownerRequired'
-        )
-    )
-);
+
+/**
+ * tickets view
+ *
+ * Manage Comments in system
+ *
+ * @author maso<mostafa.barmshory@dpq.co.ir>
+ */
+class Tenant_Views_Tckets
+{
+
+    /**
+     * Get a ticket
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public function get($request, $match)
+    {}
+
+    /**
+     * Create a new ticket
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public function create($request, $match)
+    {}
+
+    /**
+     * Delete a ticket
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public function delete($request, $match)
+    {}
+
+    /**
+     * Update a ticket
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public function update($request, $match)
+    {}
+}

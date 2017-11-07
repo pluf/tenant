@@ -19,48 +19,10 @@
  */
 
 /**
- * tickets view
- *
- * Manage Comments in system
+ * Comments view
  *
  * @author maso<mostafa.barmshory@dpq.co.ir>
  */
-class Tenant_Views_Tckets
+class Tenant_Views_Tickets
 {
-
-    /**
-     * Get a ticket
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function get($request, $match)
-    {}
-
-    /**
-     * Create a new ticket
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function create($request, $match)
-    {}
-
-    /**
-     * Delete a ticket
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function delete($request, $match)
-    {}
-
-    /**
-     * Update a ticket
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function update($request, $match)
-    {}
 }

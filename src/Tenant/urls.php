@@ -50,47 +50,83 @@ return array(
      */
     array(
         'regex' => '#^/current/ticket/find$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'find',
+        'model' => 'Pluf_Views',
+        'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Ticket',
+            'listFilters' => array(
+                'status',
+                'type',
+                'requester'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'subject',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'status',
+                'type',
+                'modif_dtime',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'id',
+                'DESC'
+            )
         )
     ),
     array(
         'regex' => '#^/current/ticket/new$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'create',
+        'model' => 'Pluf_Views',
+        'method' => 'createObject',
         'http-method' => 'POST',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'get',
+        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'update',
+        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'updateObject',
         'http-method' => 'POST',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'delete',
+        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'deleteObject',
         'http-method' => 'DELETE',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Ticket'
         )
     ),
     /*

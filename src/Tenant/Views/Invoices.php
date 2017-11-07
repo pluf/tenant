@@ -21,46 +21,8 @@
 /**
  * Invoices view
  *
- * Manage Comments in system
- *
  * @author maso<mostafa.barmshory@dpq.co.ir>
  */
 class Tenant_Views_Invoices
 {
-
-    /**
-     * Get a Invoice
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function get($request, $match)
-    {}
-
-    /**
-     * Create a new Invoice
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function create($request, $match)
-    {}
-
-    /**
-     * Delete a Invoice
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function delete($request, $match)
-    {}
-
-    /**
-     * Update a Invoice
-     *
-     * @param Pluf_HTTP_Request $request
-     * @param array $match
-     */
-    public function update($request, $match)
-    {}
 }

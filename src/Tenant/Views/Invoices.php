@@ -25,4 +25,5 @@
  */
 class Tenant_Views_Invoices
 {
+    // TODO: maso, 2017: adding payment
 }

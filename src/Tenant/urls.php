@@ -133,48 +133,94 @@ return array(
      * Comments of ticket
      */
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/find$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'findComments',
+        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/find$#',
+        'model' => 'Pluf_Views',
+        'method' => 'findManyToOne',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Comment',
+            'parent' => 'Tenant_Ticket',
+            'parentKey' => 'ticket',
+            'listFilters' => array(
+                'status',
+                'type',
+                'requester'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'subject',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'status',
+                'type',
+                'modif_dtime',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'id',
+                'DESC'
+            )
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/new$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'createComments',
+        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/new$#',
+        'model' => 'Pluf_Views',
+        'method' => 'createManyToOne',
         'http-method' => 'POST',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Comment',
+            'parent' => 'Tenant_Ticket',
+            'parentKey' => 'ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'get',
+        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'getManyToOne',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Comment',
+            'parent' => 'Tenant_Ticket',
+            'parentKey' => 'ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'get',
+        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'updateManyToOne',
         'http-method' => 'POST',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Comment',
+            'parent' => 'Tenant_Ticket',
+            'parentKey' => 'ticket'
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
-        'model' => 'Tenant_Views_Ticket',
-        'method' => 'get',
+        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'deleteManyToOne',
         'http-method' => 'DELETE',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Comment',
+            'parent' => 'Tenant_Ticket',
+            'parentKey' => 'ticket'
         )
     ),
     

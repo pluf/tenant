@@ -183,47 +183,47 @@ return array(
      */    
     array(
         'regex' => '#^/current/invoice/find$#',
-        'model' => 'Tenant_Views_Invoices',
-        'method' => 'find',
+        'model' => 'Pluf_Views',
+        'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Invoice',
+            'listFilters' => array(
+                'id',
+                'status'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'title',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'status',
+                'amount',
+                'due_dtiem',
+                'modif_dtime',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'id',
+                'DESC'
+            )
         )
     ),
     array(
-        'regex' => '#^/current/invoice/new$#',
-        'model' => 'Tenant_Views_Invoices',
-        'method' => 'create',
-        'http-method' => 'POST',
-        'precond' => array(
-            'Pluf_Precondition::ownerRequired'
-        )
-    ),
-    array(
-        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Invoices',
-        'method' => 'get',
+        'regex' => '#^/current/invoice/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
             'Pluf_Precondition::ownerRequired'
-        )
-    ),
-    array(
-        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Invoices',
-        'method' => 'update',
-        'http-method' => 'POST',
-        'precond' => array(
-            'Pluf_Precondition::ownerRequired'
-        )
-    ),
-    array(
-        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
-        'model' => 'Tenant_Views_Invoices',
-        'method' => 'delete',
-        'http-method' => 'DELETE',
-        'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Invoice'
         )
     )
 );

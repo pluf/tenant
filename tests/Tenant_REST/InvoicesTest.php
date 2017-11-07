@@ -24,9 +24,9 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Tenant_REST_TenantTest extends TestCase
+class Tenant_REST_InvoicesTest extends TestCase
 {
-
+    
     /**
      * @beforeClass
      */
@@ -66,7 +66,6 @@ class Tenant_REST_TenantTest extends TestCase
      */
     public static function removeDatabses()
     {
-        Pluf::start(dirname(__FILE__) . '/../conf/config-01.php');
         $m = new Pluf_Migration(array(
             'Pluf',
             'Tenant'
@@ -81,7 +80,7 @@ class Tenant_REST_TenantTest extends TestCase
      *
      * @test
      */
-    public function testDefaultTenant()
+    public function testFindInvoices()
     {
         $client = new Test_Client(array(
             array(
@@ -91,9 +90,10 @@ class Tenant_REST_TenantTest extends TestCase
                 'sub' => include 'Tenant/urls.php'
             )
         ));
-        $response = $client->get('/api/tenant/current');
+        $response = $client->get('/api/tenant/current/invoice/find');
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
     }
+
 }
 

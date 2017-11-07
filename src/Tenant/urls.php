@@ -17,6 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 return array(
+    /*
+     * Tenant
+     */
     array(
         'regex' => '#^/current$#',
         'model' => 'Tenant_Views',
@@ -36,6 +39,151 @@ return array(
     array(
         'regex' => '#^/current$#',
         'model' => 'Tenant_Views',
+        'method' => 'delete',
+        'http-method' => 'DELETE',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    /*
+     * Ticket
+     */
+    array(
+        'regex' => '#^/current/ticket/find$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'find',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/new$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'create',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'update',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'delete',
+        'http-method' => 'DELETE',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    /*
+     * Comments of ticket
+     */
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/find$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'findComments',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/new$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'createComments',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'get',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/ticket/(?P<tecket_id>\d+)/comment/(?P<comment_id>\d+)$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'get',
+        'http-method' => 'DELETE',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    
+    /*
+     * invoices
+     */    
+    array(
+        'regex' => '#^/current/invoice/find$#',
+        'model' => 'Tenant_Views_Invoices',
+        'method' => 'find',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/invoice/new$#',
+        'model' => 'Tenant_Views_Invoices',
+        'method' => 'create',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Invoices',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Invoices',
+        'method' => 'update',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/current/invoice/(?P<tecket_id>\d+)$#',
+        'model' => 'Tenant_Views_Invoices',
         'method' => 'delete',
         'http-method' => 'DELETE',
         'precond' => array(

@@ -21,14 +21,14 @@ return array(
      * Tenant
      */
     array(
-        'regex' => '#^/current$#',
+        'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'current',
         'http-method' => 'GET',
         'precond' => array()
     ),
     array(
-        'regex' => '#^/current$#',
+        'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'update',
         'http-method' => 'POST',
@@ -37,7 +37,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current$#',
+        'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'delete',
         'http-method' => 'DELETE',
@@ -49,7 +49,7 @@ return array(
      * Ticket
      */
     array(
-        'regex' => '#^/current/ticket/find$#',
+        'regex' => '#^/ticket/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findObject',
         'http-method' => 'GET',
@@ -82,7 +82,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/new$#',
+        'regex' => '#^/ticket/new$#',
         'model' => 'Pluf_Views',
         'method' => 'createObject',
         'http-method' => 'POST',
@@ -94,7 +94,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getObject',
         'http-method' => 'GET',
@@ -106,7 +106,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'updateObject',
         'http-method' => 'POST',
@@ -118,7 +118,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'deleteObject',
         'http-method' => 'DELETE',
@@ -133,7 +133,7 @@ return array(
      * Comments of ticket
      */
     array(
-        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/find$#',
+        'regex' => '#^/ticket/(?P<parentId>\d+)/comment/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findManyToOne',
         'http-method' => 'GET',
@@ -168,7 +168,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/new$#',
+        'regex' => '#^/ticket/(?P<parentId>\d+)/comment/new$#',
         'model' => 'Pluf_Views',
         'method' => 'createManyToOne',
         'http-method' => 'POST',
@@ -182,7 +182,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getManyToOne',
         'http-method' => 'GET',
@@ -196,7 +196,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'updateManyToOne',
         'http-method' => 'POST',
@@ -210,7 +210,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
+        'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'deleteManyToOne',
         'http-method' => 'DELETE',
@@ -228,7 +228,7 @@ return array(
      * invoices
      */    
     array(
-        'regex' => '#^/current/invoice/find$#',
+        'regex' => '#^/invoice/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findObject',
         'http-method' => 'GET',
@@ -261,7 +261,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/current/invoice/(?P<modelId>\d+)$#',
+        'regex' => '#^/invoice/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getObject',
         'http-method' => 'GET',

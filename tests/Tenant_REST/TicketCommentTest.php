@@ -126,7 +126,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->create();
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -183,7 +183,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $c->create();
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -242,7 +242,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $c->create();
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/' . $c->id);
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/' . $c->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponseAsModel($response);
@@ -294,7 +294,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/current/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -302,7 +302,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -355,7 +355,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/current/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -363,14 +363,14 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // update
-        $response = $client->post('/api/tenant/current/ticket/' . $t->id . '/comment/' . $tc['id'], array(
+        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/' . $tc['id'], array(
             'title' => 'test new title',
             'description' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200);
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -423,7 +423,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/current/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -431,11 +431,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // update
-        $response = $client->delete('/api/tenant/current/ticket/' . $t->id . '/comment/' . $tc['id']);
+        $response = $client->delete('/api/tenant/ticket/' . $t->id . '/comment/' . $tc['id']);
         Test_Assert::assertResponseStatusCode($response, 200);
         
         // find comments
-        $response = $client->get('/api/tenant/current/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);

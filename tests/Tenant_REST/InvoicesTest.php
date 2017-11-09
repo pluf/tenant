@@ -112,7 +112,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // find
-        $response = $client->get('/api/tenant/current/invoice/find');
+        $response = $client->get('/api/tenant/invoice/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -156,7 +156,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         $i->create();
         
         // find
-        $response = $client->get('/api/tenant/current/invoice/find');
+        $response = $client->get('/api/tenant/invoice/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -203,7 +203,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         $i->create();
         
         // find
-        $response = $client->get('/api/tenant/current/invoice/'. $i->id);
+        $response = $client->get('/api/tenant/invoice/'. $i->id);
         Test_Assert::assertResponseNotNull($response);
         Test_Assert::assertResponseStatusCode($response, 200);
         Test_Assert::assertResponseNotAnonymousModel($response, 'Invoice not foudn');

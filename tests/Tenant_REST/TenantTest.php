@@ -100,7 +100,7 @@ class Tenant_REST_TenantTest extends TestCase
                 'sub' => include 'Tenant/urls.php'
             )
         ));
-        $response = $client->get('/api/tenant/current');
+        $response = $client->get('/api/tenant/tenant/current');
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
     }

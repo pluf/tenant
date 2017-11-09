@@ -2,6 +2,11 @@
 	"name": "Tenant",
 	"version": "2.1.9",
 	"title": "Tenant Management",
+	"model": [
+		"Tenant_Invoice",
+		"Tenant_Ticket",
+		"Tenant_Comment"
+	],
 	"permisson": [],
 	"monitor":[{
 		"bean": "tenant",

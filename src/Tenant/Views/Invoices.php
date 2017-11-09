@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -16,23 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-return array(
-    'Tenant_Invoice' => array(
-        'relate_to' => array(
-            'Bank_Receipt'
-        )
-    ),
-    'Tenant_Ticket' => array(
-        'relate_to' => array(
-            'Pluf_User'
-        ),
-        'relate_to_many' => array(
-            'Tenant_Comment'
-        )
-    ),
-    'Tenant_Comment' => array(
-        'relate_to' => array(
-            'Pluf_User'
-        )
-    )
-);
+
+/**
+ * Invoices view
+ *
+ * @author maso<mostafa.barmshory@dpq.co.ir>
+ */
+class Tenant_Views_Invoices
+{
+    // TODO: maso, 2017: adding payment
+}

@@ -36,7 +36,7 @@ class Tenant_Invoice extends Pluf_Model
                 'blank' => false,
                 'is_null' => false
             ),
-            'due_dtiem' => array(
+            'due_dtime' => array(
                 'type' => 'Pluf_DB_Field_Date',
                 'blank' => false,
                 'is_null' => false

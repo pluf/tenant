@@ -8,6 +8,5 @@
 
 
 [![Build Status](https://travis-ci.org/pluf/tenant.svg?branch=develop)](https://travis-ci.org/pluf/tenant)
-[![Coverage Status](https://coveralls.io/repos/github/pluf/supertenant/badge.svg?branch=develop)](https://coveralls.io/github/pluf/supertenant?branch=develop)
 
 It is a Pluf module to manage current tenant.

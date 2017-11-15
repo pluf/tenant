@@ -46,7 +46,7 @@ class Tenant_Views extends Pluf_Views
     public static function update ($request, $match)
     {
         $model = $request->tenant;
-        $form = Pluf_Shortcuts_GetFormForModel($model, $request->REQUEST, 
+        $form = Pluf_Shortcuts_GetFormForUpdateModel($model, $request->REQUEST, 
                 array());
         return new Pluf_HTTP_Response_Json($form->save());
     }

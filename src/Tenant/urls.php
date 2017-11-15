@@ -163,7 +163,7 @@ return array(
     ),
     array( // Create
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/new$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'createManyToOne',
         'http-method' => 'POST',
         'precond' => array(

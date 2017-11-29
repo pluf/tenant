@@ -41,6 +41,13 @@ class Tenant_Views_Invoice
         $backend = $request->REQUEST['backend'];
         $price = $invoice->amount;
         
+        // Check backend
+        $be = Pluf::factory('Tenant_BankBackend')->getOne('id=' . $backend);
+        $mainTenant = Tenant_Shortcuts_GetMainTenant();
+        if($be->id !== $mainTenant->id){
+            throw new Pluf_Exception('Invalid backend. Backend should be blong to main tenant.');
+        }
+        
         // check for discount
         if (isset($request->REQUEST['discount_code'])) {
             $discountCode = $request->REQUEST['discount_code'];
@@ -60,7 +67,7 @@ class Tenant_Views_Invoice
             'backend' => $backend
         );
         
-        $payment = Bank_Service::create($receiptData, 'tenant-invoice', $invoice->id);
+        $payment = Tenant_BankService::create($receiptData, 'tenant-invoice', $invoice->id);
         
         $invoice->payment = $payment;
         $invoice->update();

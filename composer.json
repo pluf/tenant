@@ -23,8 +23,7 @@
 		"pluf/bank" : "^2.1.0"
 	},
 	"require-dev" : {
-		"pluf/test" : "^2.1.0",
-		"pluf/collection" : "^2.1.0"
+		"pluf/test" : "^2.1.0"
 	},
 	"include-path" : [
 		"src/"

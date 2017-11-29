@@ -74,7 +74,7 @@ class Tenant_Invoice extends Pluf_Model
             // relations
             'payment' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Bank_Receipt',
+                'model' => 'Tenant_BankReceipt',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true,
@@ -136,9 +136,9 @@ class Tenant_Invoice extends Pluf_Model
         }
         // It is first time to update status of invoice
         // Note: Hadi - 1396-04: time is base on day
-        $day = Setting_Service::get(Tenant_Constants::SETTING_KEY_INVOICE_VALID_DAY, '30');
-        $expiryDay = ' +' . $day . ' day';
-        $this->expiry = date('Y-m-d H:i:s', strtotime($expiryDay));
+//         $day = Setting_Service::get(Tenant_Constants::SETTING_KEY_INVOICE_VALID_DAY, '30');
+//         $expiryDay = ' +' . $day . ' day';
+//         $this->expiry = date('Y-m-d H:i:s', strtotime($expiryDay));
         $this->status = $status;
         $this->update();
     }

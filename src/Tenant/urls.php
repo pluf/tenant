@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+Pluf::loadFunction('Tenant_Shortcuts_GetMainTenant');
+
 return array(
-    /*
-     * Tenant
-     */
-    array(
+    // **************************************************************** Current Tenant
+    array( // Get
         'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'current',
         'http-method' => 'GET',
         'precond' => array()
     ),
-    array(
+    array( // Update
         'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'update',
@@ -36,7 +36,7 @@ return array(
             'Pluf_Precondition::ownerRequired'
         )
     ),
-    array(
+    array( // Delete
         'regex' => '#^/tenant/current$#',
         'model' => 'Tenant_Views',
         'method' => 'delete',
@@ -45,10 +45,8 @@ return array(
             'Pluf_Precondition::ownerRequired'
         )
     ),
-    /*
-     * Ticket
-     */
-    array(
+    // **************************************************************** Ticket
+    array( // Find
         'regex' => '#^/ticket/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findObject',
@@ -81,7 +79,7 @@ return array(
             )
         )
     ),
-    array(
+    array( // Create
         'regex' => '#^/ticket/new$#',
         'model' => 'Pluf_Views',
         'method' => 'createObject',
@@ -93,7 +91,7 @@ return array(
             'model' => 'Tenant_Ticket'
         )
     ),
-    array(
+    array( // Get info
         'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getObject',
@@ -105,7 +103,7 @@ return array(
             'model' => 'Tenant_Ticket'
         )
     ),
-    array(
+    array( // Update
         'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'updateObject',
@@ -117,7 +115,7 @@ return array(
             'model' => 'Tenant_Ticket'
         )
     ),
-    array(
+    array( // Delete
         'regex' => '#^/ticket/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'deleteObject',
@@ -129,10 +127,8 @@ return array(
             'model' => 'Tenant_Ticket'
         )
     ),
-    /*
-     * Comments of ticket
-     */
-    array(
+    // **************************************************************** Comments of ticket
+    array( // Find
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findManyToOne',
@@ -167,9 +163,9 @@ return array(
             )
         )
     ),
-    array(
+    array( // Create
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/new$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'createManyToOne',
         'http-method' => 'POST',
         'precond' => array(
@@ -181,7 +177,7 @@ return array(
             'parentKey' => 'ticket'
         )
     ),
-    array(
+    array( // Get
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getManyToOne',
@@ -195,7 +191,7 @@ return array(
             'parentKey' => 'ticket'
         )
     ),
-    array(
+    array( // Update
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'updateManyToOne',
@@ -209,7 +205,7 @@ return array(
             'parentKey' => 'ticket'
         )
     ),
-    array(
+    array( // Delete
         'regex' => '#^/ticket/(?P<parentId>\d+)/comment/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'deleteManyToOne',
@@ -224,10 +220,8 @@ return array(
         )
     ),
     
-    /*
-     * invoices
-     */    
-    array(
+    // **************************************************************** Invoices
+    array( // Find
         'regex' => '#^/invoice/find$#',
         'model' => 'Pluf_Views',
         'method' => 'findObject',
@@ -260,7 +254,7 @@ return array(
             )
         )
     ),
-    array(
+    array( // Get
         'regex' => '#^/invoice/(?P<modelId>\d+)$#',
         'model' => 'Pluf_Views',
         'method' => 'getObject',
@@ -270,6 +264,131 @@ return array(
         ),
         'params' => array(
             'model' => 'Tenant_Invoice'
+        )
+    ),
+    array( // pay invoice for tenant
+        'regex' => '#^/invoice/(?P<modelId>\d+)/pay$#',
+        'model' => 'Tenant_Views_Invoice',
+        'method' => 'payment',
+        'http-method' => 'POST',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    array( // check payment state
+        'regex' => '#^/invoice/(?P<modelId>\d+)/state$#',
+        'model' => 'Tenant_Views_Invoice',
+        'method' => 'checkPaymentState',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        )
+    ),
+    // **************************************************************** Bank Backend
+    array( // Find
+        'regex' => '#^/backend/find$#',
+        'model' => 'Pluf_Views',
+        'method' => 'findObject',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::loginRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_BankBackend',
+            'model_view' => 'global',
+            'sql' => new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id),
+            'listFilters' => array(
+                'id',
+                'title',
+                'home',
+                'engine'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'title',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'title',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'creation_dtime',
+                'DESC'
+            )
+        )
+    ),
+    array( // Get
+        'regex' => '#^/backend/(?P<modelId>\d+)$#',
+        'model' => 'Tenant_Views_BankBackend',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(),
+        'params' => array(
+            'model' => 'Tenant_BankBackend'
+        )
+    ),
+    // **************************************************************** Receipt
+    array( // Find
+        'regex' => '#^/receipt/find$#',
+        'model' => 'Pluf_Views',
+        'method' => 'findObject',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Bank_Receipt',
+            'sql' => new Pluf_SQL('owner_class="tenant-invoice"'),
+            'listFilters' => array(
+                'id',
+                'title',
+                'secure_id',
+                'backend'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'title',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'title',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'creation_dtime',
+                'DESC'
+            )
+        )
+    ),
+    // array( // Create
+    // 'regex' => '#^/receipt/new$#',
+    // 'model' => 'Bank_Views_Receipt',
+    // 'method' => 'create',
+    // 'http-method' => array(
+    // 'POST'
+    // )
+    // ),
+    array( // Get
+        'regex' => '#^/receipt/(?P<modelId>\d+)$#',
+        'model' => 'Pluf_Views',
+        'method' => 'getObject',
+        'http-method' => 'GET',
+        'precond' => array(
+            'Pluf_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Bank_Receipt'
+        )
+    ),
+    array( // Get (by secure id)
+        'regex' => '#^/receipt/(?P<secure_id>.+)$#',
+        'model' => 'Tenant_Views_Receipt',
+        'method' => 'getBySecureId',
+        'http-method' => array(
+            'GET'
         )
     )
 );

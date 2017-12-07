@@ -17,13 +17,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+Pluf::loadFunction('Pluf_Shortcuts_GetFormForModel');
 
 /**
  * Invoices view
  *
  * @author maso<mostafa.barmshory@dpq.co.ir>
  */
-class Tenant_Views_Invoices
+class Tenant_Views_Ticket
 {
-    // TODO: maso, 2017: adding payment
+
+    /**
+     * Create new comment
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $p
+     */
+    public function createManyToOne($request, $match)
+    {
+        $parent = Pluf_Shortcuts_GetObjectOr404('Tenant_Ticket', $match['parentId']);
+        $object = new Tenant_Comment();
+        $form = Pluf_Shortcuts_GetFormForModel($object, $request->REQUEST);
+        $object = $form->save(false);
+        $object->ticket = $parent;
+        $object->author = $request->user;
+        $object->create();
+        return $object;
+    }
 }

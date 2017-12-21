@@ -33,7 +33,7 @@ return array(
         'method' => 'update',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         )
     ),
     array( // Delete
@@ -42,7 +42,7 @@ return array(
         'method' => 'delete',
         'http-method' => 'DELETE',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         )
     ),
     // **************************************************************** Ticket
@@ -52,7 +52,7 @@ return array(
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Ticket',
@@ -85,7 +85,7 @@ return array(
         'method' => 'createObject',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Ticket'
@@ -97,7 +97,7 @@ return array(
         'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Ticket'
@@ -109,7 +109,7 @@ return array(
         'method' => 'updateObject',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Ticket'
@@ -121,7 +121,7 @@ return array(
         'method' => 'deleteObject',
         'http-method' => 'DELETE',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Ticket'
@@ -134,7 +134,7 @@ return array(
         'method' => 'findManyToOne',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Comment',
@@ -169,7 +169,7 @@ return array(
         'method' => 'createManyToOne',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Comment',
@@ -183,7 +183,7 @@ return array(
         'method' => 'getManyToOne',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Comment',
@@ -197,7 +197,7 @@ return array(
         'method' => 'updateManyToOne',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Comment',
@@ -211,7 +211,7 @@ return array(
         'method' => 'deleteManyToOne',
         'http-method' => 'DELETE',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Comment',
@@ -227,7 +227,7 @@ return array(
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Invoice',
@@ -260,7 +260,7 @@ return array(
         'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Tenant_Invoice'
@@ -272,7 +272,7 @@ return array(
         'method' => 'payment',
         'http-method' => 'POST',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         )
     ),
     array( // check payment state
@@ -281,7 +281,7 @@ return array(
         'method' => 'checkPaymentState',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         )
     ),
     // **************************************************************** Bank Backend
@@ -291,7 +291,7 @@ return array(
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::loginRequired'
+            'User_Precondition::loginRequired'
         ),
         'params' => array(
             'model' => 'Tenant_BankBackend',
@@ -336,7 +336,7 @@ return array(
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Bank_Receipt',
@@ -377,7 +377,7 @@ return array(
         'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
-            'Pluf_Precondition::ownerRequired'
+            'User_Precondition::ownerRequired'
         ),
         'params' => array(
             'model' => 'Bank_Receipt'

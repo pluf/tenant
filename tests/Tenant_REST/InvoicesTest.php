@@ -38,7 +38,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         ));
         $m->install();
         // Test user
-        $user = new Pluf_User();
+        $user = new User();
         $user->login = 'test';
         $user->first_name = 'test';
         $user->last_name = 'test';
@@ -62,12 +62,12 @@ class Tenant_REST_InvoicesTest extends TestCase
         $client = new Test_Client(array());
         $GLOBALS['_PX_request']->tenant = $tenant;
         
-        $per = new Pluf_RowPermission();
+        $per = new Role();
         $per->version = 1;
         $per->model_id = $tenant->id;
         $per->model_class = 'Pluf_Tenant';
         $per->owner_id = $user->id;
-        $per->owner_class = 'Pluf_User';
+        $per->owner_class = 'User';
         $per->create();
     }
 

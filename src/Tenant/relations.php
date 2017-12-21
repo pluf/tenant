@@ -24,7 +24,7 @@ return array(
     ),
     'Tenant_Ticket' => array(
         'relate_to' => array(
-            'Pluf_User'
+            'User'
         ),
         'relate_to_many' => array(
             'Tenant_Comment'
@@ -32,7 +32,7 @@ return array(
     ),
     'Tenant_Comment' => array(
         'relate_to' => array(
-            'Pluf_User'
+            'User'
         )
     )
 );

@@ -38,7 +38,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         ));
         $m->install();
         // Test user
-        $user = new Pluf_User();
+        $user = new User();
         $user->login = 'test';
         $user->first_name = 'test';
         $user->last_name = 'test';
@@ -67,7 +67,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $per->model_id = $tenant->id;
         $per->model_class = 'Pluf_Tenant';
         $per->owner_id = $user->id;
-        $per->owner_class = 'Pluf_User';
+        $per->owner_class = 'User';
         $per->create();
     }
 
@@ -114,7 +114,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -164,7 +164,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -223,7 +223,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -282,7 +282,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -343,7 +343,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -411,7 +411,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new Pluf_User();
+        $user = new User();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();

@@ -24,21 +24,21 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class PlufTenantSingleTest extends TestCase
+class PlufTenantSingleEmptyTest extends TestCase
 {
 
     /**
      * @before
      */
-    protected function setUp ()
+    protected function setUp()
     {
-        Pluf::start(dirname(__FILE__) . '/../conf/config.singleTenant.php');
+        Pluf::start(dirname(__FILE__) . '/../conf/config.singleEmptyTenant.php');
     }
 
     /**
      * @test
      */
-    public function testDefaultTenant ()
+    public function testDefaultTenant()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
@@ -56,7 +56,6 @@ class PlufTenantSingleTest extends TestCase
         $this->assertNotNull($desc);
     }
 
-    
     /**
      * @test
      */
@@ -70,4 +69,5 @@ class PlufTenantSingleTest extends TestCase
         $this->assertEquals(Pluf::f('upload_path'), $storage);
     }
 }
+
 

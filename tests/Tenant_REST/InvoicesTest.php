@@ -31,12 +31,28 @@ class Tenant_REST_InvoicesTest extends TestCase
      */
     public static function installApps()
     {
-        Pluf::start(dirname(__FILE__) . '/../conf/config-01.php');
+        Pluf::start(__DIR__ . '/../conf/mysql.mt.conf.php');
         $m = new Pluf_Migration(array(
             'Pluf',
+            'User',
+            'Role',
+            'Group',
             'Tenant'
         ));
         $m->install();
+        
+        
+        // Test tenant
+        $tenant = new Pluf_Tenant();
+        $tenant->domain = 'localhost';
+        $tenant->subdomain = 'www';
+        $tenant->validate = true;
+        if (true !== $tenant->create()) {
+            throw new Pluf_Exception('Faile to create new tenant');
+        }
+        
+        $m->init($tenant);
+        
         // Test user
         $user = new User();
         $user->login = 'test';
@@ -45,30 +61,17 @@ class Tenant_REST_InvoicesTest extends TestCase
         $user->email = 'toto@example.com';
         $user->setPassword('test');
         $user->active = true;
-        $user->administrator = true;
+        
+        if(!isset($GLOBALS['_PX_request'])){
+            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
+        }
+        $GLOBALS['_PX_request']->tenant= $tenant;
         if (true !== $user->create()) {
             throw new Exception();
         }
         
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'test';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $client = new Test_Client(array());
-        $GLOBALS['_PX_request']->tenant = $tenant;
-        
-        $per = new Role();
-        $per->version = 1;
-        $per->model_id = $tenant->id;
-        $per->model_class = 'Pluf_Tenant';
-        $per->owner_id = $user->id;
-        $per->owner_class = 'User';
-        $per->create();
+        $per = Role::getFromString('Pluf.owner');
+        $user->setAssoc($per);
     }
 
     /**
@@ -78,11 +81,51 @@ class Tenant_REST_InvoicesTest extends TestCase
     {
         $m = new Pluf_Migration(array(
             'Pluf',
+            'User',
+            'Role',
+            'Group',
             'Tenant'
         ));
         $m->unInstall();
     }
 
+    /**
+     * Getting invoice list
+     *
+     * @test
+     */
+    public function shouldSupportMultipleLogin()
+    {
+        $urls =array(
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^/api/tenant#',
+                'base' => '',
+                'sub' => include 'Tenant/urls.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/user#',
+                'base' => '',
+                'sub' => include 'User/urls.php'
+            )
+        );
+        
+        // login
+        for($i = 0; $i < 10; $i++){
+            $client = new Test_Client($urls);
+            $response = $client->post('/api/user/login', array(
+                'login' => 'test',
+                'password' => 'test'
+            ));
+            Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+            // Current user is valid
+            $response = $client->get('/api/user');
+            Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+            Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        }
+    }
+    
     /**
      * Getting invoice list
      *
@@ -104,12 +147,18 @@ class Tenant_REST_InvoicesTest extends TestCase
                 'sub' => include 'User/urls.php'
             )
         ));
+
         // login
         $response = $client->post('/api/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        
+        // Current user is valid
+        $response = $client->get('/api/user');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
         
         // find
         $response = $client->get('/api/tenant/invoice/find');
@@ -148,11 +197,16 @@ class Tenant_REST_InvoicesTest extends TestCase
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
+        // Current user is valid
+        $response = $client->get('/api/user');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        
         $i = new Tenant_Invoice();
         $i->title = 'test';
         $i->descscription = 'test';
         $i->amount = 1000;
-        $i->due_dtiem = gmdate('Y-m-d H:i:s');
+        $i->due_dtime = gmdate('Y-m-d H:i:s');
         $i->create();
         
         // find
@@ -199,7 +253,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         $i->title = 'test';
         $i->descscription = 'test';
         $i->amount = 1000;
-        $i->due_dtiem = gmdate('Y-m-d H:i:s');
+        $i->due_dtime = gmdate('Y-m-d H:i:s');
         $i->create();
         
         // find

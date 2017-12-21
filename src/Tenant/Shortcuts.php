@@ -2,10 +2,10 @@
 
 function Tenant_Shortcuts_GetMainTenant ()
 {
-    $subdomain = Pluf::f('tenant_default', null);
-    if($subdomain === null){
-        throw new Pluf_Exception_DoesNotExist('tenant_default is not set!');
-    }
+    $subdomain = Pluf::f('tenant_default', 'www');
+//     if($subdomain === null){
+//         throw new Pluf_Exception_DoesNotExist('tenant_default is not set!');
+//     }
     $tenant = Pluf_Tenant::bySubDomain($subdomain);
     if ($tenant == null || $tenant->id <= 0) {
         throw new Pluf_Exception_DoesNotExist(

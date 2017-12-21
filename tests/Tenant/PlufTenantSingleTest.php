@@ -20,26 +20,25 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\IncompleteTestError;
 require_once 'Pluf.php';
 
-
 /**
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class PlufTenantSingleEmptyTest extends TestCase
+class PlufTenantSingleTest extends TestCase
 {
 
     /**
      * @before
      */
-    protected function setUp ()
+    protected function setUp()
     {
-        Pluf::start(dirname(__FILE__) . '/../conf/config.singleEmptyTenant.php');
+        Pluf::start(dirname(__FILE__) . '/../conf/config.singleTenant.php');
     }
 
     /**
      * @test
      */
-    public function testDefaultTenant ()
+    public function testDefaultTenant()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
@@ -56,8 +55,7 @@ class PlufTenantSingleEmptyTest extends TestCase
         $desc = $tenant->description;
         $this->assertNotNull($desc);
     }
-    
-    
+
     /**
      * @test
      */
@@ -70,7 +68,5 @@ class PlufTenantSingleEmptyTest extends TestCase
         $this->assertNotNull($storage);
         $this->assertEquals(Pluf::f('upload_path'), $storage);
     }
-
 }
-
 

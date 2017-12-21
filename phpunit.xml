@@ -2,7 +2,7 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="Tenant">
-            <directory>tests/Pluf_Tenant_REST/</directory>
+            <directory>tests/Tenant/</directory>
             <directory>tests/Tenant_REST/</directory> 
         </testsuite>
     </testsuites>

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-Pluf::loadFunction('Tenant_Shortcuts_GetMainTenant');
 
 return array(
     // **************************************************************** Current Tenant
@@ -285,40 +284,41 @@ return array(
         )
     ),
     // **************************************************************** Bank Backend
-    array( // Find
-        'regex' => '#^/backend/find$#',
-        'model' => 'Pluf_Views',
-        'method' => 'findObject',
-        'http-method' => 'GET',
-        'precond' => array(
-            'User_Precondition::loginRequired'
-        ),
-        'params' => array(
-            'model' => 'Tenant_BankBackend',
-            'model_view' => 'global',
-            'sql' => new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id),
-            'listFilters' => array(
-                'id',
-                'title',
-                'home',
-                'engine'
-            ),
-            'listDisplay' => array(),
-            'searchFields' => array(
-                'title',
-                'description'
-            ),
-            'sortFields' => array(
-                'id',
-                'title',
-                'creation_dtime'
-            ),
-            'sortOrder' => array(
-                'creation_dtime',
-                'DESC'
-            )
-        )
-    ),
+    // XXX: maso, 2017: Not a good idea to call function in URL (impossible to load setup)
+//     array( // Find
+//         'regex' => '#^/backend/find$#',
+//         'model' => 'Pluf_Views',
+//         'method' => 'findObject',
+//         'http-method' => 'GET',
+//         'precond' => array(
+//             'User_Precondition::loginRequired'
+//         ),
+//         'params' => array(
+//             'model' => 'Tenant_BankBackend',
+//             'model_view' => 'global',
+//             'sql' => new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id),
+//             'listFilters' => array(
+//                 'id',
+//                 'title',
+//                 'home',
+//                 'engine'
+//             ),
+//             'listDisplay' => array(),
+//             'searchFields' => array(
+//                 'title',
+//                 'description'
+//             ),
+//             'sortFields' => array(
+//                 'id',
+//                 'title',
+//                 'creation_dtime'
+//             ),
+//             'sortOrder' => array(
+//                 'creation_dtime',
+//                 'DESC'
+//             )
+//         )
+//     ),
     array( // Get
         'regex' => '#^/backend/(?P<modelId>\d+)$#',
         'model' => 'Tenant_Views_BankBackend',

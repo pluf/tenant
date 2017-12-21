@@ -36,10 +36,6 @@ return array(
     'encoding' => 'UTF-8',
     
     'secret_key' => '5a8d7e0f2aad8bdab8f6eef725412850',
-    'auth_backends' => array(
-        'Pluf_Auth_ModelBackend'
-    ),
-    'pluf_use_rowpermission' => true,
     
     'db_engine' => 'MySQL',
     'db_version' => '5.5.33',

@@ -48,7 +48,7 @@ class Tenant_Comment extends Pluf_Model
             // relations
             'author' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Pluf_User',
+                'model' => 'User',
                 'blank' => false,
                 'is_null' => false,
                 'editable' => false,

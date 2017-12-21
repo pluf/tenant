@@ -23,13 +23,17 @@ class Tenant_Invoice extends Pluf_Model
                 'type' => 'Pluf_DB_Field_Varchar',
                 'blank' => true,
                 'is_null' => true,
-                'size' => 256
+                'size' => 256,
+                'editable' => true,
+                'readable' => true
             ),
             'description' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
                 'blank' => true,
                 'is_null' => true,
-                'size' => 500
+                'size' => 500,
+                'editable' => true,
+                'readable' => true
             ),
             'amount' => array(
                 'type' => 'Pluf_DB_Field_Integer',
@@ -39,7 +43,9 @@ class Tenant_Invoice extends Pluf_Model
             'due_dtime' => array(
                 'type' => 'Pluf_DB_Field_Date',
                 'blank' => false,
-                'is_null' => false
+                'is_null' => false,
+                'editable' => true,
+                'readable' => true
             ),
             'status' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
@@ -81,17 +87,6 @@ class Tenant_Invoice extends Pluf_Model
                 'relate_name' => 'payment'
             )
         );
-        
-        // $this->_a['idx'] = array(
-        // 'invoice_tenant_idx' => array(
-        // 'col' => 'secure_invoice',
-        // 'type' => 'unique', // normal, unique, fulltext, spatial
-        // 'index_type' => '', // hash, btree
-        // 'index_option' => '',
-        // 'algorithm_option' => '',
-        // 'lock_option' => ''
-        // )
-        // );
     }
 
     /**

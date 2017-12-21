@@ -62,7 +62,7 @@ class Tenant_Ticket extends Pluf_Model
             // relations
             'requester' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Pluf_User',
+                'model' => 'User',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true,

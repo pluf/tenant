@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Tenant">
+            <directory>tests/Tenant/</directory>
+            <directory>tests/Tenant_REST/</directory> 
+        </testsuite>
+    </testsuites>
+
+	<!-- Code coverage -->
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
+	<logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+	</logging>
+</phpunit>

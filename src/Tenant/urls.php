@@ -284,41 +284,39 @@ return array(
         )
     ),
     // **************************************************************** Bank Backend
-    // XXX: maso, 2017: Not a good idea to call function in URL (impossible to load setup)
-//     array( // Find
-//         'regex' => '#^/backend/find$#',
-//         'model' => 'Pluf_Views',
-//         'method' => 'findObject',
-//         'http-method' => 'GET',
-//         'precond' => array(
-//             'User_Precondition::loginRequired'
-//         ),
-//         'params' => array(
-//             'model' => 'Tenant_BankBackend',
-//             'model_view' => 'global',
-//             'sql' => new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id),
-//             'listFilters' => array(
-//                 'id',
-//                 'title',
-//                 'home',
-//                 'engine'
-//             ),
-//             'listDisplay' => array(),
-//             'searchFields' => array(
-//                 'title',
-//                 'description'
-//             ),
-//             'sortFields' => array(
-//                 'id',
-//                 'title',
-//                 'creation_dtime'
-//             ),
-//             'sortOrder' => array(
-//                 'creation_dtime',
-//                 'DESC'
-//             )
-//         )
-//     ),
+    array( // Find
+        'regex' => '#^/backend/find$#',
+        'model' => 'Pluf_Views',
+        'method' => 'findObject',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::loginRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_BankBackend',
+            'model_view' => 'global',
+            'listFilters' => array(
+                'id',
+                'title',
+                'home',
+                'engine'
+            ),
+            'listDisplay' => array(),
+            'searchFields' => array(
+                'title',
+                'description'
+            ),
+            'sortFields' => array(
+                'id',
+                'title',
+                'creation_dtime'
+            ),
+            'sortOrder' => array(
+                'creation_dtime',
+                'DESC'
+            )
+        )
+    ),
     array( // Get
         'regex' => '#^/backend/(?P<modelId>\d+)$#',
         'model' => 'Tenant_Views_BankBackend',

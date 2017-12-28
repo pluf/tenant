@@ -30,16 +30,9 @@ class Tenant_REST_TenantTest extends TestCase
      */
     public static function installApps()
     {
-        Pluf::start(__DIR__ . '/../conf/mysql.mt.conf.php');
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        Pluf::start(__DIR__ . '/../conf/config.php');
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
-        
         
         // Test tenant
         $tenant = new Pluf_Tenant();
@@ -66,7 +59,7 @@ class Tenant_REST_TenantTest extends TestCase
         }
         $GLOBALS['_PX_request']->tenant= $tenant;
         if (true !== $user->create()) {
-            throw new Exception();
+            throw new Exception('Error while creating user of tenant');
         }
         
         $per = Role::getFromString('Pluf.owner');

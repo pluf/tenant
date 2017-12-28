@@ -40,8 +40,14 @@ class Tenant_Views_BankBackend
         $backend = Pluf_Views::getObject($request, $match, $p);
         if ($backend->tenant !== Tenant_Shortcuts_GetMainTenant()->id) {
             throw new Pluf_HTTP_Error404("Object not found (" . $p['model'] . "," . $backend->id . ")");
-            ;
         }
         return $backend;
+    }
+    
+    public function find($request, $match, $p){
+        if(Pluf::f('multitenant', false)){
+            $p['sql'] = new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id);
+        }
+        return Pluf_Views::findObject($request, $match, $p);
     }
 }

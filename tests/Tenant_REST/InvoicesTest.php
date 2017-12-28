@@ -31,7 +31,7 @@ class Tenant_REST_InvoicesTest extends TestCase
      */
     public static function installApps()
     {
-        Pluf::start(__DIR__ . '/../conf/mysql.mt.conf.php');
+        Pluf::start(__DIR__ . '/../conf/config.php');
         $m = new Pluf_Migration(array(
             'Pluf',
             'User',

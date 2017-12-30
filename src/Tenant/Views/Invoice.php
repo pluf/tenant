@@ -17,7 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+Pluf::loadFunction('Tenant_Shortcuts_GetMainTenant');
+ 
 /**
  * Invoices view
  *
@@ -42,9 +43,9 @@ class Tenant_Views_Invoice
         $price = $invoice->amount;
         
         // Check backend
-        $be = Pluf::factory('Tenant_BankBackend')->getOne('id=' . $backend);
+        $be = new Tenant_BankBackend($backend);
         $mainTenant = Tenant_Shortcuts_GetMainTenant();
-        if($be->id !== $mainTenant->id){
+        if($be->tenant !== $mainTenant->id){
             throw new Pluf_Exception('Invalid backend. Backend should be blong to main tenant.');
         }
         

@@ -16,6 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ * Push new settings into the DBMS
+ */
+Pluf_Signal::connect('Pluf_Dispatcher::postDispatch',
+    array(
+        'Tenant_Service',
+        'flush'
+    ), 'Pluf_Dispatcher');
+
+
 return array(
     'Tenant_Invoice' => array(
         'relate_to' => array(

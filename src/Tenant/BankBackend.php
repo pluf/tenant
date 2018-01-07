@@ -12,7 +12,6 @@ class Tenant_BankBackend extends Bank_Backend
                 'type' => 'Pluf_DB_Field_Foreignkey',
                 'model' => 'Pluf_Tenant',
                 'blank' => false,
-                'unique' => true,
                 'editable' => false
             )
         ));

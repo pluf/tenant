@@ -5,7 +5,8 @@
 	"model": [
 		"Tenant_Invoice",
 		"Tenant_Ticket",
-		"Tenant_Comment"
+		"Tenant_Comment",
+		"Tenant_Setting"
 	],
 	"permisson": [],
 	"monitor":[{

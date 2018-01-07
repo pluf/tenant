@@ -28,11 +28,67 @@ class PlufTenantSingleEmptyTest extends TestCase
 {
 
     /**
-     * @before
+     * @beforeClass
      */
-    protected function setUp()
+    public static function installApps()
     {
-        Pluf::start(dirname(__FILE__) . '/../conf/config.singleEmptyTenant.php');
+        $cfg = include __DIR__ . '/../conf/config.php';
+        $cfg['multitenant'] = false;
+        Pluf::start($cfg);
+        $m = new Pluf_Migration(array(
+            'Pluf',
+            'User',
+            'Role',
+            'Group',
+            'Tenant'
+        ));
+        $m->install();
+        
+        // Test tenant
+        $tenant = new Pluf_Tenant();
+        $tenant->domain = 'localhost';
+        $tenant->subdomain = 'www';
+        $tenant->validate = true;
+        if (true !== $tenant->create()) {
+            throw new Pluf_Exception('Faile to create new tenant');
+        }
+        
+        $m->init($tenant);
+        
+        // Test user
+        $user = new User();
+        $user->login = 'test';
+        $user->first_name = 'test';
+        $user->last_name = 'test';
+        $user->email = 'toto@example.com';
+        $user->setPassword('test');
+        $user->active = true;
+        
+        if (! isset($GLOBALS['_PX_request'])) {
+            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
+        }
+        $GLOBALS['_PX_request']->tenant = $tenant;
+        if (true !== $user->create()) {
+            throw new Exception();
+        }
+        
+        $per = Role::getFromString('Pluf.owner');
+        $user->setAssoc($per);
+    }
+
+    /**
+     * @afterClass
+     */
+    public static function uninstallApps()
+    {
+        $m = new Pluf_Migration(array(
+            'Pluf',
+            'User',
+            'Role',
+            'Group',
+            'Tenant'
+        ));
+        $m->unInstall();
     }
 
     /**

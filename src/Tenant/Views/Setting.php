@@ -17,29 +17,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-class Tenant_Monitor
+
+/**
+ * Settings special views
+ *
+ * @author maso
+ *        
+ */
+class Tenant_Views_Setting extends Pluf_Views
 {
 
-    public static function count ()
-    {
-        // XXX: maso, 1395
-    }
-    
-    public static function storage ()
-    {
-        $result = array(
-                'value' => 35,
-                'unit' => 'byte',
-                'interval' => 1000000,
-                'type' => 'scalar'
-        );
-        // maso, 2017: find storage size
-        // FIXME: maso, 2017: using php native if is not linux
-        $file_directory = Pluf_Tenant::storagePath();
-//         $output = exec('du -sk ' . $file_directory);
-//         $result['value'] = trim(str_replace($file_directory, '', $output)) * 1024;
-        $result['value'] = Pluf_Shortcuts_folderSize($file_directory);
-        return $result;
+    /**
+     * Getting system setting
+     *
+     * Anonymous are allowed to get Publich properties from the system.
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public function get($request, $match)
+    { // Set the default
+        $sql = new Pluf_SQL('`key`=%s', array(
+            $match['key']
+        ));
+        $model = new Tenant_Setting();
+        $model = $model->getOne(array(
+            'filter' => $sql->gen()
+        ));
+        if (! isset($model)) {
+            throw new Pluf_Exception_DoesNotExist('Setting not found');
+        }
+        return $model;
     }
 }
-

@@ -24,17 +24,15 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class PlufTenantSingleTest extends TestCase
+class PlufSettingTemplateTest extends TestCase
 {
-
+    
     /**
      * @beforeClass
      */
     public static function installApps()
     {
-        $cfg = include __DIR__ . '/../conf/config.php';
-        $cfg['multitenant'] = false;
-        Pluf::start($cfg);
+        Pluf::start(__DIR__ . '/../conf/config.php');
         $m = new Pluf_Migration(array(
             'Pluf',
             'User',
@@ -43,6 +41,7 @@ class PlufTenantSingleTest extends TestCase
             'Tenant'
         ));
         $m->install();
+        
         
         // Test tenant
         $tenant = new Pluf_Tenant();
@@ -64,10 +63,10 @@ class PlufTenantSingleTest extends TestCase
         $user->setPassword('test');
         $user->active = true;
         
-        if (! isset($GLOBALS['_PX_request'])) {
+        if(!isset($GLOBALS['_PX_request'])){
             $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
         }
-        $GLOBALS['_PX_request']->tenant = $tenant;
+        $GLOBALS['_PX_request']->tenant= $tenant;
         if (true !== $user->create()) {
             throw new Exception();
         }
@@ -75,7 +74,7 @@ class PlufTenantSingleTest extends TestCase
         $per = Role::getFromString('Pluf.owner');
         $user->setAssoc($per);
     }
-
+    
     /**
      * @afterClass
      */
@@ -90,39 +89,31 @@ class PlufTenantSingleTest extends TestCase
         ));
         $m->unInstall();
     }
-
+    
     /**
      * @test
      */
-    public function testDefaultTenant()
+    public function testSetting1()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-        
-        // check id
-        $id = $tenant->id;
-        $this->assertNotNull($id);
-        
-        // check title
-        $title = $tenant->title;
-        $this->assertNotNull($title);
-        
-        // check description
-        $desc = $tenant->description;
-        $this->assertNotNull($desc);
+        $folders = array(
+            __DIR__ . '/../templates'
+        );
+        $tmpl = new Pluf_Template('tpl-setting1.html', $folders);
+        $this->assertEquals(Tenant_Service::setting('setting1', 'default value'), $tmpl->render());
     }
 
     /**
      * @test
      */
-    public function testStoragePath()
+    public function testSetting2()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-        
-        $storage = $tenant->storagePath();
-        $this->assertNotNull($storage);
-        $this->assertEquals(Pluf::f('upload_path'), $storage);
+        $folders = array(
+            __DIR__ . '/../templates'
+        );
+        $value = 'Random val:' . rand();
+        Tenant_Service::setSetting('setting2', $value);
+        $tmpl = new Pluf_Template('tpl-setting2.html', $folders);
+        $this->assertEquals($value, $tmpl->render());
     }
 }
 

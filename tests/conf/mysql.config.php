@@ -65,7 +65,8 @@ $cfg['templates_folder'] = array(
  * Template tags
  */
 $cfg['template_tags'] = array(
-    'config' => 'Pluf_Template_Tag_Mytag'
+    'config' => 'Pluf_Template_Tag_Mytag',
+    'setting' => 'Tenant_Template_Tag_Setting'
 );
 
 // Default mimetype of the document your application is sending.

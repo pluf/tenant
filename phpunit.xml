@@ -8,6 +8,7 @@
         <testsuite name="Setting">
             <directory>tests/Setting/</directory>
             <directory>tests/Setting_Template/</directory> 
+            <directory>tests/Setting_REST/</directory> 
             <directory>tests/Setting_REST_Legacy/</directory> 
         </testsuite>
     </testsuites>

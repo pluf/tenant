@@ -23,7 +23,7 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Setting_REST_Legacy_BasicTest extends TestCase
+class Setting_REST_BasicTest extends TestCase
 {
 
     private static $client = null;
@@ -76,14 +76,14 @@ class Setting_REST_Legacy_BasicTest extends TestCase
         $per = Role::getFromString('Pluf.owner');
         $user->setAssoc($per);
         
-        $subs = include 'Tenant/urls-setting-legacy.php';
+        $subs = include 'Tenant/urls.php';
         for ($i = 0; $i < sizeof($subs); $i++) {
             $subs[$i]['precond'] = array();
         }
         self::$client = new Test_Client(array(
             array(
                 'app' => 'Tenant',
-                'regex' => '#^/api/setting#',
+                'regex' => '#^/api/saas#',
                 'base' => '',
                 'sub' => $subs
             )
@@ -112,7 +112,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
      */
     public function anonymousCanGetListOfSettings()
     {
-        $response = self::$client->get('/api/setting/find');
+        $response = self::$client->get('/api/saas/setting/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -126,7 +126,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
     public function adminCanGetListOfSettings()
     {
         // Getting list
-        $response = self::$client->get('/api/setting/find');
+        $response = self::$client->get('/api/saas/setting/find');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -145,7 +145,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/setting/new', $values);
+        $response = self::$client->post('/api/saas/setting/new', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -168,7 +168,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/setting/new', $values);
+        $response = self::$client->post('/api/saas/setting/new', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -177,7 +177,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
         Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
         Test_Assert::assertEquals($values['value'], Tenant_Service::setting($values['key']), 'Values are not equal.');
         
-        $response = self::$client->get('/api/setting/' . $values['key']);
+        $response = self::$client->get('/api/saas/setting/' . $values['key']);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -195,7 +195,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/setting/new', $values);
+        $response = self::$client->post('/api/saas/setting/new', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -212,7 +212,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
         ));
         Test_Assert::assertNotNull($one, 'Setting not found with key');
         
-        $response = self::$client->get('/api/setting/' . $one->id);
+        $response = self::$client->get('/api/saas/setting/' . $one->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -230,7 +230,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/setting/new', $values);
+        $response = self::$client->post('/api/saas/setting/new', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -245,7 +245,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
         Test_Assert::assertNotNull($one, 'Setting not found with key');
         
         // delete by id
-        $response = self::$client->delete('/api/setting/' . $one->id);
+        $response = self::$client->delete('/api/saas/setting/' . $one->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -269,7 +269,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/setting/new', $values);
+        $response = self::$client->post('/api/saas/setting/new', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         
@@ -283,7 +283,7 @@ class Setting_REST_Legacy_BasicTest extends TestCase
         Test_Assert::assertNotNull($one, 'Setting not found with key');
         
         $values['value'] = 'new value' . rand();
-        $response = self::$client->post('/api/setting/' . $one->id, $values);
+        $response = self::$client->post('/api/saas/setting/' . $one->id, $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         

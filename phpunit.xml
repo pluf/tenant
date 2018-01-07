@@ -2,8 +2,13 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="Tenant">
-<!--             <directory>tests/Tenant/</directory> -->
+            <directory>tests/Tenant/</directory>
             <directory>tests/Tenant_REST/</directory> 
+        </testsuite>
+        <testsuite name="Setting">
+            <directory>tests/Setting/</directory>
+            <directory>tests/Setting_Template/</directory> 
+            <directory>tests/Setting_REST_Legacy/</directory> 
         </testsuite>
     </testsuites>
 

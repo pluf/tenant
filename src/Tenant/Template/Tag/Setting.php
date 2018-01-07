@@ -17,29 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-class Tenant_Monitor
+
+/**
+ * Display a tenant attribute.
+ */
+class Tenant_Template_Tag_Setting extends Pluf_Template_Tag
 {
 
-    public static function count ()
+    function start ($key, $defValue = '')
     {
-        // XXX: maso, 1395
-    }
-    
-    public static function storage ()
-    {
-        $result = array(
-                'value' => 35,
-                'unit' => 'byte',
-                'interval' => 1000000,
-                'type' => 'scalar'
-        );
-        // maso, 2017: find storage size
-        // FIXME: maso, 2017: using php native if is not linux
-        $file_directory = Pluf_Tenant::storagePath();
-//         $output = exec('du -sk ' . $file_directory);
-//         $result['value'] = trim(str_replace($file_directory, '', $output)) * 1024;
-        $result['value'] = Pluf_Shortcuts_folderSize($file_directory);
-        return $result;
+        echo Tenant_Service::setting($key, $defValue);
     }
 }
 

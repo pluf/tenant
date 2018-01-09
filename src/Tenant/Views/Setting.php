@@ -37,9 +37,16 @@ class Tenant_Views_Setting extends Pluf_Views
      */
     public function get($request, $match)
     { // Set the default
-        $sql = new Pluf_SQL('`key`=%s', array(
-            $match['key']
-        ));
+        if ($request->user->hasPerm('Pluf.owner')) {
+            $sql = new Pluf_SQL('`key`=%s', array(
+                $match['key']
+            ));
+        } else {
+            $sql = new Pluf_SQL('`key`=%s AND `mode`=%s', array(
+                $match['key'],
+                Tenant_Setting::MOD_PUBLIC
+            ));
+        }
         $model = new Tenant_Setting();
         $model = $model->getOne(array(
             'filter' => $sql->gen()
@@ -48,5 +55,21 @@ class Tenant_Views_Setting extends Pluf_Views
             throw new Pluf_Exception_DoesNotExist('Setting not found');
         }
         return $model;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see Pluf_Views::findObject()
+     */
+    public function findObject($request, $match, $p)
+    {
+        if (! $request->user->hasPerm('Pluf.owner')) {
+            $sql = new Pluf_SQL('`mode`=%s', array(
+                Tenant_Setting::MOD_PUBLIC
+            ));
+            $p['sql'] = $sql->gen();
+        }
+        return parent::findObject($request, $match, $p);
     }
 }

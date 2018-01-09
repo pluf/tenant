@@ -45,7 +45,7 @@ class Tenant_Setting extends Pluf_Model
                         'editable' => false,
                         'readable' => true
                 ),
-                'mod' => array(
+                'mode' => array(
                         'type' => 'Pluf_DB_Field_Integer',
                         'blank' => false,
                         'editable' => false

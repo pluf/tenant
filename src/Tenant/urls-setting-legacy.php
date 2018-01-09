@@ -20,7 +20,7 @@ return array(
     // TODO: maso, 2017: some attributes are not readable by users
     array(
         'regex' => '#^/find$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Setting',
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(),

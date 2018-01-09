@@ -68,7 +68,7 @@ class Tenant_Views_Setting extends Pluf_Views
             $sql = new Pluf_SQL('`mode`=%s', array(
                 Tenant_Setting::MOD_PUBLIC
             ));
-            $p['sql'] = $sql->gen();
+            $p['sql'] = $sql;
         }
         return parent::findObject($request, $match, $p);
     }

@@ -99,7 +99,7 @@ class Tenant_Setting extends Pluf_Model
                 'col' => 'mode, key'
             ),
             'key_idx' => array(
-                'type' => 'index',
+                'type' => 'unique',
                 'col' => 'key'
             )
         );

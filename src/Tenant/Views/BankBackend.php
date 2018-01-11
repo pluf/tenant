@@ -23,7 +23,7 @@
  * @author hadi <mohammad.hadi.mansouri@dpq.co.ir>
  *        
  */
-class Tenant_Views_BankBackend
+class Tenant_Views_BankBackend extends Pluf_Views
 {
 
     /**
@@ -37,7 +37,7 @@ class Tenant_Views_BankBackend
      */
     public function get($request, $match, $p)
     {
-        $backend = Pluf_Views::getObject($request, $match, $p);
+        $backend = parent::getObject($request, $match, $p);
         if ($backend->tenant !== Tenant_Shortcuts_GetMainTenant()->id) {
             throw new Pluf_HTTP_Error404("Object not found (" . $p['model'] . "," . $backend->id . ")");
         }
@@ -48,6 +48,6 @@ class Tenant_Views_BankBackend
         if(Pluf::f('multitenant', false)){
             $p['sql'] = new Pluf_SQL('tenant = ' . Tenant_Shortcuts_GetMainTenant()->id);
         }
-        return Pluf_Views::findObject($request, $match, $p);
+        return parent::findObject($request, $match, $p);
     }
 }

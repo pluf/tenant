@@ -286,8 +286,8 @@ return array(
     // **************************************************************** Bank Backend
     array( // Find
         'regex' => '#^/backend/find$#',
-        'model' => 'Pluf_Views',
-        'method' => 'findObject',
+        'model' => 'Tenant_Views_BankBackend',
+        'method' => 'find',
         'http-method' => 'GET',
         'precond' => array(
             'User_Precondition::loginRequired'

@@ -29,5 +29,37 @@ class Tenant_Monitor
         $file_directory = Pluf_Tenant::storagePath();
         return Pluf_Shortcuts_folderSize($file_directory);
     }
+    
+    /**
+     * Retruns permision status
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public static function permisson ($request, $match)
+    {
+        
+        // Check user
+        if ($request->user->isAnonymous()) {
+            return false;
+        }
+        
+        // Get permission
+        $per = new Role();
+        $sql = new Pluf_SQL('code_name=%s',
+            array(
+                $match['property']
+            ));
+        $items = $per->getList(
+            array(
+                'filter' => $sql->gen()
+            ));
+        if ($items->count() == 0) {
+            return false;
+        }
+        
+        // Check permission
+        return $request->user->hasPerm($items[0].'');
+    }
 }
 

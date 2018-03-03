@@ -71,13 +71,7 @@ class Tenant_REST_TenantTest extends TestCase
      */
     public static function uninstallApps()
     {
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->unInstall();
     }
 

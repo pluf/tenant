@@ -36,13 +36,7 @@ class Setting_REST_BasicTest extends TestCase
     public static function createDataBase()
     {
         Pluf::start(__DIR__ . '/../conf/config.php');
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
         
         // Test tenant
@@ -95,13 +89,7 @@ class Setting_REST_BasicTest extends TestCase
      */
     public static function removeDatabses()
     {
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->unInstall();
     }
 

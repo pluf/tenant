@@ -15,7 +15,8 @@
 				"name": "storage",
 				"title": "Storage size",
 				"description": "Storage size of the tenant.",
-				"function": "Tenant_Monitor::Storage"
+				"function": "Tenant_Monitor::storage",
+				"cacheable": true
 			}
 		]
 	}

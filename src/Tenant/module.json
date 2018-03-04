@@ -22,7 +22,7 @@
 				"name": "owner",
 				"title": "Owner",
 				"description": "User ownership monitor",
-				"function": "Tenant_Monitor::permisson"
+				"function": "Tenant_Monitor::permission"
 			}
 		]
 	}

@@ -95,7 +95,7 @@ class Tenant_Setting extends Pluf_Model
             )
         );
         $this->_a['idx'] = array(
-            'mod_key_idx' => array(
+            'mode_key_idx' => array(
                 'col' => 'mode, key'
             ),
             'key_idx' => array(

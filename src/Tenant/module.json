@@ -8,13 +8,22 @@
 		"Tenant_Comment",
 		"Tenant_Setting"
 	],
-	"permisson": [],
-	"monitor":[{
-		"bean": "tenant",
-		"property": "storage",
-		"title": "Storage size",
-		"description": "Storage size of the tenant.",
-		"function": "Tenant_Monitor::Storage",
-		"level": 1
-	}]
+	"init": {
+		"Monitor_Property": [
+			{
+				"monitor": "tenant",
+				"name": "storage",
+				"title": "Storage size",
+				"description": "Storage size of the tenant.",
+				"function": "Tenant_Monitor::storage",
+				"cacheable": true
+			},{
+				"monitor": "user",
+				"name": "owner",
+				"title": "Owner",
+				"description": "User ownership monitor",
+				"function": "Tenant_Monitor::permission"
+			}
+		]
+	}
 }

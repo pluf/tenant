@@ -20,26 +20,46 @@
 class Tenant_Monitor
 {
 
-    public static function count ()
+    /**
+     * Find storage size
+     */
+    public static function storage()
     {
-        // XXX: maso, 1395
+        // maso, 2017: find storage size
+        $file_directory = Pluf_Tenant::storagePath();
+        return Pluf_Shortcuts_folderSize($file_directory);
     }
     
-    public static function storage ()
+    /**
+     * Retruns permision status
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     */
+    public static function permission ($request, $match)
     {
-        $result = array(
-                'value' => 35,
-                'unit' => 'byte',
-                'interval' => 1000000,
-                'type' => 'scalar'
-        );
-        // maso, 2017: find storage size
-        // FIXME: maso, 2017: using php native if is not linux
-        $file_directory = Pluf_Tenant::storagePath();
-//         $output = exec('du -sk ' . $file_directory);
-//         $result['value'] = trim(str_replace($file_directory, '', $output)) * 1024;
-        $result['value'] = Pluf_Shortcuts_folderSize($file_directory);
-        return $result;
+        
+        // Check user
+        if ($request->user->isAnonymous()) {
+            return false;
+        }
+        
+        // Get permission
+        $per = new Role();
+        $sql = new Pluf_SQL('code_name=%s',
+            array(
+                $match['property']
+            ));
+        $items = $per->getList(
+            array(
+                'filter' => $sql->gen()
+            ));
+        if ($items->count() == 0) {
+            return false;
+        }
+        
+        // Check permission
+        return $request->user->hasPerm($items[0].'');
     }
 }
 

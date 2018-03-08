@@ -24,31 +24,20 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class PlufSettingTemplateTest extends TestCase
+class User_Monitor_BasicsTest extends TestCase
 {
-    
+
     /**
      * @beforeClass
      */
-    public static function installApps()
+    public static function createDataBase()
     {
-        Pluf::start(__DIR__ . '/../conf/config.php');
+        $cfg = include __DIR__ . '/../conf/config.php';
+        $cfg['multitenant'] = false;
+        Pluf::start($cfg);
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
         
-        
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $m->init($tenant);
-        
-        // Test user
         $user = new User();
         $user->login = 'test';
         $user->first_name = 'test';
@@ -56,17 +45,10 @@ class PlufSettingTemplateTest extends TestCase
         $user->email = 'toto@example.com';
         $user->setPassword('test');
         $user->active = true;
-        
-        if(!isset($GLOBALS['_PX_request'])){
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant= $tenant;
+        $user->administrator = true;
         if (true !== $user->create()) {
             throw new Exception();
         }
-        
-        $per = Role::getFromString('Pluf.owner');
-        $user->setAssoc($per);
     }
     
     /**
@@ -81,27 +63,40 @@ class PlufSettingTemplateTest extends TestCase
     /**
      * @test
      */
-    public function testSetting1()
+    public function currentUserRest()
     {
-        $folders = array(
-            __DIR__ . '/../templates'
-        );
-        $tmpl = new Pluf_Template('tpl-setting1.html', $folders);
-        $this->assertEquals(Tenant_Service::setting('setting1', 'default value'), $tmpl->render());
+        
+        $client = new Test_Client(array(
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/user#',
+                'base' => '',
+                'sub' => include 'User/urls.php'
+            ),
+            array(
+                'regex' => '#^/monitor/(?P<property>.+)$#',
+                'model' => 'Tenant_Monitor',
+                'method' => 'permisson',
+                'http-method' => 'GET'
+            )
+        ));
+        
+        // Change detail
+        $user = new User();
+        $user = $user->getUser('test');
+        
+        // Login
+        $response = $client->post('/api/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+        
+        // Login
+        $response = $client->get('/monitor/owner');
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
     }
 
-    /**
-     * @test
-     */
-    public function testSetting2()
-    {
-        $folders = array(
-            __DIR__ . '/../templates'
-        );
-        $value = 'Random val:' . rand();
-        Tenant_Service::setSetting('setting2', $value);
-        $tmpl = new Pluf_Template('tpl-setting2.html', $folders);
-        $this->assertEquals($value, $tmpl->render());
-    }
 }
-

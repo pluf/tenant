@@ -4,6 +4,7 @@
         <testsuite name="Tenant">
             <directory>tests/Tenant/</directory>
             <directory>tests/Tenant_REST/</directory> 
+            <directory>tests/Tenant_Monitor/</directory> 
         </testsuite>
         <testsuite name="Setting">
             <directory>tests/Setting/</directory>

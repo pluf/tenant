@@ -35,13 +35,7 @@ class PlufTenantSingleEmptyTest extends TestCase
         $cfg = include __DIR__ . '/../conf/config.php';
         $cfg['multitenant'] = false;
         Pluf::start($cfg);
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
         
         // Test tenant
@@ -81,13 +75,7 @@ class PlufTenantSingleEmptyTest extends TestCase
      */
     public static function uninstallApps()
     {
-        $m = new Pluf_Migration(array(
-            'Pluf',
-            'User',
-            'Role',
-            'Group',
-            'Tenant'
-        ));
+        $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->unInstall();
     }
 

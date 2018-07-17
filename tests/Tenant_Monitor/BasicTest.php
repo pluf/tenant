@@ -76,7 +76,7 @@ class User_Monitor_BasicsTest extends TestCase
             array(
                 'regex' => '#^/monitor/(?P<property>.+)$#',
                 'model' => 'Tenant_Monitor',
-                'method' => 'permisson',
+                'method' => 'permission',
                 'http-method' => 'GET'
             )
         ));

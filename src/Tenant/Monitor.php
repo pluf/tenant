@@ -36,7 +36,7 @@ class Tenant_Monitor
      * @param Pluf_HTTP_Request $request
      * @param array $match
      */
-    public static function permission ($request, $match)
+    public static function permission ($request = null, $match = null)
     {
         
         // Check user

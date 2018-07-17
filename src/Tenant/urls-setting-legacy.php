@@ -25,29 +25,7 @@ return array(
         'http-method' => 'GET',
         'precond' => array(),
         'params' => array(
-            'model' => 'Tenant_Setting',
-            'listFilters' => array(
-                'id',
-                'key',
-                'value',
-                'description'
-            ),
-            'listDisplay' => array(
-                'key' => 'key',
-                'description' => 'description'
-            ),
-            'searchFields' => array(
-                'title',
-                'symbol',
-                'description'
-            ),
-            'sortFields' => array(
-                'title',
-                'symbol',
-                'description',
-                'creation_date',
-                'modif_dtime'
-            )
+            'model' => 'Tenant_Setting'
         )
     ),
     array(

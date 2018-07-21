@@ -62,7 +62,7 @@ class Tenant_Views_Setting extends Pluf_Views
      * {@inheritdoc}
      * @see Pluf_Views::findObject()
      */
-    public function findObject($request, $match, $p)
+    public function findObject($request, $match, $p = array())
     {
         if (! $request->user->hasPerm('Pluf.owner')) {
             $sql = new Pluf_SQL('`mode`=%s', array(

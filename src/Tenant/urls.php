@@ -54,28 +54,7 @@ return array(
             'User_Precondition::ownerRequired'
         ),
         'params' => array(
-            'model' => 'Tenant_Ticket',
-            'listFilters' => array(
-                'status',
-                'type',
-                'requester'
-            ),
-            'listDisplay' => array(),
-            'searchFields' => array(
-                'subject',
-                'description'
-            ),
-            'sortFields' => array(
-                'id',
-                'status',
-                'type',
-                'modif_dtime',
-                'creation_dtime'
-            ),
-            'sortOrder' => array(
-                'id',
-                'DESC'
-            )
+            'model' => 'Tenant_Ticket'
         )
     ),
     array( // Create
@@ -229,28 +208,7 @@ return array(
             'User_Precondition::ownerRequired'
         ),
         'params' => array(
-            'model' => 'Tenant_Invoice',
-            'listFilters' => array(
-                'id',
-                'status'
-            ),
-            'listDisplay' => array(),
-            'searchFields' => array(
-                'title',
-                'description'
-            ),
-            'sortFields' => array(
-                'id',
-                'status',
-                'amount',
-                'due_dtiem',
-                'modif_dtime',
-                'creation_dtime'
-            ),
-            'sortOrder' => array(
-                'id',
-                'DESC'
-            )
+            'model' => 'Tenant_Invoice'
         )
     ),
     array( // Get
@@ -338,27 +296,7 @@ return array(
         ),
         'params' => array(
             'model' => 'Bank_Receipt',
-            'sql' => new Pluf_SQL('owner_class="tenant-invoice"'),
-            'listFilters' => array(
-                'id',
-                'title',
-                'secure_id',
-                'backend'
-            ),
-            'listDisplay' => array(),
-            'searchFields' => array(
-                'title',
-                'description'
-            ),
-            'sortFields' => array(
-                'id',
-                'title',
-                'creation_dtime'
-            ),
-            'sortOrder' => array(
-                'creation_dtime',
-                'DESC'
-            )
+            'sql' => new Pluf_SQL('owner_class="tenant-invoice"')
         )
     ),
     // array( // Create
@@ -399,29 +337,7 @@ return array(
         'http-method' => 'GET',
         'precond' => array(),
         'params' => array(
-            'model' => 'Tenant_Setting',
-            'listFilters' => array(
-                'id',
-                'key',
-                'value',
-                'description'
-            ),
-            'listDisplay' => array(
-                'key' => 'key',
-                'description' => 'description'
-            ),
-            'searchFields' => array(
-                'title',
-                'symbol',
-                'description'
-            ),
-            'sortFields' => array(
-                'title',
-                'symbol',
-                'description',
-                'creation_date',
-                'modif_dtime'
-            )
+            'model' => 'Tenant_Setting'
         )
     ),
     array(

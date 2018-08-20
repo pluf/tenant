@@ -96,7 +96,7 @@ return array(
         )
     ),
     
-    // ************************************************************ States of Tenant
+    // ************************************************************ States of SPAs
     
     array(
         'regex' => '#^/spas/(?P<modelId>\d+)/states$#',
@@ -124,6 +124,54 @@ return array(
             'PUT',
             'POST'
         ),
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    
+    // ************************************************************ Resources of SPAs
+    
+    array(
+        'regex' => '#^/spas/(?P<modelId>\d+)/resources/find$#',
+        'model' => 'Tenant_Views_SpaResources',
+        'method' => 'find',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/spas/(?P<modelId>\d+)/resources/new$#',
+        'model' => 'Tenant_Views_SpaResources',
+        'method' => 'create',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/spas/(?P<modelId>\d+)/resources/(?P<resourcePath>.+)$#',
+        'model' => 'Tenant_Views_SpaResources',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/spas/(?P<modelId>\d+)/resources/(?P<resourcePath>.+)$#',
+        'model' => 'Tenant_Views_SpaResources',
+        'method' => 'update',
+        'http-method' => 'POST',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array(
+        'regex' => '#^/spas/(?P<modelId>\d+)/resources/(?P<resourcePath>.+)$#',
+        'model' => 'Tenant_Views_SpaResources',
+        'method' => 'delete',
+        'http-method' => 'Delete',
         'precond' => array(
             'User_Precondition::ownerRequired'
         )

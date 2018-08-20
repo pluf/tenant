@@ -37,6 +37,20 @@ class Tenant_Views_Setting extends Pluf_Views
      */
     public function get($request, $match)
     { // Set the default
+        $model = $this->internalGet($request, $match);
+        if (! isset($model)) {
+            throw new Pluf_Exception_DoesNotExist('Setting not found');
+        }
+        return $model;
+    }
+
+    /**
+     * Returns setting with given key in the $match array. Returns null if such setting does not exist.
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @return Pluf_Model|NULL
+     */
+    private function internalGet($request, $match){
         if ($request->user->hasPerm('Pluf.owner')) {
             $sql = new Pluf_SQL('`key`=%s', array(
                 $match['key']
@@ -51,12 +65,9 @@ class Tenant_Views_Setting extends Pluf_Views
         $model = $model->getOne(array(
             'filter' => $sql->gen()
         ));
-        if (! isset($model)) {
-            throw new Pluf_Exception_DoesNotExist('Setting not found');
-        }
         return $model;
     }
-
+    
     /**
      *
      * {@inheritdoc}
@@ -72,4 +83,37 @@ class Tenant_Views_Setting extends Pluf_Views
         }
         return parent::findObject($request, $match, $p);
     }
+    
+    /**
+     * Deletes setting with given key
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @return Pluf_Model|NULL
+     */
+    public function deleteByKey($request, $match){
+        $model = $this->internalGet($request, $match);
+        if (! isset($model)) {
+            throw new Pluf_Exception_DoesNotExist('Setting not found');
+        }
+        $model->delete();
+        return $model;
+    }
+    
+    /**
+     * Deletes setting with given key
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @return Pluf_Model|NULL
+     */
+    public function updateByKey($request, $match){
+        $model = $this->internalGet($request, $match);
+        if (! isset($model)) {
+            throw new Pluf_Exception_DoesNotExist('Setting not found');
+        }
+        $form = Pluf_Shortcuts_GetFormForUpdateModel($model, $request->REQUEST);
+        $model = $form->save();
+        return $model;
+    }
+    
 }
+

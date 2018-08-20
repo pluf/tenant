@@ -5,7 +5,8 @@
 		"Tenant_Invoice",
 		"Tenant_Ticket",
 		"Tenant_Comment",
-		"Tenant_Setting"
+		"Tenant_Setting",
+		"Tenant_SPA"
 	],
 	"init": {
 		"Monitor_Property": [

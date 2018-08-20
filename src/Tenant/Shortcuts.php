@@ -21,3 +21,15 @@ function Tenant_Shortcuts_NormalizeItemPerPage ($request)
         $count = 30;
     return $count;
 }
+
+/**
+ *
+ * @param Tenant_SPA $spa
+ * @return Tenant_SPA_Manager
+ */
+function Tenant_Shortcuts_SpaManager($spa)
+{
+    // XXX: maso, 2017: read from settings
+    $manager = new Tenant_SPA_Manager_Simple();
+    return $manager;
+}

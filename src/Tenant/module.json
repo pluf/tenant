@@ -6,6 +6,7 @@
 		"Tenant_Ticket",
 		"Tenant_Comment",
 		"Tenant_Setting",
+		"Tenant_Configuration",
 		"Tenant_SPA"
 	],
 	"init": {

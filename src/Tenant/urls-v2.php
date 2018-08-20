@@ -2,6 +2,7 @@
 $paths = array(
     'urls/tenant-v2.php',
     'urls/spa-v2.php',
+    'urls/configuration-v2.php',
     'urls/spa-repository-v2.php'
 );
 

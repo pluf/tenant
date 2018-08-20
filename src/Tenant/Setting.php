@@ -43,7 +43,7 @@ class Tenant_Setting extends Pluf_Model
     function init()
     {
         $this->_a['table'] = 'settings';
-        $this->_a['verbose'] = 'System setting';
+        $this->_a['verbose'] = 'Tenant Setting';
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Pluf_DB_Field_Sequence',

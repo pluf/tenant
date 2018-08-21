@@ -20,7 +20,7 @@ return array(
     // main page of default SPA
     array(
         'regex' => '#^/$#',
-        'model' => 'Spa_Views_Run',
+        'model' => 'Tenant_Views_SpaRun',
         'method' => 'defaultSpa'
     ),
     // url format for SPA resources:    
@@ -28,12 +28,12 @@ return array(
     // resource form specified spa: /spa-name/path/to/resource
     array(
         'regex' => '#^/(?P<firstPart>[^/]+)/(?P<remainPart>.*)$#',
-        'model' => 'Spa_Views_Run',
+        'model' => 'Tenant_Views_SpaRun',
         'method' => 'loadResource'
     ),
     array(
             'regex' => '#^/(?P<firstPart>[^/]+)$#',
-            'model' => 'Spa_Views_Run',
+            'model' => 'Tenant_Views_SpaRun',
             'method' => 'loadResource'
     ),
 );

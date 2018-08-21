@@ -32,7 +32,7 @@ class Tenant_SpaService
         $spa = Tenant_SPA::getSpaByName($name);
         if (! isset($spa)) {
             $spa = self::installFromFile(__DIR__ . '/resources/not-found-0.1.1.zip');
-            return Spa_Shortcuts_SpaManager($spa)->apply($spa, 'create');
+            return Tenant_Shortcuts_SpaManager($spa)->apply($spa, 'create');
         }
         return $spa;
     }

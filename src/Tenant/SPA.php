@@ -227,7 +227,7 @@ class Tenant_SPA extends Pluf_Model
         $sql = new Pluf_SQL('name=%s', array(
             $name
         ));
-        return Pluf::factory('Spa_SPA')->getOne($sql->gen());
+        return Pluf::factory('Tenant_SPA')->getOne($sql->gen());
     }
 
     /**

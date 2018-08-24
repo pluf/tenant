@@ -45,10 +45,10 @@ class Tenant_Monitor
         }
         
         // Get permission
-        $per = new Role();
+        $per = new User_Role();
         $sql = new Pluf_SQL('code_name=%s',
             array(
-                $match['property']
+                $match['metricName']
             ));
         $items = $per->getList(
             array(

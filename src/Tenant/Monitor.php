@@ -40,7 +40,7 @@ class Tenant_Monitor
     {
         
         // Check user
-        if ($request->user->isAnonymous()) {
+        if (!$request->user || $request->user->isAnonymous()) {
             return false;
         }
         

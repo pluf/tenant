@@ -33,7 +33,7 @@ class Tenant_Configuration extends Pluf_Model
      */
     function init()
     {
-        $this->_a['table'] = 'configurations';
+        $this->_a['table'] = 'tenant_configurations';
         $this->_a['verbose'] = 'Tenant Configuration';
         $this->_a['cols'] = array(
             'id' => array(
@@ -77,12 +77,6 @@ class Tenant_Configuration extends Pluf_Model
                 'readable' => true
             )
         );
-//         $this->_a['idx'] = array(
-//             'key_idx' => array(
-//                 'type' => 'unique',
-//                 'col' => 'tenant, key'
-//             )
-//         );
     }
 
     /**

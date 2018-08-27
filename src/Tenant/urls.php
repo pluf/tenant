@@ -1,6 +1,7 @@
 <?php
 $paths = array(
-    'urls/tenant-legacy.php'
+    'urls/tenant-legacy.php',
+    'urls/setting-legacy.php',
 );
 
 $shopApi = array();

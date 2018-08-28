@@ -10,12 +10,12 @@ $paths = array(
     'urls-v2/spa-repository.php'
 );
 
-$shopApi = array();
+$api = array();
 
 foreach ($paths as $path){
     $myApi = include $path;
-    $shopApi = array_merge($shopApi, $myApi);
+    $api = array_merge($api, $myApi);
 }
 
-return $shopApi;
+return $api;
 

@@ -16,76 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
 require_once 'Pluf.php';
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Tenant_REST_TicketCommentsTest extends TestCase
+class Tenant_REST_TicketCommentsTest extends AbstractBasicTest
 {
-    /**
-     * @beforeClass
-     */
-    public static function installApps()
-    {
-        Pluf::start(__DIR__ . '/../conf/config.php');
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->install();
-        
-        
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $m->init($tenant);
-        
-        // Test user
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        
-        if(!isset($GLOBALS['_PX_request'])){
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant= $tenant;
-        if (true !== $user->create()) {
-            throw new Exception();
-        }
-        
-        $per = Role::getFromString('Pluf.owner');
-        $user->setAssoc($per);
-    }
-    
-    /**
-     * @afterClass
-     */
-    public static function uninstallApps()
-    {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
-    }
-
-    /**
-     * Getting tenant tickets
-     *
-     * Call tenant to get list of tickets
-     *
-     * @test
-     */
-    public function testFindTikcetComments()
-    {
-        $client = new Test_Client(array(
+    private static function getApi(){
+        $myAPI = array(
             array(
                 'app' => 'Tenant',
                 'regex' => '#^/api/tenant#',
@@ -98,16 +40,47 @@ class Tenant_REST_TicketCommentsTest extends TestCase
                 'base' => '',
                 'sub' => include 'User/urls.php'
             )
-        ));
+        );
+        return $myAPI;
+    }
+    
+    private static function getApiV2(){
+        $myAPI = array(
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^/api/v2/tenant#',
+                'base' => '',
+                'sub' => include 'Tenant/urls-v2.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/v2/user#',
+                'base' => '',
+                'sub' => include 'User/urls-v2.php'
+            )
+        );
+        return $myAPI;
+    }
+    
+    /**
+     * Getting tenant tickets
+     *
+     * Call tenant to get list of tickets
+     *
+     * @test
+     */
+    public function testFindTikcetComments()
+    {
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -115,11 +88,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -135,29 +108,16 @@ class Tenant_REST_TicketCommentsTest extends TestCase
      */
     public function testFindTikcetCommentSNotEmpty()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -165,18 +125,18 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         $c = new Tenant_Comment();
         $c->title = 'test';
         $c->description = 'test';
-        $c->author = $user;
-        $c->ticket = $t;
+        $c->author_id = $user;
+        $c->ticket_id = $t;
         $c->create();
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -194,29 +154,16 @@ class Tenant_REST_TicketCommentsTest extends TestCase
      */
     public function testGetTikcetComment()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -224,18 +171,18 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         $c = new Tenant_Comment();
         $c->title = 'test';
         $c->description = 'test';
-        $c->author = $user;
-        $c->ticket = $t;
+        $c->author_id = $user;
+        $c->ticket_id = $t;
         $c->create();
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/' . $c->id);
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $c->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponseAsModel($response);
@@ -253,29 +200,16 @@ class Tenant_REST_TicketCommentsTest extends TestCase
      */
     public function testCreateTikcetComment()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -283,11 +217,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -295,7 +229,7 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -314,29 +248,16 @@ class Tenant_REST_TicketCommentsTest extends TestCase
      */
     public function testUpdateTikcetComment()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -344,11 +265,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -356,14 +277,14 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // update
-        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/' . $tc['id'], array(
+        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $tc['id'], array(
             'title' => 'test new title',
             'description' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200);
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);
@@ -382,29 +303,16 @@ class Tenant_REST_TicketCommentsTest extends TestCase
      */
     public function testDeleteTikcetComment()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Create ticket
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         $t = new Tenant_Ticket();
@@ -412,11 +320,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $t->description = 'test';
         $t->type = 'bug';
         $t->status = 'new';
-        $t->requester = $user;
+        $t->requester_id = $user;
         $t->create();
         
         // find comments
-        $response = $client->post('/api/tenant/ticket/' . $t->id . '/comment/new', array(
+        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -424,11 +332,11 @@ class Tenant_REST_TicketCommentsTest extends TestCase
         $tc = json_decode($response->content, true);
         
         // update
-        $response = $client->delete('/api/tenant/ticket/' . $t->id . '/comment/' . $tc['id']);
+        $response = $client->delete('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $tc['id']);
         Test_Assert::assertResponseStatusCode($response, 200);
         
         // find comments
-        $response = $client->get('/api/tenant/ticket/' . $t->id . '/comment/find');
+        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response);

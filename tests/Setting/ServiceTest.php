@@ -16,67 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
 require_once 'Pluf.php';
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Setting_ServiceTest extends TestCase
+class Setting_ServiceTest extends AbstractBasicTest
 {
-
-    /**
-     * @beforeClass
-     */
-    public static function createDataBase()
-    {
-        Pluf::start(__DIR__ . '/../conf/config.php');
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->install();
-        
-        
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $m->init($tenant);
-        
-        // Test user
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        
-        if(!isset($GLOBALS['_PX_request'])){
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant= $tenant;
-        if (true !== $user->create()) {
-            throw new Exception();
-        }
-        
-        $per = Role::getFromString('Pluf.owner');
-        $user->setAssoc($per);
-    }
-
-    /**
-     * @afterClass
-     */
-    public static function removeDatabses()
-    {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
-    }
-
     /**
      * Getting list of properties
      *
@@ -139,7 +88,7 @@ class Setting_ServiceTest extends TestCase
         $setting = new Tenant_Setting();
         $setting->key = $key;
         $setting->value = $value;
-        $setting->mod = Tenant_Setting::MOD_PUBLIC;
+        $setting->mode = Tenant_Setting::MOD_PUBLIC;
         Test_Assert::assertTrue($setting->create());
         
         $result = Tenant_Service::setting($key, 'New value');

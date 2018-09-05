@@ -16,81 +16,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
 require_once 'Pluf.php';
 
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+
 /**
+ *
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Setting_REST_BasicTest extends TestCase
+class Setting_REST_BasicTest extends AbstractBasicTest
 {
 
     private static $client = null;
 
-    private static $user = null;
+    private static $ownerClient = null;
 
     /**
+     *
      * @beforeClass
      */
-    public static function createDataBase()
+    public static function installApps()
     {
-        Pluf::start(__DIR__ . '/../conf/config.php');
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->install();
-        
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $m->init($tenant);
-        
-        // Test user
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        
-        if(!isset($GLOBALS['_PX_request'])){
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant= $tenant;
-        if (true !== $user->create()) {
-            throw new Exception();
-        }
-        
-        $per = Role::getFromString('Pluf.owner');
-        $user->setAssoc($per);
-        
-        $subs = include 'Tenant/urls.php';
-        for ($i = 0; $i < sizeof($subs); $i++) {
-            $subs[$i]['precond'] = array();
-        }
+        parent::installApps();
+        // Anonymouse client
         self::$client = new Test_Client(array(
             array(
                 'app' => 'Tenant',
-                'regex' => '#^/api/saas#',
+                'regex' => '#^/api/v2/tenant#',
                 'base' => '',
-                'sub' => $subs
+                'sub' => include 'Tenant/urls-v2.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/v2/user#',
+                'base' => '',
+                'sub' => include 'User/urls-v2.php'
             )
         ));
-    }
-
-    /**
-     * @afterClass
-     */
-    public static function removeDatabses()
-    {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
+        // Owner client
+        self::$ownerClient = new Test_Client(array(
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^/api/v2/tenant#',
+                'base' => '',
+                'sub' => include 'Tenant/urls-v2.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/v2/user#',
+                'base' => '',
+                'sub' => include 'User/urls-v2.php'
+            )
+        ));
+        // Login
+        $response = self::$ownerClient->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertNotNull($response);
+        Test_Assert::assertEquals($response->status_code, 200);
     }
 
     /**
@@ -100,21 +85,21 @@ class Setting_REST_BasicTest extends TestCase
      */
     public function anonymousCanGetListOfSettings()
     {
-        $response = self::$client->get('/api/saas/setting/find');
+        $response = self::$client->get('/api/v2/tenant/settings');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
-     * Getting list of properties with admin
+     * Getting list of properties with owner
      *
      * @test
      */
-    public function adminCanGetListOfSettings()
+    public function ownerCanGetListOfSettings()
     {
         // Getting list
-        $response = self::$client->get('/api/saas/setting/find');
+        $response = self::$ownerClient->get('/api/v2/tenant/settings');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -125,7 +110,7 @@ class Setting_REST_BasicTest extends TestCase
      *
      * @test
      */
-    public function adminCanCreateASetting()
+    public function ownerCanCreateASetting()
     {
         // Getting list
         $values = array(
@@ -133,10 +118,10 @@ class Setting_REST_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/saas/setting/new', $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         $setting = new Tenant_Setting();
         $list = $setting->getList();
         Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
@@ -144,11 +129,11 @@ class Setting_REST_BasicTest extends TestCase
     }
 
     /**
-     * Create and update a new setting in system by admin
+     * Create and update a new setting in system by owner
      *
      * @test
      */
-    public function adminCanCreateAndGetSettingByKey()
+    public function ownerCanCreateAndGetSettingByKey()
     {
         // Getting list
         $values = array(
@@ -156,26 +141,26 @@ class Setting_REST_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/saas/setting/new', $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         $setting = new Tenant_Setting();
         $list = $setting->getList();
         Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
         Test_Assert::assertEquals($values['value'], Tenant_Service::setting($values['key']), 'Values are not equal.');
-        
-        $response = self::$client->get('/api/saas/setting/' . $values['key']);
+
+        $response = self::$ownerClient->get('/api/v2/tenant/settings/' . $values['key']);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
 
     /**
-     * Create and update a new setting in system by admin
+     * Create and update a new setting in system by owner
      *
      * @test
      */
-    public function adminCanCreateAndGetSettingById()
+    public function ownerCanCreateAndGetSettingById()
     {
         // Getting list
         $values = array(
@@ -183,15 +168,15 @@ class Setting_REST_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/saas/setting/new', $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         $setting = new Tenant_Setting();
         $list = $setting->getList();
         Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
         Test_Assert::assertEquals($values['value'], Tenant_Service::setting($values['key']), 'Values are not equal.');
-        
+
         $sql = new Pluf_SQL('`key`=%s', array(
             $values['key']
         ));
@@ -199,18 +184,18 @@ class Setting_REST_BasicTest extends TestCase
             'filter' => $sql->gen()
         ));
         Test_Assert::assertNotNull($one, 'Setting not found with key');
-        
-        $response = self::$client->get('/api/saas/setting/' . $one->id);
+
+        $response = self::$ownerClient->get('/api/v2/tenant/settings/' . $one->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
 
     /**
-     * Create and update a new setting in system by admin
+     * Create and update a new setting in system by owner
      *
      * @test
      */
-    public function adminCanCreateAndDeleteSettingById()
+    public function ownerCanCreateAndDeleteSettingById()
     {
         // Getting list
         $values = array(
@@ -218,10 +203,10 @@ class Setting_REST_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/saas/setting/new', $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         // Get setting form db
         $setting = new Tenant_Setting();
         $sql = new Pluf_SQL('`key`=%s', array(
@@ -231,12 +216,12 @@ class Setting_REST_BasicTest extends TestCase
             'filter' => $sql->gen()
         ));
         Test_Assert::assertNotNull($one, 'Setting not found with key');
-        
+
         // delete by id
-        $response = self::$client->delete('/api/saas/setting/' . $one->id);
+        $response = self::$ownerClient->delete('/api/v2/tenant/settings/' . $one->id);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         // Check if deleted
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
@@ -245,11 +230,11 @@ class Setting_REST_BasicTest extends TestCase
     }
 
     /**
-     * Create and update a new setting in system by admin
+     * Create and update a new setting in system by owner
      *
      * @test
      */
-    public function adminCanCreateAndUpdateSettingById()
+    public function ownerCanCreateAndUpdateSettingById()
     {
         // Getting list
         $values = array(
@@ -257,10 +242,10 @@ class Setting_REST_BasicTest extends TestCase
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$client->post('/api/saas/setting/new', $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         $setting = new Tenant_Setting();
         $sql = new Pluf_SQL('`key`=%s', array(
             $values['key']
@@ -269,12 +254,12 @@ class Setting_REST_BasicTest extends TestCase
             'filter' => $sql->gen()
         ));
         Test_Assert::assertNotNull($one, 'Setting not found with key');
-        
+
         $values['value'] = 'new value' . rand();
-        $response = self::$client->post('/api/saas/setting/' . $one->id, $values);
+        $response = self::$ownerClient->post('/api/v2/tenant/settings/' . $one->id, $values);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        
+
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
         ));

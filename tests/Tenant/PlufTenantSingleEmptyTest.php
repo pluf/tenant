@@ -21,6 +21,7 @@ use PHPUnit\Framework\IncompleteTestError;
 require_once 'Pluf.php';
 
 /**
+ *
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
@@ -28,6 +29,7 @@ class PlufTenantSingleEmptyTest extends TestCase
 {
 
     /**
+     *
      * @beforeClass
      */
     public static function installApps()
@@ -37,7 +39,7 @@ class PlufTenantSingleEmptyTest extends TestCase
         Pluf::start($cfg);
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
-        
+
         // Test tenant
         $tenant = new Pluf_Tenant();
         $tenant->domain = 'localhost';
@@ -46,31 +48,37 @@ class PlufTenantSingleEmptyTest extends TestCase
         if (true !== $tenant->create()) {
             throw new Pluf_Exception('Faile to create new tenant');
         }
-        
+
         $m->init($tenant);
-        
-        // Test user
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        
+
         if (! isset($GLOBALS['_PX_request'])) {
             $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
         }
         $GLOBALS['_PX_request']->tenant = $tenant;
+
+        // Test user
+        $user = new User_Account();
+        $user->login = 'test';
+        $user->is_active = true;
         if (true !== $user->create()) {
             throw new Exception();
         }
-        
-        $per = Role::getFromString('Pluf.owner');
+        // Credential of user
+        $credit = new User_Credential();
+        $credit->setFromFormData(array(
+            'account_id' => $user->id
+        ));
+        $credit->setPassword('test');
+        if (true !== $credit->create()) {
+            throw new Exception();
+        }
+
+        $per = User_Role::getFromString('Pluf.owner');
         $user->setAssoc($per);
     }
 
     /**
+     *
      * @afterClass
      */
     public static function uninstallApps()
@@ -80,34 +88,36 @@ class PlufTenantSingleEmptyTest extends TestCase
     }
 
     /**
+     *
      * @test
      */
     public function testDefaultTenant()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
-        
+
         // check id
         $id = $tenant->id;
         $this->assertNotNull($id);
-        
+
         // check title
         $title = $tenant->title;
         $this->assertNotNull($title);
-        
+
         // check description
         $desc = $tenant->description;
         $this->assertNotNull($desc);
     }
 
     /**
+     *
      * @test
      */
     public function testStoragePath()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
-        
+
         $storage = $tenant->storagePath();
         $this->assertNotNull($storage);
         $this->assertEquals(Pluf::f('upload_path'), $storage);

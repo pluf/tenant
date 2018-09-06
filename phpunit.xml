@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
-    <testsuites>
-        <testsuite name="Tenant">
-            <directory>tests/Tenant/</directory>
-            <directory>tests/Tenant_REST/</directory> 
-            <directory>tests/Tenant_Monitor/</directory> 
-        </testsuite>
-        <testsuite name="Setting">
-            <directory>tests/Setting/</directory>
-            <directory>tests/Setting_Template/</directory> 
-            <directory>tests/Setting_REST/</directory> 
-            <directory>tests/Setting_REST_Legacy/</directory> 
-        </testsuite>
-    </testsuites>
+	<testsuites>
+		<testsuite name="Tenant">
+			<directory>tests/Tenant/</directory>
+			<directory>tests/Tenant_REST/</directory>
+			<directory>tests/Tenant_Monitor/</directory>
+		</testsuite>
+		<testsuite name="Setting">
+			<directory>tests/Setting/</directory>
+			<directory>tests/Setting_Template/</directory>
+			<directory>tests/Setting_REST/</directory>
+		</testsuite>
+		<testsuite name="SPA">
+			<directory>tests/Spa_REST/</directory>
+		</testsuite>
+	</testsuites>
 
 	<!-- Code coverage -->
 	<filter>
@@ -21,6 +23,6 @@
 		</whitelist>
 	</filter>
 	<logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
+		<log type="coverage-clover" target="build/logs/clover.xml" />
 	</logging>
 </phpunit>

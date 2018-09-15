@@ -49,7 +49,7 @@ class Tenant_Views_SpaStates extends Pluf_Views
     {
         $states = $this->find($request, $match);
         foreach ($states as $state){
-            if($state['id'] == $match['stateId']){
+            if($state['id'] == $match['transitionId']){
                 return $state;
             }
         }
@@ -64,7 +64,7 @@ class Tenant_Views_SpaStates extends Pluf_Views
     public function put($request, $match)
     {
         $spa = Pluf_Shortcuts_GetObjectOr404('Tenant_SPA', $match['modelId']);
-        $transitionId = array_key_exists('id', $request->REQUEST) ? $request->REQUEST['id'] : $match['stateId'];
+        $transitionId = array_key_exists('id', $request->REQUEST) ? $request->REQUEST['id'] : $match['transitionId'];
         return Tenant_Shortcuts_SpaManager($spa)->apply($spa, $transitionId);
     }
 }

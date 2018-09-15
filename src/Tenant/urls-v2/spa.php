@@ -108,7 +108,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spas/(?P<modelId>\d+)/possible-transitions/(?P<stateId>.+)$#',
+        'regex' => '#^/spas/(?P<modelId>\d+)/possible-transitions/(?P<transitionId>.+)$#',
         'model' => 'Tenant_Views_SpaStates',
         'method' => 'get',
         'http-method' => 'GET',

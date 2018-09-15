@@ -96,10 +96,10 @@ return array(
         )
     ),
     
-    // ************************************************************ States of SPAs
+    // ************************************************************ Transitions of SPAs (States of SPAs)
     
     array(
-        'regex' => '#^/spas/(?P<modelId>\d+)/states$#',
+        'regex' => '#^/spas/(?P<modelId>\d+)/possible-transitions$#',
         'model' => 'Tenant_Views_SpaStates',
         'method' => 'find',
         'http-method' => 'GET',
@@ -108,7 +108,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spas/(?P<modelId>\d+)/states/(?P<stateId>.+)$#',
+        'regex' => '#^/spas/(?P<modelId>\d+)/possible-transitions/(?P<stateId>.+)$#',
         'model' => 'Tenant_Views_SpaStates',
         'method' => 'get',
         'http-method' => 'GET',
@@ -117,7 +117,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spas/(?P<modelId>\d+)/states/(?P<stateId>.+)$#',
+        'regex' => '#^/spas/(?P<modelId>\d+)/transitions$#',
         'model' => 'Tenant_Views_SpaStates',
         'method' => 'put',
         'http-method' => array(

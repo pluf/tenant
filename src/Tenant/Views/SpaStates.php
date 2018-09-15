@@ -64,6 +64,7 @@ class Tenant_Views_SpaStates extends Pluf_Views
     public function put($request, $match)
     {
         $spa = Pluf_Shortcuts_GetObjectOr404('Tenant_SPA', $match['modelId']);
-        return Tenant_Shortcuts_SpaManager($spa)->apply($spa, $match['stateId']);
+        $transitionId = array_key_exists('id', $request->REQUEST) ? $request->REQUEST['id'] : $match['stateId'];
+        return Tenant_Shortcuts_SpaManager($spa)->apply($spa, $transitionId);
     }
 }

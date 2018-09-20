@@ -37,7 +37,14 @@ class Tenant_Views_SpaStates extends Pluf_Views
     public function find($request, $match)
     {
         $spa = Pluf_Shortcuts_GetObjectOr404('Tenant_SPA', $match['modelId']);
-        return Tenant_Shortcuts_SpaManager($spa)->states($spa);
+        $items = Tenant_Shortcuts_SpaManager($spa)->states($spa);
+        return array(
+            'items' => $items,
+            'counts' => count($items),
+            'current_page' => 1,
+            'items_per_page' => count($items),
+            'page_number' => 1
+        );
     }
 
     /**

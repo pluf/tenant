@@ -51,7 +51,7 @@ class Tenant_Views_Setting extends Pluf_Views
      * @return Pluf_Model|NULL
      */
     private function internalGet($request, $match){
-        if ($request->user->hasPerm('Pluf.owner')) {
+        if ($request->user->hasPerm('tenant.owner')) {
             $sql = new Pluf_SQL('`key`=%s', array(
                 $match['key']
             ));
@@ -75,7 +75,7 @@ class Tenant_Views_Setting extends Pluf_Views
      */
     public function findObject($request, $match, $p = array())
     {
-        if (! $request->user->hasPerm('Pluf.owner')) {
+        if (! $request->user->hasPerm('tenant.owner')) {
             $sql = new Pluf_SQL('`mode`=%s', array(
                 Tenant_Setting::MOD_PUBLIC
             ));

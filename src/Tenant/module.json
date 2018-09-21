@@ -26,7 +26,8 @@
 				"title": "Storage size",
 				"description": "Storage size of the tenant.",
 				"function": "Tenant_Monitor::storage",
-				"cacheable": true
+				"cacheable": true,
+				"interval": 86400
 			},
 			{
 				"name": "owner",

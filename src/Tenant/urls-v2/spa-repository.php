@@ -38,7 +38,7 @@ return array(
     ),
     
     array(
-        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)/states$#',
+        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)/possible-transitions$#',
         'model' => 'Tenant_Views_SpaRepository',
         'method' => 'findRemoteSpaStates',
         'http-method' => 'GET',
@@ -47,7 +47,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)/states/(?P<stateId>.+)$#',
+        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)/possible-transitions/(?P<stateId>.+)$#',
         'model' => 'Tenant_Views_SpaRepository',
         'method' => 'getRemoteSpaState',
         'http-method' => 'GET',
@@ -56,7 +56,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>\d+)/states/(?P<stateId>.+)$#',
+        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>\d+)/transitions/(?P<stateId>.+)$#',
         'model' => 'Tenant_Views_SpaRepository',
         'method' => 'putToRemoteSpaState',
         'http-method' => array(

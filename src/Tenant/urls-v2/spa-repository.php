@@ -27,16 +27,7 @@ return array(
             'User_Precondition::ownerRequired'
         )
     ),
-    array(
-        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)$#',
-        'model' => 'Tenant_Views_SpaRepository',
-        'method' => 'get',
-        'http-method' => 'GET',
-        'precond' => array(
-            'User_Precondition::ownerRequired'
-        )
-    ),
-    
+       
     array(
         'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)/possible-transitions$#',
         'model' => 'Tenant_Views_SpaRepository',
@@ -56,7 +47,7 @@ return array(
         )
     ),
     array(
-        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>\d+)/transitions/(?P<stateId>.+)$#',
+        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>\d+)/transitions$#',
         'model' => 'Tenant_Views_SpaRepository',
         'method' => 'putToRemoteSpaState',
         'http-method' => array(
@@ -66,5 +57,17 @@ return array(
         'precond' => array(
             'User_Precondition::ownerRequired'
         )
-    )
+    ),
+    
+    // Note: Should be last item else upper items will not be matched
+    array(
+        'regex' => '#^/spa-repositories/default/spas/(?P<modelId>.+)$#',
+        'model' => 'Tenant_Views_SpaRepository',
+        'method' => 'get',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    
 );

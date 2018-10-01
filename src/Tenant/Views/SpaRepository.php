@@ -91,7 +91,14 @@ class Tenant_Views_SpaRepository extends Pluf_Views
 //         $spa = $repo->get($request, $match);
         $spa = $this->get($request, $match);
         $m = new Tenant_SPA_Manager_Remote();
-        return $m->states($spa);
+        $items = $m->states($spa);
+        return array(
+            'items' => $items,
+            'counts' => count($items),
+            'current_page' => 1,
+            'items_per_page' => count($items),
+            'page_number' => 1
+        );
     }
     
     /**
@@ -121,7 +128,8 @@ class Tenant_Views_SpaRepository extends Pluf_Views
 //         $spa = $repo->get($request, $match);
         $spa = $this->get($request, $match);
         $m = new Tenant_SPA_Manager_Remote();
-        return $m->apply($spa, $match['stateId']);
+        $transitionId = array_key_exists('id', $request->REQUEST) ? $request->REQUEST['id'] : $match['transitionId'];
+        return $m->apply($spa, $transitionId);
     }
 
 }

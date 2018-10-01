@@ -105,7 +105,7 @@ class Tenant_SpaService
     public static function installFromRepository($id){
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.webpich.com');
-        $path = '/api/marketplace/spa/' . $id . '/download';
+        $path = '/api/v2/marketplace/spas/' . $id . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request
         $client = new GuzzleHttp\Client();

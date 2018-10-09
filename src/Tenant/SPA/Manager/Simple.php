@@ -170,14 +170,14 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
     {
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.webpich.com');
-        $path = '/api/marketplace/spa/' . $object->name . '/download';
+        $path = '/api/v2/marketplace/spas/' . $object->name . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request
         $client = new GuzzleHttp\Client();
         $response = $client->request('GET', $backend . $path, [
             'sink' => $file
         ]);
-        return Spa_Service::updateFromFile($object, $file, true);
+        return Tenant_SpaService::updateFromFile($object, $file, true);
     }
     
     /**

@@ -40,8 +40,8 @@ class Tenant_Views_Ticket
         $object = new Tenant_Comment();
         $form = Pluf_Shortcuts_GetFormForModel($object, $request->REQUEST);
         $object = $form->save(false);
-        $object->ticket = $parent;
-        $object->author = $request->user;
+        $object->ticket_id = $parent;
+        $object->author_id = $request->user;
         $object->create();
         return $object;
     }

@@ -16,50 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\IncompleteTestError;
 require_once 'Pluf.php';
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class User_Monitor_BasicsTest extends TestCase
+class User_Monitor_BasicsTest extends AbstractBasicTest
 {
 
-    /**
-     * @beforeClass
-     */
-    public static function createDataBase()
-    {
-        $cfg = include __DIR__ . '/../conf/config.php';
-        $cfg['multitenant'] = false;
-        Pluf::start($cfg);
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->install();
-        
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        $user->administrator = true;
-        if (true !== $user->create()) {
-            throw new Exception();
-        }
-    }
-    
-    /**
-     * @afterClass
-     */
-    public static function uninstallApps()
-    {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
-    }
-    
     /**
      * @test
      */
@@ -69,32 +37,32 @@ class User_Monitor_BasicsTest extends TestCase
         $client = new Test_Client(array(
             array(
                 'app' => 'User',
-                'regex' => '#^/api/user#',
+                'regex' => '#^/api/v2/user#',
                 'base' => '',
-                'sub' => include 'User/urls.php'
+                'sub' => include 'User/urls-v2.php'
             ),
             array(
-                'regex' => '#^/monitor/(?P<property>.+)$#',
-                'model' => 'Tenant_Monitor',
-                'method' => 'permission',
-                'http-method' => 'GET'
+                'app' => 'Monitor',
+                'regex' => '#^/api/v2/monitor#',
+                'base' => '',
+                'sub' => include 'Monitor/urls-v2.php'
             )
         ));
         
         // Change detail
-        $user = new User();
+        $user = new User_Account();
         $user = $user->getUser('test');
         
         // Login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
         
-        // Login
-        $response = $client->get('/monitor/owner');
+        // Monitor owner
+        $response = $client->get('/api/v2/monitor/tags/user/metrics/owner');
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
     }

@@ -20,10 +20,10 @@
 
 /**
  * Model of setting
- * 
- * @property {int} 
- *  mode each bit is used for an special protection. 
- *  First bit is a protection bit: true means owner can access
+ *
+ * @property {int}
+ *           mode each bit is used for an special protection.
+ *           First bit is a protection bit: true means owner can access
  * @author maso <mostafa.barmshory@dpq.co.ir>
  *        
  */
@@ -31,19 +31,22 @@ class Tenant_Setting extends Pluf_Model
 {
 
     const MOD_PRIVATE = 1;
- // 001
+
+    // 001
     const MOD_PUBLIC = 0;
- // 000
-    
+
+    // 000
+
     /**
+     *
      * @brief مدل داده‌ای را بارگذاری می‌کند.
      *
      * @see Pluf_Model::init()
      */
     function init()
     {
-        $this->_a['table'] = 'settings';
-        $this->_a['verbose'] = 'System setting';
+        $this->_a['table'] = 'tenant_settings';
+        $this->_a['verbose'] = 'Tenant Setting';
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Pluf_DB_Field_Sequence',
@@ -53,33 +56,34 @@ class Tenant_Setting extends Pluf_Model
             ),
             'mode' => array(
                 'type' => 'Pluf_DB_Field_Integer',
-                'blank' => false,
+                'is_null' => false,
                 'editable' => false
             ),
             'key' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
-                'blank' => false,
+                'unique' => true,
+                'is_null' => false,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'value' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
-                'blank' => true,
+                'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'description' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
-                'blank' => true,
+                'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'creation_dtime' => array(
                 'type' => 'Pluf_DB_Field_Datetime',
-                'blank' => true,
+                'is_null' => true,
                 'verbose' => __('creation date'),
                 'help_text' => __('Creation date of the configuration.'),
                 'editable' => false,
@@ -87,22 +91,18 @@ class Tenant_Setting extends Pluf_Model
             ),
             'modif_dtime' => array(
                 'type' => 'Pluf_DB_Field_Datetime',
-                'blank' => true,
+                'is_null' => true,
                 'verbose' => __('modification date'),
                 'help_text' => __('Modification date of the configuration.'),
                 'editable' => false,
                 'readable' => true
             )
         );
-        $this->_a['idx'] = array(
-            'mode_key_idx' => array(
-                'col' => 'mode, key'
-            ),
-            'key_idx' => array(
-                'type' => 'unique',
-                'col' => 'key'
-            )
-        );
+//         $this->_a['idx'] = array(
+//             'mode_key_idx' => array(
+//                 'col' => 'mode, key'
+//             )
+//         );
     }
 
     /**

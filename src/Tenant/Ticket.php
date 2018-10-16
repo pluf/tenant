@@ -10,8 +10,8 @@ class Tenant_Ticket extends Pluf_Model
      */
     function init()
     {
-        $this->_a['table'] = 'tenant_ticket';
-        $this->_a['verbose'] = 'Tenant Ticket';
+        $this->_a['table'] = 'tenant_tickets';
+        $this->_a['verbose'] = 'Tenant Tickets';
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Pluf_DB_Field_Sequence',
@@ -59,27 +59,19 @@ class Tenant_Ticket extends Pluf_Model
                 'editable' => false,
                 'readable' => true
             ),
-            // relations
-            'requester' => array(
+            /*
+             * Relations
+             */
+            'requester_id' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'User',
+                'model' => 'User_Account',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true,
-                'relate_name' => 'requester'
+                'name' => 'requester',
+                'graphql_name' => 'requester'
             )
         );
-        
-        // $this->_a['idx'] = array(
-        // 'ticket_tenant_idx' => array(
-        // 'col' => 'secure_ticket',
-        // 'type' => 'unique', // normal, unique, fulltext, spatial
-        // 'index_type' => '', // hash, btree
-        // 'index_option' => '',
-        // 'algorithm_option' => '',
-        // 'lock_option' => ''
-        // )
-        // );
     }
 
     /**

@@ -16,75 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
 require_once 'Pluf.php';
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Tenant_REST_InvoicesTest extends TestCase
+class Tenant_REST_InvoicesTest extends AbstractBasicTest
 {
 
-    /**
-     * @beforeClass
-     */
-    public static function installApps()
-    {
-        Pluf::start(__DIR__ . '/../conf/config.php');
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->install();
-        
-        
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-        
-        $m->init($tenant);
-        
-        // Test user
-        $user = new User();
-        $user->login = 'test';
-        $user->first_name = 'test';
-        $user->last_name = 'test';
-        $user->email = 'toto@example.com';
-        $user->setPassword('test');
-        $user->active = true;
-        
-        if(!isset($GLOBALS['_PX_request'])){
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant= $tenant;
-        if (true !== $user->create()) {
-            throw new Exception();
-        }
-        
-        $per = Role::getFromString('Pluf.owner');
-        $user->setAssoc($per);
-    }
-
-    /**
-     * @afterClass
-     */
-    public static function uninstallApps()
-    {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
-    }
-
-    /**
-     * Getting invoice list
-     *
-     * @test
-     */
-    public function shouldSupportMultipleLogin()
-    {
-        $urls =array(
+    private static function getApi(){
+        $myAPI = array(
             array(
                 'app' => 'Tenant',
                 'regex' => '#^/api/tenant#',
@@ -98,21 +42,48 @@ class Tenant_REST_InvoicesTest extends TestCase
                 'sub' => include 'User/urls.php'
             )
         );
-        
-        // login
-        for($i = 0; $i < 10; $i++){
-            $client = new Test_Client($urls);
-            $response = $client->post('/api/user/login', array(
-                'login' => 'test',
-                'password' => 'test'
-            ));
-            Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
-            // Current user is valid
-            $response = $client->get('/api/user');
-            Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
-            Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
-        }
+        return $myAPI;
     }
+    
+    private static function getApiV2(){
+        $myAPI = array(
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^/api/v2/tenant#',
+                'base' => '',
+                'sub' => include 'Tenant/urls-v2.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/v2/user#',
+                'base' => '',
+                'sub' => include 'User/urls-v2.php'
+            )
+        );
+        return $myAPI;
+    }
+    
+    /**
+     * Getting invoice list
+     *
+     * @test
+     */
+    public function shouldSupportMultipleLogin()
+{
+    // login
+    for ($i = 0; $i < 10; $i ++) {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        // Current user is valid
+        $response = $client->get('/api/v2/user/accounts/current');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+    }
+}
     
     /**
      * Getting invoice list
@@ -121,35 +92,22 @@ class Tenant_REST_InvoicesTest extends TestCase
      */
     public function testFindInvoices()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
 
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Current user is valid
-        $response = $client->get('/api/user');
+        $response = $client->get('/api/v2/user/accounts/current');
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
         
         // find
-        $response = $client->get('/api/tenant/invoice/find');
+        $response = $client->get('/api/v2/tenant/invoices');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -164,29 +122,16 @@ class Tenant_REST_InvoicesTest extends TestCase
      */
     public function testFindInvoicesNonEmpty()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         
         // Current user is valid
-        $response = $client->get('/api/user');
+        $response = $client->get('/api/v2/user/accounts/current');
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
         Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
         
@@ -198,7 +143,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         $i->create();
         
         // find
-        $response = $client->get('/api/tenant/invoice/find');
+        $response = $client->get('/api/v2/tenant/invoices');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -216,22 +161,9 @@ class Tenant_REST_InvoicesTest extends TestCase
      */
     public function testGetInvoice()
     {
-        $client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        ));
+        $client = new Test_Client(self::getApiV2());
         // login
-        $response = $client->post('/api/user/login', array(
+        $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -245,7 +177,7 @@ class Tenant_REST_InvoicesTest extends TestCase
         $i->create();
         
         // find
-        $response = $client->get('/api/tenant/invoice/'. $i->id);
+        $response = $client->get('/api/v2/tenant/invoices/'. $i->id);
         Test_Assert::assertResponseNotNull($response);
         Test_Assert::assertResponseStatusCode($response, 200);
         Test_Assert::assertResponseNotAnonymousModel($response, 'Invoice not foudn');

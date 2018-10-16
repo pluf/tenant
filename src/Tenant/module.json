@@ -5,23 +5,47 @@
 		"Tenant_Invoice",
 		"Tenant_Ticket",
 		"Tenant_Comment",
-		"Tenant_Setting"
+		"Tenant_Setting",
+		"Tenant_Configuration",
+		"Tenant_SPA"
 	],
 	"init": {
-		"Monitor_Property": [
+		"Monitor_Tag": [
 			{
-				"monitor": "tenant",
-				"name": "storage",
+				"name": "tenant",
+				"description": "Tag for monitors on tenant metrics"
+			},
+			{
+				"name": "user",
+				"description": "Tag for monitors on user metrics"
+			}
+		],
+		"Monitor_Metric": [
+			{
+				"name": "tenant.storage",
 				"title": "Storage size",
 				"description": "Storage size of the tenant.",
 				"function": "Tenant_Monitor::storage",
-				"cacheable": true
-			},{
-				"monitor": "user",
+				"cacheable": true,
+				"interval": 86400
+			},
+			{
 				"name": "owner",
 				"title": "Owner",
 				"description": "User ownership monitor",
 				"function": "Tenant_Monitor::permission"
+			}
+		]
+	},
+	"init_assoc": {
+		"Monitor_Tag|Monitor_Metric": [
+			{
+				"from": "name='tenant'",
+				"to": "name='tenant.storage'"
+			},
+			{
+				"from": "name='user'",
+				"to": "name='owner'"
 			}
 		]
 	}

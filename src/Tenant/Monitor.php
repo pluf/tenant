@@ -40,15 +40,15 @@ class Tenant_Monitor
     {
         
         // Check user
-        if ($request->user->isAnonymous()) {
+        if (!$request->user || $request->user->isAnonymous()) {
             return false;
         }
         
         // Get permission
-        $per = new Role();
+        $per = new User_Role();
         $sql = new Pluf_SQL('code_name=%s',
             array(
-                $match['property']
+                $match['metricName']
             ));
         $items = $per->getList(
             array(

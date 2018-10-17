@@ -43,6 +43,7 @@ $cfg['secret_key'] = '5a8d7e0f2aad8bdab8f6eef725412850';
 // It must be writeable by your webserver instance.
 // It is mandatory if you are using the template system.
 $cfg['tmp_folder'] = __DIR__ . '/../tmp';
+$cfg['upload_path'] =  __DIR__ . '/../storage/tenant';
 
 // The folder in which the templates of the application are located.
 $cfg['templates_folder'] = array(

@@ -10,7 +10,7 @@ class Tenant_Invoice extends Pluf_Model
      */
     function init()
     {
-        $this->_a['table'] = 'tenant_invoice';
+        $this->_a['table'] = 'tenant_invoices';
         $this->_a['verbose'] = 'Tenant Invoice';
         $this->_a['cols'] = array(
             'id' => array(
@@ -77,14 +77,17 @@ class Tenant_Invoice extends Pluf_Model
                 'editable' => false,
                 'readable' => true
             ),
-            // relations
-            'payment' => array(
+            /*
+             * Foreign Keys
+             */
+            'payment_id' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
                 'model' => 'Tenant_BankReceipt',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true,
-                'relate_name' => 'payment'
+                'name' => 'payment',
+                'graphql_name' => 'payment'
             )
         );
     }

@@ -4,13 +4,14 @@ class Tenant_Comment extends Pluf_Model
 {
 
     /**
+     *
      * @brief مدل داده‌ای را بارگذاری می‌کند.
      *
      * @see Pluf_Model::init()
      */
     function init()
     {
-        $this->_a['table'] = 'tenant_comment';
+        $this->_a['table'] = 'tenant_comments';
         $this->_a['verbose'] = 'Tenant Comment';
         $this->_a['cols'] = array(
             'id' => array(
@@ -45,37 +46,28 @@ class Tenant_Comment extends Pluf_Model
                 'editable' => false,
                 'readable' => true
             ),
-            // relations
-            'author' => array(
+            /*
+            * Foreign keys
+            */
+            'author_id' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'User',
-                'blank' => false,
+                'model' => 'User_Account',
                 'is_null' => false,
                 'editable' => false,
                 'readable' => true,
-                'relate_name' => 'author'
+                'name' => 'author',
+                'graphql_feild' => 'author'
             ),
-            'ticket' => array(
+            'ticket_id' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
                 'model' => 'Tenant_Ticket',
-                'blank' => false,
                 'is_null' => false,
                 'editable' => false,
                 'readable' => true,
-                'relate_name' => 'ticket'
+                'name' => 'ticket',
+                'graphql_feild' => 'ticket'
             )
         );
-        
-        // $this->_a['idx'] = array(
-        // 'comment_tenant_idx' => array(
-        // 'col' => 'secure_comment',
-        // 'type' => 'unique', // normal, unique, fulltext, spatial
-        // 'index_type' => '', // hash, btree
-        // 'index_option' => '',
-        // 'algorithm_option' => '',
-        // 'lock_option' => ''
-        // )
-        // );
     }
 
     /**
@@ -102,5 +94,4 @@ class Tenant_Comment extends Pluf_Model
     {
         //
     }
-   
 }

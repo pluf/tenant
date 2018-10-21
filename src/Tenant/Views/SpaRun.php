@@ -45,6 +45,23 @@ class Tenant_Views_SpaRun
     }
 
     /**
+     * Load robots.txt of default spa
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @return Pluf_HTTP_Response_File|Pluf_HTTP_Response
+     */
+    public static function defaultSpaRobotsTxt($request, $match){
+        $name = Tenant_Service::setting('spa.default', 'not-found');
+        $spa = Tenant_SPA::getSpaByName($name);
+        if (! isset($spa)) {
+            $spa = Tenant_SpaService::getNotfoundSpa();
+        }
+        $resourcePath = $spa->getResourcePath('robots.txt');
+        return new Tenant_HTTP_Response_RobotsTxt($request->SERVER['HTTP_HOST'], $resourcePath);
+    }
+    
+    /**
      * Load a resource from SPA
      *
      * @param Pluf_HTTP_Request $request

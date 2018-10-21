@@ -23,7 +23,12 @@ return array(
         'model' => 'Tenant_Views_SpaRun',
         'method' => 'defaultSpa'
     ),
-    // url format for SPA resources:    
+    array(
+        'regex' => '#^/robots.txt$#',
+        'model' => 'Tenant_Views_SpaRun',
+        'method' => 'defaultSpaRobotsTxt'
+    ),
+    // url format for SPA resources:
     // resource from default spa: /path/to/resource
     // resource form specified spa: /spa-name/path/to/resource
     array(
@@ -32,8 +37,8 @@ return array(
         'method' => 'loadResource'
     ),
     array(
-            'regex' => '#^/(?P<firstPart>[^/]+)$#',
-            'model' => 'Tenant_Views_SpaRun',
-            'method' => 'loadResource'
-    ),
+        'regex' => '#^/(?P<firstPart>[^/]+)$#',
+        'model' => 'Tenant_Views_SpaRun',
+        'method' => 'loadResource'
+    )
 );

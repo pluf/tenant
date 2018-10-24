@@ -58,7 +58,8 @@ class Tenant_Views_SpaRun
             $spa = Tenant_SpaService::getNotfoundSpa();
         }
         $resourcePath = $spa->getResourcePath('robots.txt');
-        return new Tenant_HTTP_Response_RobotsTxt($request->SERVER['HTTP_HOST'], $resourcePath);
+        $host = ($request->https ? 'https://' : 'http://') . $request->SERVER['HTTP_HOST'];
+        return new Tenant_HTTP_Response_RobotsTxt($host, $resourcePath);
     }
     
     /**

@@ -42,7 +42,8 @@ class Tenant_Views_SpaRun
         }
         // $resPath = $spa->getMainPagePath();
         // return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath));
-        $url = $request->uri . $spa->name . '/';
+        $host = ($request->https ? 'https://' : 'http://') . $request->SERVER['HTTP_HOST'];
+        $url = $host . '/' . $spa->name . '/';
         return new Pluf_HTTP_Response_Redirect($url);
     }
 

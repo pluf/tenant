@@ -40,8 +40,10 @@ class Tenant_Views_SpaRun
         if (! isset($spa)) {
             $spa = Tenant_SpaService::getNotfoundSpa();
         }
-        $resPath = $spa->getMainPagePath();
-        return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath));
+        // $resPath = $spa->getMainPagePath();
+        // return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath));
+        $url = $request->uri . $spa->name . '/';
+        return new Pluf_HTTP_Response_Redirect($url);
     }
 
     /**

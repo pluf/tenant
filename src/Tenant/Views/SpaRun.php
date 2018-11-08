@@ -40,10 +40,31 @@ class Tenant_Views_SpaRun
         if (! isset($spa)) {
             $spa = Tenant_SpaService::getNotfoundSpa();
         }
-        $resPath = $spa->getMainPagePath();
-        return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath));
+        // $resPath = $spa->getMainPagePath();
+        // return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath));
+        $host = ($request->https ? 'https://' : 'http://') . $request->SERVER['HTTP_HOST'];
+        $url = $host . '/' . $spa->name . '/';
+        return new Pluf_HTTP_Response_Redirect($url);
     }
 
+    /**
+     * Load robots.txt of default spa
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @return Pluf_HTTP_Response_File|Pluf_HTTP_Response
+     */
+    public static function defaultSpaRobotsTxt($request, $match){
+        $name = Tenant_Service::setting('spa.default', 'not-found');
+        $spa = Tenant_SPA::getSpaByName($name);
+        if (! isset($spa)) {
+            $spa = Tenant_SpaService::getNotfoundSpa();
+        }
+        $resourcePath = $spa->getResourcePath('robots.txt');
+        $host = ($request->https ? 'https://' : 'http://') . $request->SERVER['HTTP_HOST'];
+        return new Tenant_HTTP_Response_RobotsTxt($host, $resourcePath);
+    }
+    
     /**
      * Load a resource from SPA
      *

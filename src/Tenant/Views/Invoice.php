@@ -65,7 +65,7 @@ class Tenant_Views_Invoice
             // 'phone' => $user->phone,
             'phone' => '',
             'callbackURL' => $url,
-            'backend' => $backend
+            'backend_id' => $backend
         );
         
         $payment = Tenant_BankService::create($receiptData, 'tenant-invoice', $invoice->id);

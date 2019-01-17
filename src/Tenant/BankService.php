@@ -22,7 +22,7 @@ class Tenant_BankService
      * 'email' => 'user@email.address',
      * 'phone' => '0917222222',
      * 'callbackURL' => 'http://.....',
-     * 'backend' => 2
+     * 'backend_id' => 2
      * );
      * </code></pre>
      *

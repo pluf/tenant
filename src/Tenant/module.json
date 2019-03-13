@@ -7,7 +7,8 @@
 		"Tenant_Comment",
 		"Tenant_Setting",
 		"Tenant_Configuration",
-		"Tenant_SPA"
+		"Tenant_SPA",
+		"Tenant_Resource"
 	],
 	"init": {
 		"Monitor_Tag": [

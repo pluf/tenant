@@ -71,10 +71,10 @@ class Spa_REST_BasePathTest extends AbstractBasicTest
      */
     public function getMainFileOfDefaultSpa()
     {
-        $response = self::$client->get('/');
+        $response = self::$client->get('/testManifest/');
         Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
         Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<html manifest="/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
+        Test_Assert::assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
 
     /**

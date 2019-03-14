@@ -1,3 +1,9 @@
+/*
+ * Tenant resources
+ * 
+ * There are several resources required by a tenant in common daily task. For
+ * example google search console search for an specific path to trust a domain.
+ */
 CREATE TABLE `tenant_resources` (
   `id` mediumint(9) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(64) NOT NULL DEFAULT '',

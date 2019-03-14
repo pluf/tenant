@@ -33,7 +33,7 @@ return array(
     array( // Create
         'regex' => '#^/resources$#',
         'model' => 'Pluf_Views',
-        'method' => 'create',
+        'method' => 'createObject',
         'http-method' => 'POST',
         'precond' => array(
             'User_Precondition::ownerRequired'

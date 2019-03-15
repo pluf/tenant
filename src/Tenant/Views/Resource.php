@@ -60,7 +60,7 @@ class Tenant_Views_Resource extends Pluf_Views
             $extra = array(
                 'model' => $resource
             );
-            $form = new CMS_Form_ContentUpdate(array_merge($request->REQUEST, $request->FILES), $extra);
+            $form = new Tenant_Form_ResourceUpdate(array_merge($request->REQUEST, $request->FILES), $extra);
             $resource = $form->save();
             return $resource;
         } else {

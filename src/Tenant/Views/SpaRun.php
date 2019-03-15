@@ -97,7 +97,7 @@ class Tenant_Views_SpaRun
             $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
 
             // find a resource
-            $tenantResource = $this->findTenantResource($path);
+            $tenantResource = $this->findTenantResource('/' . $path);
             if ($tenantResource) {
                 return new Pluf_HTTP_Response_File($tenantResource->getAbsloutPath(), $tenantResource->mime_type);
             }

@@ -20,8 +20,8 @@
 
 /**
  * Tenant resource date model
- * 
- * A direct resource model for a tenant. Suppose ther is a file which you wish to 
+ *
+ * A direct resource model for a tenant. Suppose ther is a file which you wish to
  * put in an specific address. Just create a resource and upload your file.
  *
  * @author hadi <mohammad.hadi.mansouri@dpq.co.ir>
@@ -79,15 +79,6 @@ class Tenant_Resource extends Pluf_Model
                 'help_text' => 'This types allow you to category contents',
                 'editable' => true
             ),
-            'file_path' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
-                'is_null' => false,
-                'size' => 250,
-                'verbose' => 'File path',
-                'help_text' => 'Content file path',
-                'editable' => false,
-                'readable' => false
-            ),
             'file_name' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
                 'is_null' => false,
@@ -111,7 +102,7 @@ class Tenant_Resource extends Pluf_Model
                 'default' => 0,
                 'help_text' => 'content downloads number',
                 'editable' => false
-            ),
+            )
         );
     }
 
@@ -148,7 +139,7 @@ class Tenant_Resource extends Pluf_Model
     function preDelete()
     {
         // remove related file
-        $filename = $this->file_path . '/' . $this->id;
+        $filename = $this->getAbsloutPath();
         if (is_file($filename)) {
             unlink($filename);
         }
@@ -161,6 +152,12 @@ class Tenant_Resource extends Pluf_Model
      */
     public function getAbsloutPath()
     {
-        return $this->file_path . '/' . $this->id;
+        $path = Pluf_Tenant::storagePath() . '/tenant-resources/' . $this->id;
+        $dirname = dirname($path);
+        if (! is_dir($dirname)) {
+            mkdir($dirname, 0755, true);
+            // FIXME: maso, 2019: throw exception if is not possible to create
+        }
+        return $path;
     }
 }

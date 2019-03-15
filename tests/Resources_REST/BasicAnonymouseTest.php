@@ -52,6 +52,11 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
                 'regex' => '#^/api/v2/user#',
                 'base' => '',
                 'sub' => include 'User/urls-v2.php'
+            ),
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^#',
+                'sub' => include 'Tenant/urls-app-v2.php'
             )
         ));
         self::$client->clean(true);
@@ -86,7 +91,34 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
             'description' => 'This is a test resources'
         );
         $response = self::$client->post('/api/v2/tenant/resources', $values);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 300, 'Find status code is not 200');
+    }
+    
+    
+    /**
+     * Create a new setting in system
+     *
+     * @test
+     */
+    public function anonymousCanAccessResourceWithPath(){
+        
+        // create resource
+        $r1 = new Tenant_Resource();
+        $r1->path = '/path/to.test/resource-' . rand();
+        $r1->title = 'A test resource';
+        $r1->description = 'Is created automaticl';
+        $r1->create();
+        
+        // upload resource value
+        $testContent = 'test content:' . rand();
+        $myfile = fopen($r1->getAbsloutPath(), "w") or die("Unable to open resource file!");
+        fwrite($myfile, $testContent);
+        fclose($myfile);
+        $r1->update();
+        
+        $response = self::$client->get($r1->path);
+        Test_Assert::assertEquals($response->status_code, 200);
+        // FIXME: maso, 2019: check if the content value is match with test content
+        // Test_Assert::assertEquals($testContent, $response, 'Value is not the same as input value');
+        $r1->delete();
     }
 }

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
 	<testsuites>
-<!-- 		<testsuite name="Tenant"> -->
-<!-- 			<directory>tests/Tenant/</directory> -->
-<!-- 			<directory>tests/Tenant_REST/</directory> -->
-<!-- 			<directory>tests/Tenant_Monitor/</directory> -->
-<!-- 		</testsuite> -->
-<!-- 		<testsuite name="Setting"> -->
-<!-- 			<directory>tests/Setting/</directory> -->
-<!-- 			<directory>tests/Setting_Template/</directory> -->
-<!-- 			<directory>tests/Setting_REST/</directory> -->
-<!-- 		</testsuite> -->
-<!-- 		<testsuite name="SPA"> -->
-<!-- 			<directory>tests/Spa_REST/</directory> -->
-<!-- 		</testsuite> -->
+		<testsuite name="Tenant">
+			<directory>tests/Tenant/</directory>
+			<directory>tests/Tenant_REST/</directory>
+			<directory>tests/Tenant_Monitor/</directory>
+		</testsuite>
+		<testsuite name="Setting">
+			<directory>tests/Setting/</directory>
+			<directory>tests/Setting_Template/</directory>
+			<directory>tests/Setting_REST/</directory>
+		</testsuite>
+		<testsuite name="SPA">
+			<directory>tests/Spa_REST/</directory>
+		</testsuite>
 		<testsuite name="Resource">
 			<directory>tests/Resources_REST/</directory>
 		</testsuite>

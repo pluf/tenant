@@ -20,7 +20,7 @@
 /**
  * 
  * @author maso<mostafa.barmshory@dpq.co.ir>
- *
+ * @deprecated This will be removed in the next major version.
  */
 class Tenant_Views_SpaResources extends Pluf_Views
 {

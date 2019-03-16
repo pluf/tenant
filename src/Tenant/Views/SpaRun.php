@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -19,9 +20,13 @@
 
 /**
  * Run SPAs.
- * 
- * @author pluf<info@pluf.ir>
  *
+ * Running an SPA is equal to send JS, CSS and other resources to the
+ * clients. So this class is nothing more than a resource access view
+ * for an SPA.
+ *
+ * @author pluf<info@pluf.ir>
+ *        
  */
 class Tenant_Views_SpaRun
 {
@@ -33,7 +38,7 @@ class Tenant_Views_SpaRun
      * @param array $match
      * @return Pluf_HTTP_Response_File|Pluf_HTTP_Response
      */
-    public static function defaultSpa($request, $match)
+    public function defaultSpa($request, $match)
     {
         $name = Tenant_Service::setting('spa.default', 'not-found');
         $spa = Tenant_SPA::getSpaByName($name);
@@ -54,7 +59,8 @@ class Tenant_Views_SpaRun
      * @param array $match
      * @return Pluf_HTTP_Response_File|Pluf_HTTP_Response
      */
-    public static function defaultSpaRobotsTxt($request, $match){
+    public function defaultSpaRobotsTxt($request, $match)
+    {
         $name = Tenant_Service::setting('spa.default', 'not-found');
         $spa = Tenant_SPA::getSpaByName($name);
         if (! isset($spa)) {
@@ -64,7 +70,7 @@ class Tenant_Views_SpaRun
         $host = ($request->https ? 'https://' : 'http://') . $request->SERVER['HTTP_HOST'];
         return new Tenant_HTTP_Response_RobotsTxt($host, $resourcePath);
     }
-    
+
     /**
      * Load a resource from SPA
      *
@@ -72,7 +78,7 @@ class Tenant_Views_SpaRun
      * @param array $match
      * @return Pluf_HTTP_Response_File|Pluf_HTTP_Response
      */
-    public static function loadResource($request, $match)
+    public function loadResource($request, $match)
     {
         // First part of path
         $firstPart = $match['firstPart'];
@@ -81,11 +87,22 @@ class Tenant_Views_SpaRun
         if (array_key_exists('remainPart', $match)) {
             $remainPart = $match['remainPart'];
         }
+
         $spa = Tenant_SPA::getSpaByName($firstPart);
         if (isset($spa)) { // SPA is valid
             $path = $remainPart;
             $spaName = $firstPart;
-        } else { // first part is not an SPA so use default SPA
+        } else {
+            // first part is not an SPA so use default SPA
+            $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
+
+            // find a resource
+            $tenantResource = $this->findTenantResource('/' . $path);
+            if ($tenantResource) {
+                return new Pluf_HTTP_Response_File($tenantResource->getAbsloutPath(), $tenantResource->mime_type);
+            }
+
+            // [OR] check for default spa
             $name = Tenant_Service::setting('spa.default', 'not-found');
             $spa = Tenant_SPA::getSpaByName($name);
             if ($spa === null) {
@@ -94,14 +111,14 @@ class Tenant_Views_SpaRun
             } else {
                 $spaName = null;
             }
-            $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
         }
+
         if (preg_match('/.+\.[a-zA-Z0-9]+$/', $path)) {
             // Looking for file in SPA
             $resPath = $spa->getResourcePath($path);
             $isMain = false;
         } else {
-            // Request is for main file (path is an internal state)
+            // [OR]Request is for main file (path is an internal state)
             $resPath = $spa->getMainPagePath();
             $isMain = true;
         }
@@ -110,5 +127,27 @@ class Tenant_Views_SpaRun
         } else {
             return new Pluf_HTTP_Response_File($resPath, Pluf_FileUtil::getMimeType($resPath));
         }
+    }
+
+    /**
+     * Finds tenant resource with path
+     *
+     * @param string $path
+     *            of the resource
+     * @return Tenant_Resource the resource
+     */
+    private function findTenantResource($path)
+    {
+        $q = new Pluf_SQL('path=%s', array(
+            $path
+        ));
+        $item = new Tenant_Resource();
+        $item = $item->getList(array(
+            'filter' => $q->gen()
+        ));
+        if (isset($item) && $item->count() == 1) {
+            return $item[0];
+        }
+        return null;
     }
 }

@@ -71,10 +71,10 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
      */
     public function getMainFileOfDefaultSpa()
     {
-        $response = self::$client->get('/');
+        $response = self::$client->get('/testResource/');
         Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
         Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<base href="/">', $response->content, 'Base tag replacement is not correct');
+        Test_Assert::assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
     }
     
     /**
@@ -82,10 +82,10 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
      */
     public function getFakeFileOfDefaultSpa()
     {
-        $response = self::$client->get('/alaki/path');
+        $response = self::$client->get('/testResource/alaki/path');
         Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
         Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<base href="/">', $response->content, 'Base tag replacement is not correct');
+        Test_Assert::assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
     }
     
     /**

@@ -14,6 +14,9 @@
 		<testsuite name="SPA">
 			<directory>tests/Spa_REST/</directory>
 		</testsuite>
+		<testsuite name="Resource">
+			<directory>tests/Resources_REST/</directory>
+		</testsuite>
 	</testsuites>
 
 	<!-- Code coverage -->

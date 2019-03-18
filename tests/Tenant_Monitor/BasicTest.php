@@ -31,7 +31,7 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
     /**
      * @test
      */
-    public function currentUserRest()
+    public function getOwnerMonitor()
     {
         
         $client = new Test_Client(array(
@@ -63,8 +63,10 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
         
         // Monitor owner
         $response = $client->get('/api/v2/monitor/tags/user/metrics/owner');
-        $this->assertNotNull($response);
-        $this->assertEquals($response->status_code, 200);
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        Test_Assert::assertResponseAsModel($response, 'Is not a valid model');
     }
 
 }
+

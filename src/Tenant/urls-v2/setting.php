@@ -1,6 +1,16 @@
 <?php
-return array( // ********************************************************************** Setting
-
+return array(
+    // ************************************************************* Schema
+    array(
+        'regex' => '#^/settings/schema$#',
+        'model' => 'Pluf_Views',
+        'method' => 'getSchema',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Setting'
+        )
+    ),
+    // ********************************************************************** Setting
     // TODO: maso, 2017: some attributes are not readable by users
     array( // Read (list)
         'regex' => '#^/settings$#',

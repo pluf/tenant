@@ -21,12 +21,32 @@ require_once 'Pluf.php';
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
+ *
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
 class Tenant_REST_TenantTest extends AbstractBasicTest
 {
-    
+
+    private static function getApiV2()
+    {
+        $myAPI = array(
+            array(
+                'app' => 'Tenant',
+                'regex' => '#^/api/v2/tenant#',
+                'base' => '',
+                'sub' => include 'Tenant/urls-v2.php'
+            ),
+            array(
+                'app' => 'User',
+                'regex' => '#^/api/v2/user#',
+                'base' => '',
+                'sub' => include 'User/urls-v2.php'
+            )
+        );
+        return $myAPI;
+    }
+
     /**
      * Getting tenant info
      *
@@ -36,18 +56,81 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
      */
     public function testDefaultTenant()
     {
-        // XXX: Hadi, 1397-06-14: Now there is no API to get information of current tenant.
-//         $client = new Test_Client(array(
-//             array(
-//                 'app' => 'Tenant',
-//                 'regex' => '#^/api/v2/tenant#',
-//                 'base' => '',
-//                 'sub' => include 'Tenant/urls-v2.php'
-//             )
-//         ));
-//         $response = $client->get('/api/v2/tenant/current');
-//         $this->assertNotNull($response);
-//         $this->assertEquals($response->status_code, 200);
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current');
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     * Getting tenants
+     *
+     * @test
+     */
+    public function getTenantsByOwner()
+    {
+        $client = new Test_Client(self::getApiV2());
+        // 1- Login
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants');
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+    }
+
+    /**
+     * Getting tenants
+     *
+     * @test
+     * @expectedException Pluf_Exception_Unauthorized
+     */
+    public function getTenantsByAnonymous()
+    {
+        $client = new Test_Client(self::getApiV2());
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants');
+    }
+
+
+    /**
+     * Creates new tenant
+     *
+     * @test
+     */
+    public function createNewTenantByAdmin()
+    {
+        $client = new Test_Client(self::getApiV2());
+        // 1- Login
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+
+        // 2.0 data
+        $data = array(
+            'subdomain' => 'test'.rand()
+        );
+        // 2- getting list of tenants
+        $response = $client->post('/api/v2/tenant/tenants', $data);
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        Test_Assert::assertResponseAsModel($response, 200, 'Fail to create tenant');
+
+        $actual = json_decode($response->content, true);
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants/'. $actual['id']);
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        Test_Assert::assertResponseAsModel($response, 200, 'Fail to find created tenant');
     }
 }
 

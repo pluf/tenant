@@ -19,31 +19,68 @@
 
 return array(
     // **************************************************************** Current Tenant
-//     array( // Get
-//         'regex' => '#^/$#',
-//         'model' => 'Tenant_Views',
-//         'method' => 'current',
-//         'http-method' => 'GET',
-//         'precond' => array()
-//     ),
-//     array( // Update
-//         'regex' => '#^/$#',
-//         'model' => 'Tenant_Views',
-//         'method' => 'update',
-//         'http-method' => 'POST',
-//         'precond' => array(
-//             'User_Precondition::ownerRequired'
-//         )
-//     ),
-//     array( // Delete
-//         'regex' => '#^/$#',
-//         'model' => 'Tenant_Views',
-//         'method' => 'delete',
-//         'http-method' => 'DELETE',
-//         'precond' => array(
-//             'User_Precondition::ownerRequired'
-//         )
-//     ),
-    
+    array( // Get current tenant
+        'regex' => '#^/tenants/current$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getCurrent',
+        'http-method' => 'GET',
+        'precond' => array()
+    ),
+    // **************************************************************** Sub tenants
+    array( // get list of all tentnats
+        'regex' => '#^/tenants$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getTenants',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array( // Add a new tenant
+        'regex' => '#^/tenants$#',
+        'model' => 'Tenant_Views',
+        'method' => 'putTenant',
+        'http-method' => 'POST',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array( // Gets a tenant
+        'regex' => '#^/tenants/(?P<modelId>\d+)$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getTenant',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array( // Updates a tenant
+        'regex' => '#^/tenants/(?P<modelId>\d+)$#',
+        'model' => 'Tenant_Views',
+        'method' => 'updateTenant',
+        'http-method' => 'POST',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    array( // Delete a tenant
+        'regex' => '#^/tenants/(?P<modelId>\d+)$#',
+        'model' => 'Tenant_Views',
+        'method' => 'deleteTenant',
+        'http-method' => 'DELETE',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        )
+    ),
+    // **************************************************************** Configurations
+    // XXX: maso, 2019
+    // **************************************************************** Settings
+    // XXX: maso, 2019
+    // **************************************************************** Tickets
+    // XXX: maso, 2019
+    // **************************************************************** Members
+    // XXX: maso, 2019
+    // **************************************************************** Invoices
+    // XXX: maso, 2019
 );
 

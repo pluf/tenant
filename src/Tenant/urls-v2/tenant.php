@@ -26,6 +26,16 @@ return array(
         'http-method' => 'GET',
         'precond' => array()
     ),
+    array( // Get current tenant configurations
+        'regex' => '#^/tenants/current/configurations$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getCurrentConfigurations',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Configuration'
+        ),
+        'precond' => array()
+    ),
     // **************************************************************** Sub tenants
     array( // get list of all tentnats
         'regex' => '#^/tenants$#',
@@ -74,6 +84,20 @@ return array(
     ),
     // **************************************************************** Configurations
     // XXX: maso, 2019
+    array(
+        'regex' => '#^/tenants/(?P<parentId>\d+)/configurations$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getTenantConfigurations',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Configuration',
+            'parent' => 'Tenant_Tenant',
+            'parentKey' => 'tenant'
+        )
+    ),
     // **************************************************************** Settings
     // XXX: maso, 2019
     // **************************************************************** Tickets

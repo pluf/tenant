@@ -98,7 +98,6 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
         $response = $client->get('/api/v2/tenant/tenants');
     }
 
-
     /**
      * Creates new tenant
      *
@@ -115,8 +114,10 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
         Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2.0 data
+        $subdomain = 'test' . rand();
         $data = array(
-            'subdomain' => 'test'.rand()
+            'subdomain' => $subdomain,
+            'domain' => $subdomain . '.domain.ir'
         );
         // 2- getting list of tenants
         $response = $client->post('/api/v2/tenant/tenants', $data);
@@ -127,10 +128,64 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
         $actual = json_decode($response->content, true);
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants/'. $actual['id']);
+        $response = $client->get('/api/v2/tenant/tenants/' . $actual['id']);
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
         Test_Assert::assertResponseAsModel($response, 200, 'Fail to find created tenant');
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getConfigurationsOfCurrentTenant()
+    {
+        $client = new Test_Client(self::getApiV2());
+        // 1- Login
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants/current/configurations');
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getConfigurationsOfSubTenant()
+    {
+        $client = new Test_Client(self::getApiV2());
+        // 1- Login
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+
+        // 2.0 data
+        $subdomain = 'test' . rand();
+        $data = array(
+            'subdomain' => $subdomain,
+            'domain' => $subdomain . '.domain.ir'
+        );
+        // 2- getting list of tenants
+        $response = $client->post('/api/v2/tenant/tenants', $data);
+        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        Test_Assert::assertResponseAsModel($response, 200, 'Fail to create tenant');
+
+        $actual = json_decode($response->content, true);
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants/' . $actual['id'] . '/configurations');
+        Test_Assert::assertResponseNotNull($response, 'Collection result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
 }
 

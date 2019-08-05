@@ -40,6 +40,17 @@ class Tenant_Views extends Pluf_Views
         return $this->getObject($request, $match, $params);
     }
 
+    public function getCurrentConfigurations($request, $match, $params)
+    {
+        $sql = new Pluf_SQL( 'tenant=%s', $request->tenant->id);
+        if (isset($params['sql'])) {
+            $sqlMain = new Pluf_SQL($params['sql']);
+            $sql = $sqlMain->SAnd($sql);
+        }
+        $params['sql'] = $sql;
+        return $this->findObject($request, $match, $params);
+    }
+
     /**
      *
      * @param Pluf_HTTP_Request $request
@@ -101,5 +112,23 @@ class Tenant_Views extends Pluf_Views
             return $tenant;
         }
         throw new Pluf_Exception_DoesNotExist('Requested tenant not found');
+    }
+
+    /**
+     * Gets tenant configurations
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
+     */
+    public function getTenantConfigurations($request, $match, $params)
+    {
+        // check tenant
+        $tenant = new Tenant_Tenant($match['parentId']);
+        if(!isset($tenant) || $tenant->parent_id !== $request->tenant->id){
+            throw new Pluf_Exception_NotExist('Tenant not found');
+        }
+        return parent::findManyToOne($request, $match, $params);
     }
 }

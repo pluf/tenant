@@ -84,7 +84,8 @@ class Tenant_Configuration extends Pluf_Model
                 'model' => 'Pluf_Tenant',
                 'is_null' => false,
                 'editable' => false,
-                'relate_name' => 'tenant',
+                'relate_name' => 'configurations',
+                'name' => 'configurations',
                 'graphql_feild' => true
             )
         );

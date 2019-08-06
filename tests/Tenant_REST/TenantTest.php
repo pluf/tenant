@@ -187,5 +187,27 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
         Test_Assert::assertResponseNotNull($response, 'Collection result is empty');
         Test_Assert::assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
+
+    /**
+     *
+     * @test
+     */
+    public function getConfigurationsOfSubTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        // 1- Login
+        $response = $client->post('/api/v2/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+
+        // 2- getting list of tenants
+        $response = $client->get('/api/v2/tenant/tenants', array(
+            'graphql' => '{items{id, configurations{id}}}'
+        ));
+        Test_Assert::assertResponseNotNull($response, 'Collection result is empty');
+        Test_Assert::assertResponseStatusCode($response, 200, 'Collection status code is not 200');
+    }
 }
 

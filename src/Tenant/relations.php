@@ -42,7 +42,15 @@ return array(
     ),
     'Tenant_Comment' => array(
         'relate_to' => array(
-            'User'
+            'User_Account'
         )
-    )
+    ),
+    'Tenant_Tenant' => array(
+        'relate_to' => array(
+            'Tenant_Tenant'
+        ),
+        'relate_to_many' => array(
+            'Tenant_Configuration'
+        )
+    ),
 );

@@ -8,7 +8,6 @@
 class Tenant_Tenant extends Pluf_Model
 {
 
-
     /**
      * Initialized the system model
      *
@@ -92,24 +91,24 @@ class Tenant_Tenant extends Pluf_Model
              */
             'parent_id' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Pluf_Tenant',
+                'model' => 'Tenant_Tenant',
                 'blank' => true,
                 'name' => 'parent',
                 'graphql_name' => 'parent',
                 'relate_name' => 'children',
                 'editable' => false,
-                'readable' => false
-            ),
+                'readable' => true
+            )
             /*
-             * XXX: maso, 2019: add following relations
-             *
-             * - Configurations
-             * - Settings
-             * - Members
-             * - SPAs
-             * - Tickets
-             * - Invoice
-             */
+         * XXX: maso, 2019: add following relations
+         *
+         * - Configurations
+         * - Settings
+         * - Members
+         * - SPAs
+         * - Tickets
+         * - Invoice
+         */
         );
         $this->_a['views'] = array();
     }
@@ -117,7 +116,8 @@ class Tenant_Tenant extends Pluf_Model
     /**
      * \brief Update date
      *
-     * @param boolean $create create the
+     * @param boolean $create
+     *            create the
      */
     function preSave($create = false)
     {

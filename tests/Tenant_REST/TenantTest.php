@@ -63,6 +63,91 @@ class Tenant_REST_TenantTest extends AbstractBasicTest
     }
 
     /**
+     * Getting tenant info with full informations
+     *
+     * @test
+     */
+    public function testGetDefaultTenantByGraphQl()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, configurations{id}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getSettingsOfCurrentTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, settings{id}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getsCurrentUserOfCurrentTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, account{id,roles{id}, groups{id, roles{id}}}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getsCurrentUserProfilesOfCurrentTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, account{id,profiles{id}}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getsCurrentUserMessagesOfCurrentTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, account{id,messages{id}}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function getsFullOfCurrentTenantByGraphql()
+    {
+        $client = new Test_Client(self::getApiV2());
+        $response = $client->get('/api/v2/tenant/tenants/current', array(
+            'graphql' => '{id, account{id,roels{id}, groups{id}, profiles{id}},messages{id},settings{id},configurations{id}}'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
+
+    /**
      * Getting tenants
      *
      * @test

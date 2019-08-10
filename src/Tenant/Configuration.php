@@ -81,11 +81,12 @@ class Tenant_Configuration extends Pluf_Model
             // Tenant properties
             'tenant' => array(
                 'type' => 'Pluf_DB_Field_Foreignkey',
-                'model' => 'Pluf_Tenant',
+                'model' => 'Tenant_Tenant',
                 'is_null' => false,
                 'editable' => false,
+                'readable' => true,
                 'relate_name' => 'configurations',
-                'name' => 'configurations',
+                'graphql_name' => 'tenant',
                 'graphql_feild' => true
             )
         );

@@ -17,17 +17,17 @@
 	],
 	"minimum-stability" : "stable",
 	"require" : {
-		"pluf/core" : "5.7.x",
-		"pluf/user" : "5.7.x",
-		"pluf/discount" : "5.7.x",
-		"pluf/bank" : "5.7.x",
-		"pluf/monitor" : "5.7.x",
-		"pluf/workflow" : "5.7.x",
+		"pluf/core" : "5.8.x",
+		"pluf/user" : "5.8.x",
+		"pluf/discount" : "5.8.x",
+		"pluf/bank" : "5.8.x",
+		"pluf/monitor" : "5.8.x",
+		"pluf/workflow" : "5.8.x",
 		"guzzlehttp/guzzle" : "^6.2.0"
 	},
 	"require-dev" : {
-		"pluf/test" : "5.7.x",
-		"pluf/user" : "5.7.x"
+		"pluf/test" : "5.8.x",
+		"pluf/user" : "5.8.x"
 	},
 	"include-path" : [
 		"src/"

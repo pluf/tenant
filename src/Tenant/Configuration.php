@@ -21,13 +21,13 @@
 /**
  *
  * @author maso <mostafa.barmshory@dpq.co.ir>
- *        
+ *
  */
 class Tenant_Configuration extends Pluf_Model
 {
 
     /**
-     * @brief مدل داده‌ای را بارگذاری می‌کند.
+     * The data model of a configuration
      *
      * @see Pluf_Model::init()
      */
@@ -35,6 +35,7 @@ class Tenant_Configuration extends Pluf_Model
     {
         $this->_a['table'] = 'tenant_configurations';
         $this->_a['verbose'] = 'Tenant Configuration';
+        $this->_a['multitenant'] = false;
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Pluf_DB_Field_Sequence',
@@ -75,6 +76,18 @@ class Tenant_Configuration extends Pluf_Model
                 'is_null' => true,
                 'editable' => false,
                 'readable' => true
+            ),
+
+            // Tenant properties
+            'tenant' => array(
+                'type' => 'Pluf_DB_Field_Foreignkey',
+                'model' => 'Tenant_Tenant',
+                'is_null' => false,
+                'editable' => false,
+                'readable' => true,
+                'relate_name' => 'configurations',
+                'graphql_name' => 'tenant',
+                'graphql_feild' => true
             )
         );
     }

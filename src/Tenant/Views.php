@@ -18,63 +18,138 @@
  */
 Pluf::loadFunction('Pluf_Shortcuts_GetObjectOr404');
 Pluf::loadFunction('Pluf_Shortcuts_GetFormForModel');
+use GraphQL\GraphQL;
+use GraphQL\Type\Schema;
 
 /**
  * لایه نمایش مدیریت گروه‌ها را به صورت پیش فرض ایجاد می‌کند
  *
  * @author maso
- *        
+ *
  */
 class Tenant_Views extends Pluf_Views
 {
 
     /**
+     * Gets current tenant
      *
-     * @param Pluf_HTTP_Request $request            
-     * @param array $match            
+     * @return Tenant_CurrentTenant current tenant
      */
-    public static function current ($request, $match)
+    public function getCurrent($request, $match, $params)
     {
-        return new Pluf_HTTP_Response_Json($request->tenant);
+
+        if (array_key_exists('graphql', $request->REQUEST)) {
+            // clean query
+            $query = $request->REQUEST['graphql'];
+            unset($request->REQUEST['graphql']);
+            // Build result
+            Pluf::loadFunction('Tenant_Shortcuts_generateCurrentTenantObjectType');
+            try {
+                $schema = new Schema([
+                    'query' => Tenant_Shortcuts_generateCurrentTenantObjectType()
+                ]);
+                $result = GraphQL::executeQuery($schema, $query, $request);
+                return $result->toArray();
+            } catch (Exception $e) {
+                throw new Pluf_Exception_BadRequest($e->getMessage());
+            }
+        }
+
+        $match['modelId'] = $request->tenant->id;
+        $params['model'] = 'Tenant_Tenant';
+        $tenant = $this->getObject($request, $match, $params);
+        return $tenant;
+    }
+
+    public function getCurrentConfigurations($request, $match, $params)
+    {
+        $sql = new Pluf_SQL('tenant=%s', $request->tenant->id);
+        if (isset($params['sql'])) {
+            $sqlMain = new Pluf_SQL($params['sql']);
+            $sql = $sqlMain->SAnd($sql);
+        }
+        $params['sql'] = $sql;
+        return $this->findObject($request, $match, $params);
     }
 
     /**
      *
-     * @param Pluf_HTTP_Request $request            
-     * @param array $match            
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
      */
-    public static function update ($request, $match)
+    public function getTenants($request, $match, $params)
     {
-        $model = $request->tenant;
-        $form = Pluf_Shortcuts_GetFormForUpdateModel($model, $request->REQUEST, 
-                array());
-        return new Pluf_HTTP_Response_Json($form->save());
+        $parentId = $request->tenant->id;
+        $sql = new Pluf_SQL('parent_id=%s OR id=%s', array(
+            $parentId,
+            $parentId
+        ));
+        $params['model'] = 'Tenant_Tenant';
+        if (isset($params['sql'])) {
+            $sqlMain = new Pluf_SQL($p['sql']);
+            $sql = $sqlMain->SAnd($sql);
+        }
+        $params['sql'] = $sql;
+        return $this->findObject($request, $match, $params);
     }
 
     /**
      *
-     * @param Pluf_HTTP_Request $request            
-     * @param array $match            
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
      */
-    public static function get ($request, $match)
+    public function putTenant($request, $match, $params)
     {
-        return Tenant_Views::current($request, $match);
+        $parent = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $request->tenant->id);
+        $params = array_merge(array(
+            'extra_context' => array(),
+            'extra_form' => array()
+        ), $params);
+        // Set the default
+        $tenant = new Tenant_Tenant();
+        $form = Pluf_Shortcuts_GetFormForModel($tenant, $request->REQUEST, $params['extra_form']);
+        $tenant = $form->save(false);
+        $tenant->parent_id = $parent;
+        $tenant->create();
+        return $tenant;
     }
 
     /**
+     * Gets tenant
      *
-     * @param Pluf_HTTP_Request $request            
-     * @param array $match            
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
      */
-    public function delete ($request, $match)
+    public function getTenant($request, $match, $params)
     {
-        $model = $request->tenant;
-        $model2 = Pluf_Shortcuts_GetObjectOr404('Pluf_Tenant', $request->tenant->id);
-        $model2->delete();
-        // XXX: maso, 1395: delete permisions
-        // XXX: maso, 1395: delete files
-        // XXX: maso, 1395: delete Settings, configs
-        // XXX: maso, 1395: emite signal
-        return new Pluf_HTTP_Response_Json($model);
+        $params['model'] = 'Tenant_Tenant';
+        $tenant = $this->getObject($request, $match, $params);
+
+        if ($tenant->id == $request->tenant->id || $tenant->parent_id == $request->tenant->id) {
+            return $tenant;
+        }
+        throw new Pluf_Exception_DoesNotExist('Requested tenant not found');
+    }
+
+    /**
+     * Gets tenant configurations
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
+     */
+    public function getTenantConfigurations($request, $match, $params)
+    {
+        // check tenant
+        $tenant = new Tenant_Tenant($match['parentId']);
+        if (! isset($tenant) || $tenant->parent_id !== $request->tenant->id) {
+            throw new Pluf_Exception_NotExist('Tenant not found');
+        }
+        return parent::findManyToOne($request, $match, $params);
     }
 }

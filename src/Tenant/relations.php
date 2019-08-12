@@ -19,12 +19,10 @@
 /*
  * Push new settings into the DBMS
  */
-Pluf_Signal::connect('Pluf_Dispatcher::postDispatch',
-    array(
-        'Tenant_Service',
-        'flush'
-    ), 'Pluf_Dispatcher');
-
+Pluf_Signal::connect('Pluf_Dispatcher::postDispatch', array(
+    'Tenant_Service',
+    'flush'
+), 'Pluf_Dispatcher');
 
 return array(
     'Tenant_Invoice' => array(
@@ -42,7 +40,17 @@ return array(
     ),
     'Tenant_Comment' => array(
         'relate_to' => array(
-            'User'
+            'User_Account'
         )
-    )
+    ),
+    'Tenant_Tenant' => array(
+        'relate_to' => array(
+            'Tenant_Tenant'
+        )
+    ),
+    'Tenant_Configuration' => array(
+        'relate_to' => array(
+            'Tenant_Tenant'
+        )
+    ),
 );

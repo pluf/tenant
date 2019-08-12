@@ -20,7 +20,7 @@ return array(
     // **************************************************************** Configurations of a Tenant
     array( // Read (list)
         'regex' => '#^/configurations$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Configuration',
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
@@ -52,7 +52,7 @@ return array(
     ),
     array( // Read
         'regex' => '#^/configurations/(?P<modelId>\d+)$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Configuration',
         'method' => 'getObject',
         'http-method' => 'GET',
         'params' => array(
@@ -72,6 +72,6 @@ return array(
         )
     )
 );
-    
-    
-    
+
+
+

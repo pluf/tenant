@@ -22,10 +22,32 @@
  * Configurations of Tenant
  *
  * @author hadi
- *        
+ *
  */
 class Tenant_Views_Configuration extends Pluf_Views
 {
+
+    /**
+     * Gets list of configurations
+     *
+     * @param unknown $request
+     * @param unknown $match
+     * @param unknown $params
+     * @return unknown
+     */
+    public function findObject($request, $match, $params){
+        $params['sql'] = 'tenant='.$request->tenant->id;
+        return parent::findObject($request, $match, $params);
+    }
+
+
+    public function getObject($request, $match, $params){
+        $cfg = parent::getObject($request, $match, $params);
+        if($cfg->tenant === $request->tenant->id){
+            return $cfg;
+        }
+        throw new Pluf_Exception_DoesNotExist('Configuration not found');
+    }
 
     /**
      * Getting system configuration
@@ -36,7 +58,7 @@ class Tenant_Views_Configuration extends Pluf_Views
      * @param array $match
      */
     public function get($request, $match)
-    { 
+    {
         $model = $this->internalGet($request, $match);
         if (! isset($model)) {
             throw new Pluf_Exception_DoesNotExist('Configuration not found');
@@ -45,16 +67,21 @@ class Tenant_Views_Configuration extends Pluf_Views
     }
 
     /**
-     * Returns configuration with given key in the $match array. Returns null if such configuration does not exist.
+     * Returns configuration with given key in the $match array.
+     * Returns null if such configuration does not exist.
+     *
      * @param Pluf_HTTP_Request $request
      * @param array $match
      * @return Pluf_Model|NULL
      */
-    private function internalGet($request, $match){
+    private function internalGet($request, $match)
+    {
         $model = new Tenant_Configuration();
-        $model = $model->getOne("`key`='" . $match['key'] . "'");
-        return $model;
+        $sql = new Pluf_Sql("`tenant`=%s AND `key`=%s", array(
+            $request->tenant->id,
+            $match['key']
+        ));
+        return $model->getOne($sql->gen());
     }
-    
 }
 

@@ -35,7 +35,7 @@ class Tenant_Views_Configuration extends Pluf_Views
      * @param unknown $params
      * @return unknown
      */
-    public function findObject($request, $match, $params){
+    public function findObject($request, $match, $params=array()){
         $params['sql'] = 'tenant='.$request->tenant->id;
         return parent::findObject($request, $match, $params);
     }

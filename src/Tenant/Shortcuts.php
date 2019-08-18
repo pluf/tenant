@@ -497,3 +497,20 @@ function Tenant_Shortcuts_generateCurrentTenantObjectType()
 
     return $Tenant_Tenant;
 }
+
+/**
+ * Returns the Tenant_Configuration with given key if exist, else returns false.
+ * @param string $key
+ * @return boolean|Tenant_Configuration
+ */
+function Tenant_Shortcuts_GetConfiguration($key, $tenantId){
+    $model = new Tenant_Configuration();
+    $where = '`key` = ' . $model->_toDb($key, 'key') . 'AND `tenant`='.$model->_toDb($tenantId, 'tenant');
+    $configs = $model->getList(array(
+        'filter' => $where
+    ));
+    if ($configs === false or count($configs) !== 1) {
+        return false;
+    }
+    return $configs[0];
+}

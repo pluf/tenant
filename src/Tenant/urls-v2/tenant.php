@@ -84,7 +84,21 @@ return array(
     ),
     // **************************************************************** Configurations
     // XXX: maso, 2019
-    array(
+    array( // Create/Update
+        'regex' => '#^/tenants/(?P<parentId>\d+)/configurations$#',
+        'model' => 'Tenant_Views',
+        'method' => 'storeConfiguration',
+        'http-method' => 'POST',
+        'precond' => array(
+            'User_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Configuration',
+            'parent' => 'Tenant_Tenant',
+            'parentKey' => 'tenant'
+        )
+    ),
+    array( // Read (list)
         'regex' => '#^/tenants/(?P<parentId>\d+)/configurations$#',
         'model' => 'Tenant_Views',
         'method' => 'getTenantConfigurations',

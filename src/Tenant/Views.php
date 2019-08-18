@@ -25,7 +25,7 @@ use GraphQL\Type\Schema;
  * لایه نمایش مدیریت گروه‌ها را به صورت پیش فرض ایجاد می‌کند
  *
  * @author maso
- *
+ *        
  */
 class Tenant_Views extends Pluf_Views
 {
@@ -37,7 +37,6 @@ class Tenant_Views extends Pluf_Views
      */
     public function getCurrent($request, $match, $params)
     {
-
         if (array_key_exists('graphql', $request->REQUEST)) {
             // clean query
             $query = $request->REQUEST['graphql'];
@@ -80,13 +79,12 @@ class Tenant_Views extends Pluf_Views
     public function getTenants($request, $match, $params)
     {
         $parentId = $request->tenant->id;
-        $sql = new Pluf_SQL('parent_id=%s OR id=%s', array(
-            $parentId,
+        $sql = new Pluf_SQL('parent_id=%s', array(
             $parentId
         ));
         $params['model'] = 'Tenant_Tenant';
         if (isset($params['sql'])) {
-            $sqlMain = new Pluf_SQL($p['sql']);
+            $sqlMain = new Pluf_SQL($params['sql']);
             $sql = $sqlMain->SAnd($sql);
         }
         $params['sql'] = $sql;
@@ -136,6 +134,24 @@ class Tenant_Views extends Pluf_Views
     }
 
     /**
+     * Deletes a tenant
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
+     */
+    public function deleteTenant($request, $match, $params)
+    {
+        $tenant = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $match['modelId']);
+        if ($tenant->id !== $request->tenant->id && $tenant->parent_id !== $request->tenant->id) {
+            throw new Pluf_Exception_Unauthorized('You are not allowed to do this action');
+        }
+        $tenant->delete();
+        return $tenant;
+    }
+
+    /**
      * Gets tenant configurations
      *
      * @param Pluf_HTTP_Request $request
@@ -148,8 +164,29 @@ class Tenant_Views extends Pluf_Views
         // check tenant
         $tenant = new Tenant_Tenant($match['parentId']);
         if (! isset($tenant) || $tenant->parent_id !== $request->tenant->id) {
-            throw new Pluf_Exception_NotExist('Tenant not found');
+            throw new Pluf_Exception_DoesNotExist('Tenant not found');
         }
         return parent::findManyToOne($request, $match, $params);
+    }
+
+    /**
+     * Stores the configuration.
+     * If given key of the configuration exist already this function will update it
+     * else will create a new configuration.
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Configuration
+     */
+    public function storeConfiguration($request, $match, $params)
+    {
+        Pluf::loadFunction('Tenant_Shortcuts_GetConfiguration');
+        $config = Tenant_Shortcuts_GetConfiguration($request->REQUEST['key'], $match['parentId']);
+        if (! $config) {
+            return $this->createManyToOne($request, $match, $params);
+        }
+        $form = Pluf_Shortcuts_GetFormForUpdateModel($config, $request->REQUEST);
+        return $form->save();
     }
 }

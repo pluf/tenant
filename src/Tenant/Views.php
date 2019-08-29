@@ -162,6 +162,23 @@ class Tenant_Views extends Pluf_Views
         $tenant->delete();
         return $tenant;
     }
+    
+    /**
+     * Updates a tenant
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
+     */
+    public function updateTenant($request, $match, $params)
+    {
+        $tenant = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $match['modelId']);
+        if ($tenant->id !== $request->tenant->id && $tenant->parent_id !== $request->tenant->id) {
+            throw new Pluf_Exception_Unauthorized('You are not allowed to do this action');
+        }
+        return $this->updateObject($request, $match, $params);
+    }
 
     /**
      * Gets tenant configurations

@@ -127,6 +127,11 @@ class Tenant_Service
         $form = Pluf_Shortcuts_GetFormForModel($tenant, $data);
         $tenant = $form->save();
         
+        // Set path to initial data. It should be checked before switching to new tenant.
+        if(!$data['initial_default_data']){
+            $data['initial_default_data'] = Tenant_Service::setting('initial_default_data'); 
+        }
+        
         // Init the Tenant
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->init($tenant);
@@ -165,5 +170,26 @@ class Tenant_Service
         }
         
         return $tenant;
+    }
+
+    private static function provideContent($data){        
+        // Load initial default data
+        $path = $data['initial_default_data'];
+        $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
+        // Do request
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('GET', $path, [
+            'sink' => $file
+        ]);
+        Backup_Service::loadData($file);
+        
+        $path = $data['initial_data'];
+        $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
+        // Do request
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('GET', $path, [
+            'sink' => $file
+        ]);
+        Backup_Service::loadData($file);
     }
 }

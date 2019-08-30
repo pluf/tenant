@@ -100,18 +100,30 @@ class Tenant_Views extends Pluf_Views
      */
     public function putTenant($request, $match, $params)
     {
-        $parent = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $request->tenant->id);
-        $params = array_merge(array(
-            'extra_context' => array(),
-            'extra_form' => array()
-        ), $params);
-        // Set the default
-        $tenant = new Tenant_Tenant();
-        $form = Pluf_Shortcuts_GetFormForModel($tenant, $request->REQUEST, $params['extra_form']);
-        $tenant = $form->save(false);
-        $tenant->parent_id = $parent;
-        $tenant->create();
+        if ($request->tenant->subdomain !== Pluf::f('tenant_default', 'www') || ! User_Precondition::isOwner($request)) {
+            $this->validateSubdomain($request->REQUEST['subdomain']);
+        }
+        $tenant = Tenant_Service::createNewTenant($request->REQUEST);
         return $tenant;
+    }
+
+    /**
+     * Checks if given subdomain is valid.
+     *
+     * A name for subdomain is valid if its lenght is at least `subdomain_min_length` characters and is not equal with reserved subdomains.
+     * The value `subdomain_min_length` is set from config.php.
+     * Also, the array of reserved subdomains is set from config.php by a key named 'reserved_subdomains'.
+     */
+    public function validateSubdomain($subdomain)
+    {
+        $minLength = Pluf::f('subdomain_min_length', 1);
+        if (strlen($subdomain) < $minLength) {
+            throw new Pluf_Exception_BadRequest('Invalid subdomain. Subdomain should be at least ' . $minLength . ' character.');
+        }
+        $reservedSubdomains = Pluf::f('reserved_subdomains', array());
+        if (in_array($subdomain, $reservedSubdomains, TRUE)) {
+            throw new Pluf_Exception_BadRequest('Subdomain is reserved.');
+        }
     }
 
     /**
@@ -149,6 +161,23 @@ class Tenant_Views extends Pluf_Views
         }
         $tenant->delete();
         return $tenant;
+    }
+    
+    /**
+     * Updates a tenant
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param array $match
+     * @param array $params
+     * @return Tenant_Tenant
+     */
+    public function updateTenant($request, $match, $params)
+    {
+        $tenant = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $match['modelId']);
+        if ($tenant->id !== $request->tenant->id && $tenant->parent_id !== $request->tenant->id) {
+            throw new Pluf_Exception_Unauthorized('You are not allowed to do this action');
+        }
+        return $this->updateObject($request, $match, $params);
     }
 
     /**

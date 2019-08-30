@@ -64,13 +64,16 @@ return array(
             'User_Precondition::ownerRequired'
         )
     ),
-    array( // Updates a tenant
+    array( // Update
         'regex' => '#^/tenants/(?P<modelId>\d+)$#',
         'model' => 'Tenant_Views',
         'method' => 'updateTenant',
         'http-method' => 'POST',
         'precond' => array(
             'User_Precondition::ownerRequired'
+        ),
+        'params' => array(
+            'model' => 'Tenant_Tenant'
         )
     ),
     array( // Delete a tenant

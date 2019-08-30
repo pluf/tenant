@@ -1,0 +1,2 @@
+<?php class Pluf_Template_dbae885c9d5cc80ecb92699509e73ec9 {
+public static function render($c) {$t = $c; ?><?php $_extra_tag = Pluf::factory('Tenant_Template_Tag_Setting', $t); $_extra_tag->start('setting1', 'default value'); ?><?php } } 

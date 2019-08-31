@@ -60,7 +60,7 @@ class Tenant_Tenant extends Pluf_Model
                 'type' => 'Pluf_DB_Field_Boolean',
                 'default' => false,
                 'blank' => true,
-                'editable' => false
+                'editable' => true
             ),
             'email' => array(
                 'type' => 'Pluf_DB_Field_Email',

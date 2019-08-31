@@ -174,7 +174,7 @@ class Tenant_Service
     private static function provideContent($data)
     {
         // Load initial default data
-        if (array_key_exists('initial_default_data', $data)) {
+        if (array_key_exists('initial_default_data', $data) && !empty($data['initial_default_data'])) {
             $path = $data['initial_default_data'];
             $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
             // Do request
@@ -185,7 +185,7 @@ class Tenant_Service
             Backup_Service::loadData($file);
         }
         // Load initial data
-        if (array_key_exists('initial_data', $data)) {
+        if (array_key_exists('initial_data', $data) && !empty($data['initial_data'])) {
             $path = $data['initial_data'];
             $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
             // Do request

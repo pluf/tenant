@@ -114,6 +114,12 @@ class Tenant_Service
 
     public static function createNewTenant($data)
     {
+        if(Pluf::f('multitenant', false)){
+            throw new Pluf_Exception_Forbidden('The server does not support multitenancy!');
+        }
+        if(!Tenant_Service::validateSubdomainFormat($data['subdomain'])){
+            throw new Pluf_Exception_BadRequest('The subdomain is not valid!');            
+        }
         // Create a tenant
         $tenant = new Pluf_Tenant();
         // Set domain from subdomain if domain is not set in the request
@@ -171,6 +177,13 @@ class Tenant_Service
         return $tenant;
     }
 
+    public static function validateSubdomainFormat($subdomain){
+        $regex = '/^[A-Za-z0-9][A-Za-z0-9_\-]{1,61}[A-Za-z0-9]$/';
+        if(preg_match($regex, $subdomain))
+            return TRUE;
+        return FALSE;
+    }
+    
     private static function provideContent($data)
     {
         // Load initial default data

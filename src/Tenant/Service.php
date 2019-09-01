@@ -114,11 +114,11 @@ class Tenant_Service
 
     public static function createNewTenant($data)
     {
-        if(Pluf::f('multitenant', false)){
+        if(!Pluf::f('multitenant', false)){
             throw new Pluf_Exception_Forbidden('The server does not support multitenancy!');
         }
         if(!Tenant_Service::validateSubdomainFormat($data['subdomain'])){
-            throw new Pluf_Exception_BadRequest('The subdomain is not valid!');            
+            throw new Pluf_Exception_BadRequest('The subdomain is not valid [' . $data['subdomain'] . ']');            
         }
         // Create a tenant
         $tenant = new Pluf_Tenant();

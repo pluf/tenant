@@ -112,7 +112,14 @@ class Tenant_Service
         }
     }
 
-    public static function createNewTenant($data){
+    public static function createNewTenant($data)
+    {
+        if(!Pluf::f('multitenant', false)){
+            throw new Pluf_Exception_Forbidden('The server does not support multitenancy!');
+        }
+        if(!Tenant_Service::validateSubdomainFormat($data['subdomain'])){
+            throw new Pluf_Exception_BadRequest('The subdomain is not valid.');            
+        }
         // Create a tenant
         $tenant = new Pluf_Tenant();
         // Set domain from subdomain if domain is not set in the request
@@ -123,37 +130,35 @@ class Tenant_Service
         $tenant->_a['cols']['parent_id']['editable'] = true;
         $currentTenant = Pluf_Tenant::current();
         $data['parent_id'] = $currentTenant->id;
-        
+
         $form = Pluf_Shortcuts_GetFormForModel($tenant, $data);
         $tenant = $form->save();
-        
+
         // Set path to initial data. It should be checked before switching to new tenant.
-        if(!$data['initial_default_data']){
-            $data['initial_default_data'] = Tenant_Service::setting('initial_default_data'); 
-        }
-        
+        $data['initial_default_data'] = Tenant_Service::setting('initial_default_data');
+
         // Init the Tenant
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->init($tenant);
-        
+
         // TODO: hadi, 97-06-18: create account and credential base on given data by user in request
         // For example: login, password, list of modules to install and so on.
-        
+
         // TODO: update user api to get user by login directly
         $user = new User_Account();
         $user = $user->getUser('admin');
-        
+
         $credit = new User_Credential();
         $credit->setFromFormData(array(
             'account_id' => $user->id
         ));
         $credit->setPassword('admin');
         $credit->create();
-        
+
         // Set owner
         $role = User_Role::getFromString('tenant.owner');
         $user->setAssoc($role);
-        
+
         // install SPAcs
         $spas = Pluf::f('spas', array());
         if (sizeof($spas) > 0 && class_exists('Tenant_SpaService')) {
@@ -168,28 +173,40 @@ class Tenant_Service
                 throw new Pluf_Exception("Impossible to install spas from market.", 5000, $e, 500);
             }
         }
-        
+        Tenant_Service::provideContent($data);
         return $tenant;
     }
 
-    private static function provideContent($data){        
+    public static function validateSubdomainFormat($subdomain){
+        $regex = '/^[A-Za-z0-9][A-Za-z0-9_\-]{1,61}[A-Za-z0-9]$/';
+        if(preg_match($regex, $subdomain))
+            return TRUE;
+        return FALSE;
+    }
+    
+    private static function provideContent($data)
+    {
         // Load initial default data
-        $path = $data['initial_default_data'];
-        $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
-        // Do request
-        $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $path, [
-            'sink' => $file
-        ]);
-        Backup_Service::loadData($file);
-        
-        $path = $data['initial_data'];
-        $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
-        // Do request
-        $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $path, [
-            'sink' => $file
-        ]);
-        Backup_Service::loadData($file);
+        if (array_key_exists('initial_default_data', $data) && !empty($data['initial_default_data'])) {
+            $path = $data['initial_default_data'];
+            $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
+            // Do request
+            $client = new GuzzleHttp\Client();
+            $response = $client->request('GET', $path, [
+                'sink' => $file
+            ]);
+            Backup_Service::loadData($file);
+        }
+        // Load initial data
+        if (array_key_exists('initial_data', $data) && !empty($data['initial_data'])) {
+            $path = $data['initial_data'];
+            $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
+            // Do request
+            $client = new GuzzleHttp\Client();
+            $response = $client->request('GET', $path, [
+                'sink' => $file
+            ]);
+            Backup_Service::loadData($file);
+        }
     }
 }

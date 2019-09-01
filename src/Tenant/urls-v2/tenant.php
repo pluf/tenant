@@ -96,7 +96,7 @@ return array(
             'User_Precondition::ownerRequired'
         ),
         'params' => array(
-            'model' => 'Tenant_Configuration',
+            'model' => 'Tenant_SubtenantConfiguration',
             'parent' => 'Tenant_Tenant',
             'parentKey' => 'tenant'
         )
@@ -110,7 +110,7 @@ return array(
             'User_Precondition::ownerRequired'
         ),
         'params' => array(
-            'model' => 'Tenant_Configuration',
+            'model' => 'Tenant_SubtenantConfiguration',
             'parent' => 'Tenant_Tenant',
             'parentKey' => 'tenant'
         )

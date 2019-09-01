@@ -25,7 +25,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Tenant_REST_TenantTest extends AbstractBasicTest
+class Tenant_REST_TenantTest extends AbstractBasicTestMt
 {
 
     private static function getApiV2()

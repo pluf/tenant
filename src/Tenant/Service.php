@@ -195,7 +195,7 @@ class Tenant_Service
             $response = $client->request('GET', $path, [
                 'sink' => $file
             ]);
-            Backup_Service::loadData($file);
+            Backup\Service::loadData($file);
         }
         // Load initial data
         if (array_key_exists('initial_data', $data) && !empty($data['initial_data'])) {
@@ -206,7 +206,7 @@ class Tenant_Service
             $response = $client->request('GET', $path, [
                 'sink' => $file
             ]);
-            Backup_Service::loadData($file);
+            Backup\Service::loadData($file);
         }
     }
 }

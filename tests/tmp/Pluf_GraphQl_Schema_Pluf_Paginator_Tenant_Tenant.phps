@@ -62,7 +62,7 @@ class Pluf_GraphQl_Schema_Pluf_Paginator_Tenant_Tenant {
                             return $root->subdomain;
                         },
                     ],
-                    //validate: Array(    [type] => Pluf_DB_Field_Boolean    [default] =>     [blank] => 1    [editable] => )
+                    //validate: Array(    [type] => Pluf_DB_Field_Boolean    [default] =>     [blank] => 1    [editable] => 1)
                     'validate' => [
                         'type' => Type::boolean(),
                         'resolve' => function ($root) {

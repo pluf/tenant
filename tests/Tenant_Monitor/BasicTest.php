@@ -33,7 +33,6 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
      */
     public function getOwnerMonitor()
     {
-        
         $client = new Test_Client(array(
             array(
                 'app' => 'User',
@@ -48,11 +47,11 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
                 'sub' => include 'Monitor/urls-v2.php'
             )
         ));
-        
+
         // Change detail
         $user = new User_Account();
         $user = $user->getUser('test');
-        
+
         // Login
         $response = $client->post('/api/v2/user/login', array(
             'login' => 'test',
@@ -60,7 +59,7 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
         ));
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
-        
+
         // Monitor owner
         $response = $client->get('/api/v2/monitor/tags/user/metrics/owner');
         Test_Assert::assertResponseNotNull($response, 'Find result is empty');

@@ -29,7 +29,7 @@ require_once 'Pluf.php';
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-abstract class AbstractBasicTest extends TestCase
+abstract class AbstractBasicTestMt extends TestCase
 {
 
     /**
@@ -39,16 +39,26 @@ abstract class AbstractBasicTest extends TestCase
     public static function installApps()
     {
         $cfg = include __DIR__ . '/../conf/config.php';
-        $cfg['multitenant'] = false;
+        $cfg['multitenant'] = true;
         Pluf::start($cfg);
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->install();
 
-        $m->init();
+        // Test tenant
+        $tenant = new Pluf_Tenant();
+        $tenant->domain = 'localhost';
+        $tenant->subdomain = 'www';
+        $tenant->validate = true;
+        if (true !== $tenant->create()) {
+            throw new Pluf_Exception('Faile to create new tenant');
+        }
+
+        $m->init($tenant);
 
         if (! isset($GLOBALS['_PX_request'])) {
             $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
         }
+        $GLOBALS['_PX_request']->tenant = $tenant;
 
         // Test user
         $user = new User_Account();
@@ -79,6 +89,16 @@ abstract class AbstractBasicTest extends TestCase
     {
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->unInstall();
+    }
+
+    /**
+     *
+     * @before
+     */
+    public function setupDefaultTenant()
+    {
+        // load default tenant
+        Pluf_Tenant::setCurrent(Pluf_Tenant::bySubDomain('www'));
     }
 }
 

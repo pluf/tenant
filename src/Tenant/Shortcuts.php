@@ -504,7 +504,7 @@ function Tenant_Shortcuts_generateCurrentTenantObjectType()
  * @return boolean|Tenant_Configuration
  */
 function Tenant_Shortcuts_GetConfiguration($key, $tenantId){
-    $model = new Tenant_Configuration();
+    $model = new Tenant_SubtenantConfiguration();
     $where = '`key` = ' . $model->_toDb($key, 'key') . 'AND `tenant`='.$model->_toDb($tenantId, 'tenant');
     $configs = $model->getList(array(
         'filter' => $where

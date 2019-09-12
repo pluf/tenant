@@ -157,7 +157,7 @@ function Tenant_Shortcuts_generateCurrentTenantObjectType()
                 'account' => [
                     'type' => $User_Account,
                     'resolve' => function ($root) {
-                        return $root->account;
+                        return $root->user;
                     }
                 ]
             ];

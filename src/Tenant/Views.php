@@ -25,7 +25,7 @@ use GraphQL\Type\Schema;
  * لایه نمایش مدیریت گروه‌ها را به صورت پیش فرض ایجاد می‌کند
  *
  * @author maso
- *        
+ *
  */
 class Tenant_Views extends Pluf_Views
 {
@@ -48,7 +48,7 @@ class Tenant_Views extends Pluf_Views
                     'query' => Tenant_Shortcuts_generateCurrentTenantObjectType()
                 ]);
                 $result = GraphQL::executeQuery($schema, $query, $request);
-                return $result->toArray();
+                return $result->toArray()['data'];
             } catch (Exception $e) {
                 throw new Pluf_Exception_BadRequest($e->getMessage());
             }
@@ -162,7 +162,7 @@ class Tenant_Views extends Pluf_Views
         $tenant->delete();
         return $tenant;
     }
-    
+
     /**
      * Updates a tenant
      *

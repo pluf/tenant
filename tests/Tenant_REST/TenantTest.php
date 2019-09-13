@@ -141,7 +141,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
     {
         $client = new Test_Client(self::getApiV2());
         $response = $client->get('/api/v2/tenant/tenants/current', array(
-            'graphql' => '{id, account{id,roels{id}, groups{id}, profiles{id}},messages{id},settings{id},configurations{id}}'
+            'graphql' => '{id, account{id,roles{id}, groups{id}, profiles{id}},settings{id},configurations{id}}'
         ));
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);

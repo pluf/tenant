@@ -43,15 +43,18 @@ class Tenant_Views extends Pluf_Views
             unset($request->REQUEST['graphql']);
             // Build result
             Pluf::loadFunction('Tenant_Shortcuts_generateCurrentTenantObjectType');
-            try {
-                $schema = new Schema([
-                    'query' => Tenant_Shortcuts_generateCurrentTenantObjectType()
-                ]);
-                $result = GraphQL::executeQuery($schema, $query, $request);
-                return $result->toArray()['data'];
-            } catch (Exception $e) {
-                throw new Pluf_Exception_BadRequest($e->getMessage());
+            $schema = new Schema([
+                'query' => Tenant_Shortcuts_generateCurrentTenantObjectType()
+            ]);
+            $result = GraphQL::executeQuery($schema, $query, $request);
+            $result = $result->toArray();
+            if (array_key_exists('errors', $result)) {
+                throw new Pluf_Exception('Fail to run GraphQl query: ' . print_r($result['errors']));
             }
+            if (!array_key_exists('data', $result)) {
+                return array();
+            }
+            return $result['data'];
         }
 
         $match['modelId'] = $request->tenant->id;

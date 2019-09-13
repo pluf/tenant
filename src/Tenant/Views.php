@@ -49,7 +49,7 @@ class Tenant_Views extends Pluf_Views
             $result = GraphQL::executeQuery($schema, $query, $request);
             $result = $result->toArray();
             if (array_key_exists('errors', $result)) {
-                throw new Pluf_Exception('Fail to run GraphQl query: ' . print_r($result['errors']));
+                throw new Pluf_Exception('Fail to run GraphQl query: ' /*. $result['errors'] */);
             }
             if (!array_key_exists('data', $result)) {
                 return array();

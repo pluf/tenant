@@ -43,7 +43,7 @@ return array(
         'method' => 'getTenants',
         'http-method' => 'GET',
         'precond' => array(
-            'User_Precondition::ownerRequired'
+            'User_Precondition::memberRequired'
         )
     ),
     array( // Add a new tenant
@@ -61,7 +61,7 @@ return array(
         'method' => 'getTenant',
         'http-method' => 'GET',
         'precond' => array(
-            'User_Precondition::ownerRequired'
+            'User_Precondition::memberRequired'
         )
     ),
     array( // Update
@@ -107,7 +107,7 @@ return array(
         'method' => 'getTenantConfigurations',
         'http-method' => 'GET',
         'precond' => array(
-            'User_Precondition::ownerRequired'
+            'User_Precondition::memberRequired'
         ),
         'params' => array(
             'model' => 'Tenant_SubtenantConfiguration',

@@ -114,11 +114,11 @@ class Tenant_Service
 
     public static function createNewTenant($data)
     {
-        if(!Pluf::f('multitenant', false)){
+        if (! Pluf::f('multitenant', false)) {
             throw new Pluf_Exception_Forbidden('The server does not support multitenancy!');
         }
-        if(!Tenant_Service::validateSubdomainFormat($data['subdomain'])){
-            throw new Pluf_Exception_BadRequest('The subdomain is not valid.');            
+        if (! Tenant_Service::validateSubdomainFormat($data['subdomain'])) {
+            throw new Pluf_Exception_BadRequest('The subdomain is not valid.');
         }
         // Create a tenant
         $tenant = new Pluf_Tenant();
@@ -144,18 +144,21 @@ class Tenant_Service
         // TODO: hadi, 97-06-18: create account and credential base on given data by user in request
         // For example: login, password, list of modules to install and so on.
 
-        // TODO: update user api to get user by login directly
+        // Set password for all users of tenant. Default password is equla to its login.
         $user = new User_Account();
+        $members = $user->getList();
+        foreach ($members as $member) {
+            $user = $user->getUser($member->login);
+            $credit = new User_Credential();
+            $credit->setFromFormData(array(
+                'account_id' => $user->id
+            ));
+            $credit->setPassword($member->login);
+            $credit->create();
+        }
+
+        // Set admin as the owner
         $user = $user->getUser('admin');
-
-        $credit = new User_Credential();
-        $credit->setFromFormData(array(
-            'account_id' => $user->id
-        ));
-        $credit->setPassword('admin');
-        $credit->create();
-
-        // Set owner
         $role = User_Role::getFromString('tenant.owner');
         $user->setAssoc($role);
 
@@ -177,17 +180,18 @@ class Tenant_Service
         return $tenant;
     }
 
-    public static function validateSubdomainFormat($subdomain){
+    public static function validateSubdomainFormat($subdomain)
+    {
         $regex = '/^[A-Za-z0-9][A-Za-z0-9_\-]{1,61}[A-Za-z0-9]$/';
-        if(preg_match($regex, $subdomain))
+        if (preg_match($regex, $subdomain))
             return TRUE;
         return FALSE;
     }
-    
+
     private static function provideContent($data)
     {
         // Load initial default data
-        if (array_key_exists('initial_default_data', $data) && !empty($data['initial_default_data'])) {
+        if (array_key_exists('initial_default_data', $data) && ! empty($data['initial_default_data'])) {
             $path = $data['initial_default_data'];
             $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
             // Do request
@@ -198,7 +202,7 @@ class Tenant_Service
             Pluf\Backup\Service::loadData($file);
         }
         // Load initial data
-        if (array_key_exists('initial_data', $data) && !empty($data['initial_data'])) {
+        if (array_key_exists('initial_data', $data) && ! empty($data['initial_data'])) {
             $path = $data['initial_data'];
             $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
             // Do request

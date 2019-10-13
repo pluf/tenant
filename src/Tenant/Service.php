@@ -133,17 +133,29 @@ class Tenant_Service
 
         $form = Pluf_Shortcuts_GetFormForModel($tenant, $data);
         $tenant = $form->save();
-
-        // Set path to initial data. It should be checked before switching to new tenant.
+        // Set path to initial data. It should be done before switching to the new tenant.
         $data['initial_default_data'] = Tenant_Service::setting('initial_default_data');
+        // Initialize the newly created tenant
+        $tenant = self::initiateTenant($tenant);
+        // Load initial data to newly created tenant
+        Tenant_Service::provideContent($data);
+        return $tenant;
+    }
 
+    /**
+     * Initiates some necessary data for given tenant.
+     * @param Pluf_Tenant $tenant
+     * @throws Pluf_Exception
+     * @return Pluf_Tenant
+     */
+    public static function initiateTenant($tenant){
         // Init the Tenant
         $m = new Pluf_Migration(Pluf::f('installed_apps'));
         $m->init($tenant);
-
+        
         // TODO: hadi, 97-06-18: create account and credential base on given data by user in request
         // For example: login, password, list of modules to install and so on.
-
+        
         // Set password for all users of tenant. Default password is equla to its login.
         $user = new User_Account();
         $members = $user->getList();
@@ -156,12 +168,12 @@ class Tenant_Service
             $credit->setPassword($member->login);
             $credit->create();
         }
-
+        
         // Set admin as the owner
         $user = $user->getUser('admin');
         $role = User_Role::getFromString('tenant.owner');
         $user->setAssoc($role);
-
+        
         // install SPAcs
         $spas = Pluf::f('spas', array());
         if (sizeof($spas) > 0 && class_exists('Tenant_SpaService')) {
@@ -176,10 +188,9 @@ class Tenant_Service
                 throw new Pluf_Exception("Impossible to install spas from market.", 5000, $e, 500);
             }
         }
-        Tenant_Service::provideContent($data);
         return $tenant;
     }
-
+    
     public static function validateSubdomainFormat($subdomain)
     {
         $regex = '/^[A-Za-z0-9][A-Za-z0-9_\-]{1,61}[A-Za-z0-9]$/';

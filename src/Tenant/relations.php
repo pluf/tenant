@@ -48,6 +48,11 @@ return array(
             'Tenant_Tenant'
         )
     ),
+    'Tenant_Member' => array(
+        'relate_to_many' => array(
+            'Tenant_Tenant'
+        )
+    ),
     'Tenant_SubtenantConfiguration' => array(
         'relate_to' => array(
             'Tenant_Tenant'

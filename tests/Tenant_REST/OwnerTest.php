@@ -153,7 +153,7 @@ class Tenant_REST_OwnerTest extends TestCase
         ));
         Test_Assert::assertNotNull($response);
         Test_Assert::assertEquals($response->status_code, 200);
-        $this->member = Tenant_Owner::getMember('test_member');
+        $this->member = Tenant_Owner::getOwner('test_member');
         
         // Owner client
         $this->ownerClient = new Test_Client(array(

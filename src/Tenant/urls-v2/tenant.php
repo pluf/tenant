@@ -135,7 +135,7 @@ return array(
         )
     ),
     array( // Delete
-        'regex' => '#^/tenants/(?P<tenantId>\d+)/owners/(?P<memberId>\d+)$#',
+        'regex' => '#^/tenants/(?P<tenantId>\d+)/owners/(?P<ownerId>\d+)$#',
         'model' => 'Tenant_Views',
         'method' => 'removeOwner',
         'http-method' => 'DELETE',

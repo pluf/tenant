@@ -23,9 +23,10 @@ Pluf::loadFunction('Pluf_Shortcuts_GetForeignKeyName');
 /**
  * Account data model
  *
- * Stores information of a member. A member actually is a user.
+ * Stores information of a tenant-owner. A tenant-owner actually is a user.
+ * This model is a mapped model of User_Account.
  */
-class Tenant_Member extends Pluf_Model
+class Tenant_Owner extends Pluf_Model
 {
 
     /**
@@ -35,7 +36,7 @@ class Tenant_Member extends Pluf_Model
 
     function init()
     {
-        $this->_a['verbose'] = 'Tenant_Member';
+        $this->_a['verbose'] = 'Tenant_Owner';
         $this->_a['table'] = 'user_accounts';
         $this->_a['mapped'] = true;
         $this->_a['cols'] = array(
@@ -94,11 +95,11 @@ class Tenant_Member extends Pluf_Model
      * Extract information of user and returns it.
      *
      * @param string $login
-     * @return Tenant_Member user information
+     * @return Tenant_Owner user information
      */
-    public static function getMember($login)
+    public static function getOwner($login)
     {
-        $model = new Tenant_Member();
+        $model = new Tenant_Owner();
         $where = 'login = ' . $model->_toDb($login, 'login');
         $users = $model->getList(array(
             'filter' => $where
@@ -111,12 +112,12 @@ class Tenant_Member extends Pluf_Model
 
     function preSave($create = false)
     {
-        throw new Pluf_Exception_NotImplemented('Creating a Tenant_Member is not supported');
+        throw new Pluf_Exception_NotImplemented('Creating a Tenant_Owner is not supported');
     }
 
     function preDelete($create = false)
     {
-        throw new Pluf_Exception_NotImplemented('Deleting a Tenant_Member is not supported');
+        throw new Pluf_Exception_NotImplemented('Deleting a Tenant_Owner is not supported');
     }
 
     /**

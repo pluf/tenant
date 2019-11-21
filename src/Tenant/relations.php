@@ -48,7 +48,7 @@ return array(
             'Tenant_Tenant'
         ),
         'relate_to_many' => array(
-            'Tenant_Member'
+            'Tenant_Owner'
         )
     ),
     'Tenant_SubtenantConfiguration' => array(

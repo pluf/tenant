@@ -103,7 +103,7 @@ class Tenant_Tenant extends Pluf_Model
             'owners' => array(
                 'type' => 'Pluf_DB_Field_Manytomany',
                 'blank' => true,
-                'model' => 'Tenant_Member',
+                'model' => 'Tenant_Owner',
                 'relate_name' => 'tenants',
                 'editable' => false,
                 'graphql_name' => 'owners',

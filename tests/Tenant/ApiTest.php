@@ -60,8 +60,8 @@ class Tenant_ApiTest extends TestCase
         $this->assertTrue(isset($object), 'Tenant_Resource could not be created!');
         $object = new Tenant_SPA();
         $this->assertTrue(isset($object), 'Tenant_SPA could not be created!');
-        $object = new Tenant_Member();
-        $this->assertTrue(isset($object), 'Tenant_Member could not be created!');
+        $object = new Tenant_Owner();
+        $this->assertTrue(isset($object), 'Tenant_Owner could not be created!');
         $object = new Tenant_SubtenantConfiguration();
         $this->assertTrue(isset($object), 'Tenant_SubtenantConfiguration could not be created!');
     }

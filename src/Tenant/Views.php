@@ -243,15 +243,15 @@ class Tenant_Views extends Pluf_Views
     public static function getOwners($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
-        $member = new Tenant_Member();
-        $memberTable = Pluf_ModelUtils::getTable($member);
-        $assocTable = Pluf_ModelUtils::getAssocTable($member, $tenant);
-        $member->_a['views']['myView'] = array(
-            'select' => $member->getSelect(),
-            'join' => 'LEFT JOIN ' . $assocTable . ' ON ' . $memberTable . '.id=' . $assocTable . '.' . Pluf_ModelUtils::getAssocField($member)
+        $owner = new Tenant_Owner();
+        $ownerTable = Pluf_ModelUtils::getTable($owner);
+        $assocTable = Pluf_ModelUtils::getAssocTable($owner, $tenant);
+        $owner->_a['views']['myView'] = array(
+            'select' => $owner->getSelect(),
+            'join' => 'LEFT JOIN ' . $assocTable . ' ON ' . $ownerTable . '.id=' . $assocTable . '.' . Pluf_ModelUtils::getAssocField($owner)
         );
         
-        $builder = new Pluf_Paginator_Builder($member);
+        $builder = new Pluf_Paginator_Builder($owner);
         return $builder->setWhereClause(new Pluf_SQL(Pluf_ModelUtils::getAssocField($tenant) . '=%s', array(
             $tenant->id
         )))
@@ -263,27 +263,27 @@ class Tenant_Views extends Pluf_Views
     public static function addOwner($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
-        if (isset($match['memberId'])) {
-            $memberId = $match['memberId'];
+        if (isset($match['ownerId'])) {
+            $ownerId = $match['ownerId'];
         } else {
-            $memberId = isset($request->REQUEST['id']) ? $request->REQUEST['id'] : $request->REQUEST['memberId'];
+            $ownerId = isset($request->REQUEST['id']) ? $request->REQUEST['id'] : $request->REQUEST['ownerId'];
         }
-        $member = Pluf_Shortcuts_GetObjectOr404('Tenant_Member', $memberId);
-        $tenant->setAssoc($member);
-        return $member;   
+        $owner = Pluf_Shortcuts_GetObjectOr404('Tenant_Owner', $ownerId);
+        $tenant->setAssoc($owner);
+        return $owner;   
     }
     
     public static function removeOwner($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
-        if (isset($match['memberId'])) {
-            $memberId = $match['memberId'];
+        if (isset($match['ownerId'])) {
+            $ownerId = $match['ownerId'];
         } else {
-            $memberId = isset($request->REQUEST['id']) ? $request->REQUEST['id'] : $request->REQUEST['memberId'];
+            $ownerId = isset($request->REQUEST['id']) ? $request->REQUEST['id'] : $request->REQUEST['ownerId'];
         }
-        $member = Pluf_Shortcuts_GetObjectOr404('Tenant_Member', $memberId);
-        $tenant->delAssoc($member);
-        return $member;
+        $owner = Pluf_Shortcuts_GetObjectOr404('Tenant_Owner', $ownerId);
+        $tenant->delAssoc($owner);
+        return $owner;
     }
 
 }

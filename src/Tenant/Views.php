@@ -244,7 +244,7 @@ class Tenant_Views extends Pluf_Views
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
         $member = new Tenant_Member();
-        $memberTable = $member->_a['table'];
+        $memberTable = Pluf_ModelUtils::getTable($member);
         $assocTable = Pluf_ModelUtils::getAssocTable($member, $tenant);
         $member->_a['views']['myView'] = array(
             'select' => $member->getSelect(),

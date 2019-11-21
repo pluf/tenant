@@ -17,6 +17,7 @@ class Tenant_Tenant extends Pluf_Model
     {
         $this->_a['table'] = 'tenants';
         $this->_a['multitenant'] = false;
+        $this->_a['mapped'] = true;
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Pluf_DB_Field_Sequence',
@@ -97,6 +98,15 @@ class Tenant_Tenant extends Pluf_Model
                 'graphql_name' => 'parent',
                 'relate_name' => 'children',
                 'editable' => false,
+                'readable' => true
+            ),
+            'owners' => array(
+                'type' => 'Pluf_DB_Field_Manytomany',
+                'blank' => true,
+                'model' => 'Tenant_Member',
+                'relate_name' => 'tenants',
+                'editable' => false,
+                'graphql_name' => 'owners',
                 'readable' => true
             )
             /*

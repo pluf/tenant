@@ -27,6 +27,7 @@ Pluf::loadFunction('Pluf_Shortcuts_GetForeignKeyName');
  */
 class Tenant_Member extends Pluf_Model
 {
+
     /**
      * Cache of the Role.
      */
@@ -36,6 +37,7 @@ class Tenant_Member extends Pluf_Model
     {
         $this->_a['verbose'] = 'Tenant_Member';
         $this->_a['table'] = 'user_accounts';
+        $this->_a['mapped'] = true;
         $this->_a['cols'] = array(
             // It is mandatory to have an "id" column.
             'id' => array(
@@ -74,28 +76,6 @@ class Tenant_Member extends Pluf_Model
                 'is_null' => false,
                 'default' => false,
                 'editable' => false
-            ),
-            /*
-             * Relations
-             */
-            'tenants' => array(
-                'type' => 'Pluf_DB_Field_Manytomany',
-                'blank' => true,
-                'model' => 'Tenant_Tenant',
-                'relate_name' => 'owners',
-                'editable' => false,
-                'graphql_name' => 'tenants',
-                'readable' => true
-            )
-        );
-
-        // Assoc. table
-        $tnt_asso = $this->_con->pfx . Pluf_Shortcuts_GetAssociationTableName('Tenant_Member', 'Tenant_Tenant');
-        $t_member = $this->_con->pfx . $this->_a['table'];
-        $member_fk = Pluf_Shortcuts_GetForeignKeyName('Tenant_Member');
-        $this->_a['views'] = array(
-            'join_tenant' => array(
-                'join' => 'LEFT JOIN ' . $tnt_asso . ' ON ' . $t_member . '.id=' . $member_fk
             )
         );
     }
@@ -133,7 +113,7 @@ class Tenant_Member extends Pluf_Model
     {
         throw new Pluf_Exception_NotImplemented('Creating a Tenant_Member is not supported');
     }
-    
+
     function preDelete($create = false)
     {
         throw new Pluf_Exception_NotImplemented('Deleting a Tenant_Member is not supported');

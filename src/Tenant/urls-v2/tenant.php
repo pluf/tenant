@@ -115,6 +115,34 @@ return array(
             'parentKey' => 'tenant'
         )
     ),
+    // **************************************************************** Owners
+    array( // Create
+        'regex' => '#^/tenants/(?P<tenantId>\d+)/owners$#',
+        'model' => 'Tenant_Views',
+        'method' => 'addOwner',
+        'http-method' => 'POST',
+        'precond' => array(
+            'User_Precondition::memberRequired'
+        )
+    ),
+    array( // Read (list)
+        'regex' => '#^/tenants/(?P<tenantId>\d+)/owners$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getOwners',
+        'http-method' => 'GET',
+        'precond' => array(
+            'User_Precondition::memberRequired'
+        )
+    ),
+    array( // Delete
+        'regex' => '#^/tenants/(?P<tenantId>\d+)/owners/(?P<ownerId>\d+)$#',
+        'model' => 'Tenant_Views',
+        'method' => 'removeOwner',
+        'http-method' => 'DELETE',
+        'precond' => array(
+            'User_Precondition::memberRequired'
+        )
+    )
     // **************************************************************** Settings
     // XXX: maso, 2019
     // **************************************************************** Tickets

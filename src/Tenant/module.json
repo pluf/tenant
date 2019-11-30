@@ -2,6 +2,7 @@
 	"name": "Tenant",
 	"title": "Tenant Management",
 	"model": [
+		"Tenant_Tenant",
 		"Tenant_Invoice",
 		"Tenant_Ticket",
 		"Tenant_Comment",

@@ -23,9 +23,6 @@ return array(
         'model' => 'Tenant_Views_Configuration',
         'method' => 'findObject',
         'http-method' => 'GET',
-        'precond' => array(
-            'User_Precondition::ownerRequired'
-        ),
         'params' => array(
             'model' => 'Tenant_Configuration',
             'listFilters' => array(
@@ -55,9 +52,6 @@ return array(
         'model' => 'Tenant_Views_Configuration',
         'method' => 'getObject',
         'http-method' => 'GET',
-        'params' => array(
-            'model' => 'Tenant_Configuration'
-        ),
         'precond' => array(
             'User_Precondition::ownerRequired'
         )
@@ -66,10 +60,7 @@ return array(
         'regex' => '#^/configurations/(?P<key>[^/]+)$#',
         'model' => 'Tenant_Views_Configuration',
         'method' => 'get',
-        'http-method' => 'GET',
-        'precond' => array(
-            'User_Precondition::ownerRequired'
-        )
+        'http-method' => 'GET'
     )
 );
 

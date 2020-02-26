@@ -62,7 +62,7 @@ class Tenant_SPA extends Pluf_Model
                 'is_null' => false,
                 'size' => 50,
                 'readable' => true,
-                'editable' => false
+                'editable' => true
             ),
             'version' => array(
                 'type' => 'Pluf_DB_Field_Varchar',
@@ -96,7 +96,7 @@ class Tenant_SPA extends Pluf_Model
                 'type' => 'Pluf_DB_Field_Varchar',
                 'is_null' => true,
                 'size' => 250,
-                'editable' => false
+                'editable' => true
             ),
             'path' => array(
                 'type' => 'Pluf_DB_Field_Varchar',

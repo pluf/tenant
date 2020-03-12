@@ -77,13 +77,13 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // find teckets
         $response = $client->get('/api/v2/tenant/tickets');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -99,7 +99,7 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
         $response = $client->post('/api/v2/tenant/tickets', array(
@@ -107,21 +107,21 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'subject' => 'test ticket',
             'description' => 'it is not possible to test',
         ));
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Ticket is not created');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotAnonymousModel($response, 'Ticket is not created');
         $t = json_decode($response->content, true);
 
         // find teckets
         $response = $client->get('/api/v2/tenant/tickets');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
-        Test_Assert::assertResponseNonEmptyPaginateList($response, 'No ticket is created');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNonEmptyPaginateList($response, 'No ticket is created');
 
         // delete ticket
         $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
-        Test_Assert::assertResponseStatusCode($response, 200, 'Ticket is removed');
+        $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
 
     /**
@@ -137,7 +137,7 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
         $response = $client->post('/api/v2/tenant/tickets', array(
@@ -145,14 +145,14 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'subject' => 'test ticket',
             'description' => 'it is not possible to test',
         ));
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Ticket is not created');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotAnonymousModel($response, 'Ticket is not created');
         $t = json_decode($response->content, true);
 
         // delete ticket
         $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
-        Test_Assert::assertResponseStatusCode($response, 200, 'Ticket is removed');
+        $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
 
 
@@ -170,7 +170,7 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
         $response = $client->post('/api/v2/tenant/tickets', array(
@@ -178,18 +178,18 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
             'subject' => 'test ticket',
             'description' => 'it is not possible to test',
         ));
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Ticket is not created');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotAnonymousModel($response, 'Ticket is not created');
 
         // Get tecket
         $t = json_decode($response->content, true);
         $response = $client->get('/api/v2/tenant/tickets/' . $t['id']);
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Ticket is not find');
+        $this->assertResponseNotAnonymousModel($response, 'Ticket is not find');
 
         // delete ticket
         $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
-        Test_Assert::assertResponseStatusCode($response, 200, 'Ticket is removed');
+        $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
 
 }

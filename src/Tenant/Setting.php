@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -98,11 +97,11 @@ class Tenant_Setting extends Pluf_Model
                 'readable' => true
             )
         );
-//         $this->_a['idx'] = array(
-//             'mode_key_idx' => array(
-//                 'col' => 'mode, key'
-//             )
-//         );
+        // $this->_a['idx'] = array(
+        // 'mode_key_idx' => array(
+        // 'col' => 'mode, key'
+        // )
+        // );
     }
 
     /**

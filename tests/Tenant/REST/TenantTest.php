@@ -160,13 +160,13 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
         $response = $client->get('/api/v2/tenant/tenants');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -196,7 +196,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2.0 data
         $subdomain = 'test' . rand();
@@ -206,17 +206,17 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
         );
         // 2- getting list of tenants
         $response = $client->post('/api/v2/tenant/tenants', $data);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response, 200, 'Fail to create tenant');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 200, 'Fail to create tenant');
 
         $actual = json_decode($response->content, true);
 
         // 2- getting list of tenants
         $response = $client->get('/api/v2/tenant/tenants/' . $actual['id']);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response, 200, 'Fail to find created tenant');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 200, 'Fail to find created tenant');
     }
 
     /**
@@ -231,12 +231,12 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
         $response = $client->get('/api/v2/tenant/tenants/current/configurations');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
 
     /**
@@ -251,7 +251,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2.0 data
         $subdomain = 'test' . rand();
@@ -261,16 +261,16 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
         );
         // 2- getting list of tenants
         $response = $client->post('/api/v2/tenant/tenants', $data);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response, 200, 'Fail to create tenant');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 200, 'Fail to create tenant');
 
         $actual = json_decode($response->content, true);
 
         // 2- getting list of tenants
         $response = $client->get('/api/v2/tenant/tenants/' . $actual['id'] . '/configurations');
-        Test_Assert::assertResponseNotNull($response, 'Collection result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Collection status code is not 200');
+        $this->assertResponseNotNull($response, 'Collection result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
 
     /**
@@ -285,14 +285,14 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
         $response = $client->get('/api/v2/tenant/tenants', array(
             'graphql' => '{items{id, configurations{id}}}'
         ));
-        Test_Assert::assertResponseNotNull($response, 'Collection result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Collection status code is not 200');
+        $this->assertResponseNotNull($response, 'Collection result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
 }
 

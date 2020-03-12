@@ -67,7 +67,7 @@ class Tenant_SpaService
         if (! mkdir($dir, 0777, true)) {
             throw new Pluf_Exception('Failed to create folder in temp');
         }
-        
+
         // Unzip to temp folder
         $zip = new ZipArchive();
         if ($zip->open($path) === TRUE) {
@@ -79,30 +79,32 @@ class Tenant_SpaService
         if ($deleteFile) {
             unlink($path);
         }
-        
+
         // 2- load infor
         $filename = $dir . '/' . Pluf::f('spa_config', 'spa.json');
         $myfile = fopen($filename, 'r') or die('Unable to open file!');
         $json = fread($myfile, filesize($filename));
         fclose($myfile);
         $package = json_decode($json, true);
-        
+
         // update spa
         $spa->setFromFormData($package);
         $spa->path = Pluf_Tenant::storagePath() . '/spa/' . $spa->id;
         $spa->update();
-        
+
         Pluf_FileUtil::removedir($spa->path);
         rename($dir, $spa->path);
         return $spa;
     }
-    
+
     /**
      * Install tenant with $id from remote repository
+     *
      * @param string $id
      * @return Tenant_SPA
      */
-    public static function installFromRepository($id){
+    public static function installFromRepository($id)
+    {
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
         $path = '/api/v2/marketplace/spas/' . $id . '/file';
@@ -112,7 +114,7 @@ class Tenant_SpaService
         $response = $client->request('GET', $backend . $path, [
             'sink' => $file
         ]);
-        
+
         // install
         return self::installFromFile($file, true);
     }

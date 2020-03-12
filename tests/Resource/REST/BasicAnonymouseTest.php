@@ -71,9 +71,9 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
     public function anonymousCanGetListOfSettings()
     {
         $response = self::$client->get('/api/v2/tenant/resources');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -116,9 +116,9 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
         $r1->update();
         
         $response = self::$client->get($r1->path);
-        Test_Assert::assertEquals($response->status_code, 200);
+        $this->assertEquals($response->status_code, 200);
         // FIXME: maso, 2019: check if the content value is match with test content
-        // Test_Assert::assertEquals($testContent, $response, 'Value is not the same as input value');
+        // $this->assertEquals($testContent, $response, 'Value is not the same as input value');
         $r1->delete();
     }
 }

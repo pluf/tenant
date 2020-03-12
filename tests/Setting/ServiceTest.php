@@ -34,8 +34,8 @@ class Setting_ServiceTest extends AbstractBasicTest
     public function shouldPossibleToGetNotDefinedProperty()
     {
         $result = Tenant_Service::setting('undefined-key', 'value');
-        Test_Assert::assertNotNull($result, 'Failt to get non defined value');
-        Test_Assert::assertEquals('value', $result, 'Value is not a defualt one');
+        $this->assertNotNull($result, 'Failt to get non defined value');
+        $this->assertEquals('value', $result, 'Value is not a defualt one');
     }
 
     /**
@@ -45,11 +45,11 @@ class Setting_ServiceTest extends AbstractBasicTest
     {
         $key = 'undefined-key';
         $result = Tenant_Service::setting($key, 'value1');
-        Test_Assert::assertNotNull($result, 'Failt to get non defined value');
-        Test_Assert::assertEquals('value', $result, 'Value is not a defualt one');
+        $this->assertNotNull($result, 'Failt to get non defined value');
+        $this->assertEquals('value', $result, 'Value is not a defualt one');
         
         $result2 = Tenant_Service::setting($key, 'value2');
-        Test_Assert::assertEquals($result, $result2, 'Value is not a defualt one');
+        $this->assertEquals($result, $result2, 'Value is not a defualt one');
     }
 
     /**
@@ -60,8 +60,8 @@ class Setting_ServiceTest extends AbstractBasicTest
         $key = 'undefined-key-' . rand();
         $value = 'value';
         $result = Tenant_Service::setting($key, $value);
-        Test_Assert::assertNotNull($result, 'Failt to get non defined value');
-        Test_Assert::assertEquals('value', $result, 'Value is not a defualt one');
+        $this->assertNotNull($result, 'Failt to get non defined value');
+        $this->assertEquals('value', $result, 'Value is not a defualt one');
         
         Tenant_Service::flush();
         
@@ -72,8 +72,8 @@ class Setting_ServiceTest extends AbstractBasicTest
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
         ));
-        Test_Assert::assertNotNull($one, 'Setting not found with key');
-        Test_Assert::assertEquals($value, $one->value, 'value are not the same');
+        $this->assertNotNull($one, 'Setting not found with key');
+        $this->assertEquals($value, $one->value, 'value are not the same');
     }
 
     /**
@@ -89,10 +89,10 @@ class Setting_ServiceTest extends AbstractBasicTest
         $setting->key = $key;
         $setting->value = $value;
         $setting->mode = Tenant_Setting::MOD_PUBLIC;
-        Test_Assert::assertTrue($setting->create());
+        $this->assertTrue($setting->create());
         
         $result = Tenant_Service::setting($key, 'New value');
-        Test_Assert::assertNotNull($result, 'Failt to get non defined value');
-        Test_Assert::assertEquals($value, $result, 'Value is not a defualt one');
+        $this->assertNotNull($result, 'Failt to get non defined value');
+        $this->assertEquals($value, $result, 'Value is not a defualt one');
     }
 }

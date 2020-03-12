@@ -73,9 +73,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getMainFileOfDefaultSpa()
     {
         $response = self::$client->get('/');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/main\.json$/', $response->filePath) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/main\.json$/', $response->filePath) === 1, 'File path is not correct');
     }
 
     /**
@@ -84,9 +84,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getResourceOfDefaultSpa()
     {
         $response = self::$client->get('/folder/main.json');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load resource of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/folder\/main\.json$/', $response->content) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load resource of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/folder\/main\.json$/', $response->content) === 1, 'File path is not correct');
     }
 
     /**
@@ -95,9 +95,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getMainFileOfTestSpa()
     {
         $response = self::$client->get('/testResource/');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/index\.html$/', $response->filePath) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/index\.html$/', $response->filePath) === 1, 'File path is not correct');
     }
 
     /**
@@ -106,9 +106,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getResourceOfTestSpa()
     {
         $response = self::$client->get('/testResource/folder/resource.json');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load resource of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/folder\/resource\.json$/', $response->content) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load resource of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/folder\/resource\.json$/', $response->content) === 1, 'File path is not correct');
     }
 
     /**
@@ -117,9 +117,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getInternalStateOfDefaultSpa()
     {
         $response = self::$client->get('/content/test');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/main\.json$/', $response->filePath) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/main\.json$/', $response->filePath) === 1, 'File path is not correct');
     }
 
     /**
@@ -128,9 +128,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     public function getInternalStateOfTestSpa()
     {
         $response = self::$client->get('/testResource/content/test');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load resource of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertTrue(preg_match('/.*\/index\.html$/', $response->filePath) === 1, 'File path is not correct');
+        $this->assertResponseNotNull($response, 'Fail to load resource of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertTrue(preg_match('/.*\/index\.html$/', $response->filePath) === 1, 'File path is not correct');
     }
 
     /**

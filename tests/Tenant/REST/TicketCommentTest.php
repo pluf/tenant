@@ -77,7 +77,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -93,9 +93,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
 
         // delete
         $t->delete();
@@ -114,7 +114,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -137,10 +137,10 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response);
-        Test_Assert::assertResponseNonEmptyPaginateList($response);
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response);
+        $this->assertResponseNonEmptyPaginateList($response);
 
         // delete
         $c->delete();
@@ -160,7 +160,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -183,10 +183,10 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $c->id);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response);
-        Test_Assert::assertResponseNotAnonymousModel($response);
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response);
+        $this->assertResponseNotAnonymousModel($response);
 
         // delete
         $c->delete();
@@ -206,7 +206,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -225,15 +225,15 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'title' => 'test',
             'description' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200);
+        $this->assertResponseStatusCode($response, 200);
         $tc = json_decode($response->content, true);
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response);
-        Test_Assert::assertResponseNonEmptyPaginateList($response);
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response);
+        $this->assertResponseNonEmptyPaginateList($response);
 
         // delete
         $c = new Tenant_Comment($tc['id']);
@@ -254,7 +254,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -273,7 +273,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'title' => 'test',
             'description' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200);
+        $this->assertResponseStatusCode($response, 200);
         $tc = json_decode($response->content, true);
 
         // update
@@ -281,14 +281,14 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'title' => 'test new title',
             'description' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200);
+        $this->assertResponseStatusCode($response, 200);
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response);
-        Test_Assert::assertResponseNonEmptyPaginateList($response);
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response);
+        $this->assertResponseNonEmptyPaginateList($response);
 
         // delete
         $c = new Tenant_Comment($tc['id']);
@@ -309,7 +309,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Create ticket
         $user = new User_Account();
@@ -328,19 +328,19 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
             'title' => 'test',
             'description' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200);
+        $this->assertResponseStatusCode($response, 200);
         $tc = json_decode($response->content, true);
 
         // update
         $response = $client->delete('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $tc['id']);
-        Test_Assert::assertResponseStatusCode($response, 200);
+        $this->assertResponseStatusCode($response, 200);
 
         // find comments
         $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response);
-        Test_Assert::assertResponseEmptyPaginateList($response);
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response);
+        $this->assertResponseEmptyPaginateList($response);
 
         // delete
         $t->delete();

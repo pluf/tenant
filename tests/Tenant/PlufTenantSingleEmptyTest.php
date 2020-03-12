@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -16,18 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Base\AbstractBasicTest;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
 class PlufTenantSingleEmptyTest extends AbstractBasicTest
 {
+
     /**
      *
      * @test

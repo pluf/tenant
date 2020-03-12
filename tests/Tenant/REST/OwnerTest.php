@@ -151,8 +151,8 @@ class Tenant_REST_OwnerTest extends TestCase
             'login' => 'test_member',
             'password' => 'test'
         ));
-        Test_Assert::assertNotNull($response);
-        Test_Assert::assertEquals($response->status_code, 200);
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
         $this->member = Tenant_Owner::getOwner('test_member');
         
         // Owner client
@@ -175,8 +175,8 @@ class Tenant_REST_OwnerTest extends TestCase
             'login' => 'test_owner',
             'password' => 'test'
         ));
-        Test_Assert::assertNotNull($response);
-        Test_Assert::assertEquals($response->status_code, 200);
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
         
         // Create a subtenant
         $subdomain = 'test' . rand();
@@ -185,9 +185,9 @@ class Tenant_REST_OwnerTest extends TestCase
             'domain' => $subdomain . '.domain.ir'
         );
         $response = $this->ownerClient->post('/api/v2/tenant/tenants', $data);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response, 200, 'Fail to create tenant');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 200, 'Fail to create tenant');
         $this->subtenantInfo = json_decode($response->content, true);
     }
     
@@ -200,9 +200,9 @@ class Tenant_REST_OwnerTest extends TestCase
     {
         // Getting list
         $response = $this->memberClient->get('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -215,45 +215,45 @@ class Tenant_REST_OwnerTest extends TestCase
         // Add owner
         $data = $this->member->jsonSerialize();
         $response = $this->memberClient->post('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners', $data);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         $subtenant = new Tenant_Tenant($this->subtenantInfo['id']);
         $list = $subtenant->get_owners_list();
-        Test_Assert::assertTrue(sizeof($list) > 0, 'Member is not added to the list of owners of the subtenant');
+        $this->assertTrue(sizeof($list) > 0, 'Member is not added to the list of owners of the subtenant');
         
         $list = $this->member->get_tenants_list();
-        Test_Assert::assertTrue(sizeof($list) > 0, 'Subtenant is not added to list of owned the tenants by the member');
+        $this->assertTrue(sizeof($list) > 0, 'Subtenant is not added to list of owned the tenants by the member');
 
         // Remove owner
         $response = $this->memberClient->delete('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners/' . $this->member->id);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         $list = $subtenant->get_owners_list();
-        Test_Assert::assertTrue(sizeof($list) == 0, 'Member is not removed from the list of owners of the subtenant');
+        $this->assertTrue(sizeof($list) == 0, 'Member is not removed from the list of owners of the subtenant');
         
         $list = $this->member->get_tenants_list();
-        Test_Assert::assertTrue(sizeof($list) == 0, 'Subtenant is not removed from the list of owned tenants by the member');
+        $this->assertTrue(sizeof($list) == 0, 'Subtenant is not removed from the list of owned tenants by the member');
         
     }
 
     public function anonymousGettingListOfOwners(){
         $this->expectException(Pluf_Exception_Unauthorized::class);
         $response = $this->anonymousClient->get('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners');
-        Test_Assert::assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to see the list of owners of a subtenant');
+        $this->assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to see the list of owners of a subtenant');
     }
     
     public function anonymousRemovingOwner(){
         $this->expectException(Pluf_Exception_Unauthorized::class);
         $response = $this->anonymousClient->post('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners', $this->member->jsonSerialize());
-        Test_Assert::assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to add somebody to the list of owners of a subtenant');
+        $this->assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to add somebody to the list of owners of a subtenant');
     }
     
     public function anonymousAddingOwner(){
         $this->expectException(Pluf_Exception_Unauthorized::class);
         $response = $this->anonymousClient->delete('/api/v2/tenant/tenants/' . $this->subtenantInfo['id'] . '/owners/' . $this->member->id);
-        Test_Assert::assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to remove somebody from the list of owners of a subtenant');
+        $this->assertResponseStatusCode($response, 401, 'Anonymous user should not be allowed to remove somebody from the list of owners of a subtenant');
     }
     
 }

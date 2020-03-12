@@ -22,15 +22,17 @@ require_once 'Pluf.php';
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
 
 /**
+ *
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Spa_REST_BaseTagTest extends AbstractBasicTest
+class Spa_REST_BasePathTest extends AbstractBasicTest
 {
 
     private static $client = null;
-    
+
     /**
+     *
      * @beforeClass
      */
     public static function installApps()
@@ -57,59 +59,59 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
                 'sub' => include 'Tenant/urls-app-v2.php'
             )
         ));
-            
         // default spa
-        $path = dirname(__FILE__) . '/../resources/testDefault.zip';
-        Tenant_Service::setSetting('spa.default', 'testDefault');
-        Tenant_SpaService::installFromFile($path);
-        $path = dirname(__FILE__) . '/../resources/testResource.zip';
+        $path = dirname(__FILE__) . '/../resources/testManifest.zip';
+        Tenant_Service::setting('spa.default', 'testManifest');
         Tenant_SpaService::installFromFile($path);
     }
 
     /**
+     *
      * @test
      */
     public function getMainFileOfDefaultSpa()
     {
-        $response = self::$client->get('/testResource/');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
+        $response = self::$client->get('/testManifest/');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getFakeFileOfDefaultSpa()
     {
-        $response = self::$client->get('/testResource/alaki/path');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
+        $response = self::$client->get('/alaki/path');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertEquals('<html manifest="/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getMainFileOfSpa()
     {
-        $response = self::$client->get('/testDefault/');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<base href="/testDefault/">', $response->content, 'Base tag replacement is not correct');
+        $response = self::$client->get('/testManifest/');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getFakeFileOfSpa()
     {
-        $response = self::$client->get('/testDefault/alaki/path');
-        Test_Assert::assertResponseNotNull($response, 'Fail to load main file of default tenant');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        Test_Assert::assertEquals('<base href="/testDefault/">', $response->content, 'Base tag replacement is not correct');
+        $response = self::$client->get('/testManifest/alaki/path');
+        $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
+        $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
+        $this->assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
-    
 }
 
 

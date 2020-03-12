@@ -58,8 +58,8 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertNotNull($response);
-        Test_Assert::assertEquals($response->status_code, 200);
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
     }
 
     /**
@@ -71,9 +71,9 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
     {
         // Getting list
         $response = self::$client->get('/api/v2/tenant/resources');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -90,12 +90,12 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'description' => 'This is a test resources'
         );
         $response = self::$client->post('/api/v2/tenant/resources', $values);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         $setting = new Tenant_Resource();
         $list = $setting->getList();
-        Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
+        $this->assertTrue(sizeof($list) > 0, 'Setting is not created');
 
         foreach ($list as $resource) {
             $resource->delete();
@@ -116,17 +116,17 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'description' => 'This is a test resources'
         );
         $response = self::$client->post('/api/v2/tenant/resources', $values);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         $setting = new Tenant_Resource();
         $list = $setting->getList();
-        Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
+        $this->assertTrue(sizeof($list) > 0, 'Setting is not created');
 
         foreach ($list as $resource) {
             $response = self::$client->get('/api/v2/tenant/resources/' . $resource->id);
-            Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-            Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+            $this->assertResponseNotNull($response, 'Find result is empty');
+            $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         }
 
         // delete
@@ -148,12 +148,12 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'description' => 'This is a test resources'
         );
         $response = self::$client->post('/api/v2/tenant/resources', $values);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         $setting = new Tenant_Resource();
         $list = $setting->getList();
-        Test_Assert::assertTrue(sizeof($list) > 0, 'Setting is not created');
+        $this->assertTrue(sizeof($list) > 0, 'Setting is not created');
 
         $sql = new Pluf_SQL('`path`=%s', array(
             $values['path']
@@ -161,11 +161,11 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
         ));
-        Test_Assert::assertNotNull($one, 'Resource not found with key');
+        $this->assertNotNull($one, 'Resource not found with key');
 
         $response = self::$client->get('/api/v2/tenant/resources/' . $one->id);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
 
     /**
@@ -181,8 +181,8 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'description' => 'This is a test resources'
         );
         $response = self::$client->post('/api/v2/tenant/resources', $values);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         // Get setting form db
         $setting = new Tenant_Resource();
@@ -192,17 +192,17 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
         ));
-        Test_Assert::assertNotNull($one, 'Resource not found with path');
+        $this->assertNotNull($one, 'Resource not found with path');
 
         // delete by id
         $response = self::$client->delete('/api/v2/tenant/resources/' . $one->id);
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
         // Check if deleted
         $one = $setting->getOne(array(
             'filter' => $sql->gen()
         ));
-        Test_Assert::assertNull($one, 'Resource is not deleted');
+        $this->assertNull($one, 'Resource is not deleted');
     }
 }

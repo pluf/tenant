@@ -62,9 +62,9 @@ class User_Monitor_BasicsTest extends AbstractBasicTest
 
         // Monitor owner
         $response = $client->get('/api/v2/monitor/tags/user/metrics/owner');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponseAsModel($response, 'Is not a valid model');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 'Is not a valid model');
     }
 
 }

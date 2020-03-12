@@ -77,11 +77,11 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
         // Current user is valid
         $response = $client->get('/api/v2/user/accounts/current');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
     }
 }
 
@@ -99,18 +99,18 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Current user is valid
         $response = $client->get('/api/v2/user/accounts/current');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
 
         // find
         $response = $client->get('/api/v2/tenant/invoices');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 
     /**
@@ -128,12 +128,12 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Current user is valid
         $response = $client->get('/api/v2/user/accounts/current');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
 
         $i = new Tenant_Invoice();
         $i->title = 'test';
@@ -144,10 +144,10 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
 
         // find
         $response = $client->get('/api/v2/tenant/invoices');
-        Test_Assert::assertResponseNotNull($response, 'Find result is empty');
-        Test_Assert::assertResponseStatusCode($response, 200, 'Find status code is not 200');
-        Test_Assert::assertResponsePaginateList($response, 'Find result is not JSON paginated list');
-        Test_Assert::assertResponseNonEmptyPaginateList($response, 'No object is in list');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
+        $this->assertResponseNonEmptyPaginateList($response, 'No object is in list');
 
         // delete
         $i->delete();
@@ -167,7 +167,7 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
             'login' => 'test',
             'password' => 'test'
         ));
-        Test_Assert::assertResponseStatusCode($response, 200, 'Fail to login');
+        $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         $i = new Tenant_Invoice();
         $i->title = 'test';
@@ -178,9 +178,9 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
 
         // find
         $response = $client->get('/api/v2/tenant/invoices/'. $i->id);
-        Test_Assert::assertResponseNotNull($response);
-        Test_Assert::assertResponseStatusCode($response, 200);
-        Test_Assert::assertResponseNotAnonymousModel($response, 'Invoice not foudn');
+        $this->assertResponseNotNull($response);
+        $this->assertResponseStatusCode($response, 200);
+        $this->assertResponseNotAnonymousModel($response, 'Invoice not foudn');
 
         // delete
         $i->delete();

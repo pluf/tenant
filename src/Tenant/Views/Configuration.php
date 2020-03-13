@@ -22,28 +22,21 @@
  * Configurations of Tenant
  *
  * @author hadi
- *
+ *        
  */
 class Tenant_Views_Configuration extends Pluf_Views
 {
 
-    /**
-     * Gets list of configurations
-     *
-     * @param unknown $request
-     * @param unknown $match
-     * @param unknown $params
-     * @return unknown
-     */
-    public function findObject($request, $match, $params=array()){
-        $params['sql'] = 'tenant='.$request->tenant->id;
+    public function findObject($request, $match, $params = array())
+    {
+        $params['sql'] = 'tenant=' . $request->tenant->id;
         return parent::findObject($request, $match, $params);
     }
 
-
-    public function getObject($request, $match, $params){
+    public function getObject($request, $match, $params)
+    {
         $cfg = parent::getObject($request, $match, $params);
-        if($cfg->tenant === $request->tenant->id){
+        if ($cfg->tenant === $request->tenant->id) {
             return $cfg;
         }
         throw new Pluf_Exception_DoesNotExist('Configuration not found');

@@ -1,6 +1,4 @@
 <?php
-use Pluf;
-
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -20,7 +18,13 @@ use Pluf;
  */
 namespace Pluf\Test\Base;
 
+use Pluf\Exception;
 use Pluf\Test\TestCase;
+use Pluf;
+use Pluf_Migration;
+use User_Account;
+use User_Credential;
+use User_Role;
 
 /**
  * It is a basic class for tests which includes common processes for unit tests.

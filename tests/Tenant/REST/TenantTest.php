@@ -16,36 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant\Rest;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTestMt;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Tenant_REST_TenantTest extends AbstractBasicTestMt
+class TenantTest extends AbstractBasicTestMt
 {
-
-    private static function getApiV2()
-    {
-        $myAPI = array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            )
-        );
-        return $myAPI;
-    }
 
     /**
      * Getting tenant info
@@ -56,8 +33,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function testDefaultTenant()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current');
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current');
         $this->assertNotNull($response);
         $this->assertEquals($response->status_code, 200);
     }
@@ -69,8 +46,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function testGetDefaultTenantByGraphQl()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, configurations{id}}'
         ));
         $this->assertNotNull($response);
@@ -83,8 +60,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getSettingsOfCurrentTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, settings{id}}'
         ));
         $this->assertNotNull($response);
@@ -97,8 +74,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getsCurrentUserOfCurrentTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, account{id,roles{id}, groups{id, roles{id}}}}'
         ));
         $this->assertNotNull($response);
@@ -111,8 +88,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getsCurrentUserProfilesOfCurrentTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, account{id,profiles{id}}}'
         ));
         $this->assertNotNull($response);
@@ -125,8 +102,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getsCurrentUserMessagesOfCurrentTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, account{id,messages{id}}}'
         ));
         $this->assertNotNull($response);
@@ -139,8 +116,8 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getsFullOfCurrentTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->get('/api/v2/tenant/tenants/current', array(
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/current', array(
             'graphql' => '{id, account{id,roles{id}, groups{id}, profiles{id}},settings{id},configurations{id}}'
         ));
         $this->assertNotNull($response);
@@ -154,16 +131,16 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getTenantsByOwner()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // 1- Login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants');
+        $response = $client->get('/tenant/tenants');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -177,10 +154,10 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getTenantsByAnonymous()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants');
+        $client->get('/tenant/tenants');
     }
 
     /**
@@ -190,9 +167,9 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function createNewTenantByAdmin()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // 1- Login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -205,7 +182,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'domain' => $subdomain . '.domain.ir'
         );
         // 2- getting list of tenants
-        $response = $client->post('/api/v2/tenant/tenants', $data);
+        $response = $client->post('/tenant/tenants', $data);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponseAsModel($response, 200, 'Fail to create tenant');
@@ -213,7 +190,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
         $actual = json_decode($response->content, true);
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants/' . $actual['id']);
+        $response = $client->get('/tenant/tenants/' . $actual['id']);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponseAsModel($response, 200, 'Fail to find created tenant');
@@ -225,16 +202,16 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getConfigurationsOfCurrentTenant()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // 1- Login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants/current/configurations');
+        $response = $client->get('/tenant/tenants/current/configurations');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -245,9 +222,9 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getConfigurationsOfSubTenant()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // 1- Login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -260,7 +237,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
             'domain' => $subdomain . '.domain.ir'
         );
         // 2- getting list of tenants
-        $response = $client->post('/api/v2/tenant/tenants', $data);
+        $response = $client->post('/tenant/tenants', $data);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponseAsModel($response, 200, 'Fail to create tenant');
@@ -268,7 +245,7 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
         $actual = json_decode($response->content, true);
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants/' . $actual['id'] . '/configurations');
+        $response = $client->get('/tenant/tenants/' . $actual['id'] . '/configurations');
         $this->assertResponseNotNull($response, 'Collection result is empty');
         $this->assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
@@ -279,16 +256,16 @@ class Tenant_REST_TenantTest extends AbstractBasicTestMt
      */
     public function getConfigurationsOfSubTenantByGraphql()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // 1- Login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // 2- getting list of tenants
-        $response = $client->get('/api/v2/tenant/tenants', array(
+        $response = $client->get('/tenant/tenants', array(
             'graphql' => '{items{id, configurations{id}}}'
         ));
         $this->assertResponseNotNull($response, 'Collection result is empty');

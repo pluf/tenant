@@ -16,16 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Resource\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Pluf_SQL;
+use Tenant_Resource;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Setting_REST_BasicOwnerTest extends AbstractBasicTest
+class BasicOwnerTest extends AbstractBasicTest
 {
 
     private static $client = null;
@@ -38,28 +36,15 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            )
-        ));
+        self::$client = new Client();
         // Login
         self::$client->clean(true);
-        $response = self::$client->post('/api/v2/user/login', array(
+        $response = self::$client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
-        $this->assertNotNull($response);
-        $this->assertEquals($response->status_code, 200);
+        self::assertNotNull($response);
+        self::assertEquals($response->status_code, 200);
     }
 
     /**
@@ -70,7 +55,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
     public function ownerCanGetListOfSettings()
     {
         // Getting list
-        $response = self::$client->get('/api/v2/tenant/resources');
+        $response = self::$client->get('/tenant/resources');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -89,7 +74,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        $response = self::$client->post('/api/v2/tenant/resources', $values);
+        $response = self::$client->post('/tenant/resources', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -115,7 +100,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        $response = self::$client->post('/api/v2/tenant/resources', $values);
+        $response = self::$client->post('/tenant/resources', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -124,7 +109,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
         $this->assertTrue(sizeof($list) > 0, 'Setting is not created');
 
         foreach ($list as $resource) {
-            $response = self::$client->get('/api/v2/tenant/resources/' . $resource->id);
+            $response = self::$client->get('/tenant/resources/' . $resource->id);
             $this->assertResponseNotNull($response, 'Find result is empty');
             $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         }
@@ -147,7 +132,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        $response = self::$client->post('/api/v2/tenant/resources', $values);
+        $response = self::$client->post('/tenant/resources', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -163,7 +148,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
         ));
         $this->assertNotNull($one, 'Resource not found with key');
 
-        $response = self::$client->get('/api/v2/tenant/resources/' . $one->id);
+        $response = self::$client->get('/tenant/resources/' . $one->id);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -180,7 +165,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        $response = self::$client->post('/api/v2/tenant/resources', $values);
+        $response = self::$client->post('/tenant/resources', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -195,7 +180,7 @@ class Setting_REST_BasicOwnerTest extends AbstractBasicTest
         $this->assertNotNull($one, 'Resource not found with path');
 
         // delete by id
-        $response = self::$client->delete('/api/v2/tenant/resources/' . $one->id);
+        $response = self::$client->delete('/tenant/resources/' . $one->id);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 

@@ -18,7 +18,15 @@
  */
 namespace Pluf\Test\Base;
 
+use Pluf\Exception;
 use Pluf\Test\TestCase;
+use Pluf;
+use Pluf_Migration;
+use Pluf_Tenant;
+use Tenant_Service;
+use User_Account;
+use User_Credential;
+use User_Role;
 
 /**
  * It is a basic class for tests which includes common processes for unit tests.
@@ -35,27 +43,20 @@ abstract class AbstractBasicTestMt extends TestCase
      */
     public static function installApps()
     {
+        // Create and init default tenant
         $cfg = include __DIR__ . '/../conf/config.php';
         $cfg['multitenant'] = true;
         Pluf::start($cfg);
         $m = new Pluf_Migration();
         $m->install();
 
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-
-        $m->init($tenant);
-
-        if (! isset($GLOBALS['_PX_request'])) {
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant = $tenant;
+        $tenant = Tenant_Service::createNewTenant(array(
+            'domain' => 'localhost',
+            'subdomain' => 'www',
+            'validate' => true
+        ));
+        
+        Pluf_Tenant::setCurrent($tenant);
 
         // Test user
         $user = new User_Account();

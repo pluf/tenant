@@ -16,48 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Spa\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Tenant_Service;
+use Tenant_SpaService;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Spa_REST_BaseTagTest extends AbstractBasicTest
+class BaseTagTest extends AbstractBasicTest
 {
 
     private static $client = null;
-    
+
     /**
+     *
      * @beforeClass
      */
     public static function installApps()
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            ),
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-app-v2.php'
-            )
-        ));
-            
+        self::$client = new Client();
+
         // default spa
         $path = dirname(__FILE__) . '/../resources/testDefault.zip';
         Tenant_Service::setSetting('spa.default', 'testDefault');
@@ -67,6 +47,7 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getMainFileOfDefaultSpa()
@@ -76,8 +57,9 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
         $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
         $this->assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getFakeFileOfDefaultSpa()
@@ -87,8 +69,9 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
         $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
         $this->assertEquals('<html><h1>test_spa</h1></html>', $response->content, 'Base tag replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getMainFileOfSpa()
@@ -98,8 +81,9 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
         $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
         $this->assertEquals('<base href="/testDefault/">', $response->content, 'Base tag replacement is not correct');
     }
-    
+
     /**
+     *
      * @test
      */
     public function getFakeFileOfSpa()
@@ -109,7 +93,6 @@ class Spa_REST_BaseTagTest extends AbstractBasicTest
         $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
         $this->assertEquals('<base href="/testDefault/">', $response->content, 'Base tag replacement is not correct');
     }
-    
 }
 
 

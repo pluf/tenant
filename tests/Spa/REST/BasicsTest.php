@@ -16,20 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Spa\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Spa_REST_BasicsTest extends AbstractBasicTest
+class BasicsTest extends AbstractBasicTest
 {
 
     private static $client = null;
-    
+
     /**
      *
      * @beforeClass
@@ -38,34 +34,16 @@ class Spa_REST_BasicsTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            ),
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-app-v2.php'
-            )
-        ));
+        self::$client = new Client();
     }
 
     /**
+     *
      * @test
      */
     public function listSapsRestTest()
     {
-        $response = self::$client->get('/api/v2/tenant/spas');
+        $response = self::$client->get('/tenant/spas');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');

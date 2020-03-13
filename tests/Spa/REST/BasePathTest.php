@@ -16,17 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Spa\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Tenant_Service;
+use Tenant_SpaService;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Spa_REST_BasePathTest extends AbstractBasicTest
+class BasePathTest extends AbstractBasicTest
 {
 
     private static $client = null;
@@ -39,26 +36,7 @@ class Spa_REST_BasePathTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            ),
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-app-v2.php'
-            )
-        ));
+        self::$client = new Client();
         // default spa
         $path = dirname(__FILE__) . '/../resources/testManifest.zip';
         Tenant_Service::setting('spa.default', 'testManifest');

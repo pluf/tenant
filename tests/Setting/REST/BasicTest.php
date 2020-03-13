@@ -16,15 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Setting;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Pluf_SQL;
+use Tenant_Service;
+use Tenant_Setting;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
 class Setting_REST_BasicTest extends AbstractBasicTest
 {
 
@@ -40,42 +39,16 @@ class Setting_REST_BasicTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            )
-        ));
+        self::$client = new Client();
         // Owner client
-        self::$ownerClient = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            )
-        ));
+        self::$ownerClient = new Client();
         // Login
-        $response = self::$ownerClient->post('/api/v2/user/login', array(
+        $response = self::$ownerClient->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
-        $this->assertNotNull($response);
-        $this->assertEquals($response->status_code, 200);
+        self::assertNotNull($response);
+        self::assertEquals($response->status_code, 200);
     }
 
     /**
@@ -85,7 +58,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
      */
     public function anonymousCanGetListOfSettings()
     {
-        $response = self::$client->get('/api/v2/tenant/settings');
+        $response = self::$client->get('/tenant/settings');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -99,7 +72,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
     public function ownerCanGetListOfSettings()
     {
         // Getting list
-        $response = self::$ownerClient->get('/api/v2/tenant/settings');
+        $response = self::$ownerClient->get('/tenant/settings');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -118,7 +91,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
+        $response = self::$ownerClient->post('/tenant/settings', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -141,7 +114,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
+        $response = self::$ownerClient->post('/tenant/settings', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -150,7 +123,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
         $this->assertTrue(sizeof($list) > 0, 'Setting is not created');
         $this->assertEquals($values['value'], Tenant_Service::setting($values['key']), 'Values are not equal.');
 
-        $response = self::$ownerClient->get('/api/v2/tenant/settings/' . $values['key']);
+        $response = self::$ownerClient->get('/tenant/settings/' . $values['key']);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -168,7 +141,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
+        $response = self::$ownerClient->post('/tenant/settings', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -185,7 +158,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
         ));
         $this->assertNotNull($one, 'Setting not found with key');
 
-        $response = self::$ownerClient->get('/api/v2/tenant/settings/' . $one->id);
+        $response = self::$ownerClient->get('/tenant/settings/' . $one->id);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
     }
@@ -203,7 +176,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
+        $response = self::$ownerClient->post('/tenant/settings', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -218,7 +191,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
         $this->assertNotNull($one, 'Setting not found with key');
 
         // delete by id
-        $response = self::$ownerClient->delete('/api/v2/tenant/settings/' . $one->id);
+        $response = self::$ownerClient->delete('/tenant/settings/' . $one->id);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -242,7 +215,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
             'value' => 'NOT SET',
             'mode' => Tenant_Setting::MOD_PUBLIC
         );
-        $response = self::$ownerClient->post('/api/v2/tenant/settings', $values);
+        $response = self::$ownerClient->post('/tenant/settings', $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 
@@ -256,7 +229,7 @@ class Setting_REST_BasicTest extends AbstractBasicTest
         $this->assertNotNull($one, 'Setting not found with key');
 
         $values['value'] = 'new value' . rand();
-        $response = self::$ownerClient->post('/api/v2/tenant/settings/' . $one->id, $values);
+        $response = self::$ownerClient->post('/tenant/settings/' . $one->id, $values);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
 

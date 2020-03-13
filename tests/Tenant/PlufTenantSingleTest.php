@@ -19,6 +19,8 @@
 namespace Pluf\Test\Tenant;
 
 use Pluf\Test\Base\AbstractBasicTest;
+use Pluf;
+use Pluf_Tenant;
 
 class PlufTenantSingleTest extends AbstractBasicTest
 {

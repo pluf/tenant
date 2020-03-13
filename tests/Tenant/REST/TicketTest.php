@@ -16,17 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant\Rest;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTestMt;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Tenant_REST_TicketsTest extends AbstractBasicTestMt
+class TicketsTest extends AbstractBasicTestMt
 {
-    private static function getApi(){
+
+    private static function getApi()
+    {
         $myAPI = array(
             array(
                 'app' => 'Tenant',
@@ -44,17 +43,18 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
         return $myAPI;
     }
 
-    private static function getApiV2(){
+    private static function getApiV2()
+    {
         $myAPI = array(
             array(
                 'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
+                'regex' => '#^/tenant#',
                 'base' => '',
                 'sub' => include 'Tenant/urls-v2.php'
             ),
             array(
                 'app' => 'User',
-                'regex' => '#^/api/v2/user#',
+                'regex' => '#^/user#',
                 'base' => '',
                 'sub' => include 'User/urls-v2.php'
             )
@@ -71,16 +71,16 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
      */
     public function testFindTikcets()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // find teckets
-        $response = $client->get('/api/v2/tenant/tickets');
+        $response = $client->get('/tenant/tickets');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -93,19 +93,19 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
      */
     public function testFindTikcetsNotEmpty()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
-        $response = $client->post('/api/v2/tenant/tickets', array(
+        $response = $client->post('/tenant/tickets', array(
             'type' => 'bug',
             'subject' => 'test ticket',
-            'description' => 'it is not possible to test',
+            'description' => 'it is not possible to test'
         ));
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
@@ -113,14 +113,14 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
         $t = json_decode($response->content, true);
 
         // find teckets
-        $response = $client->get('/api/v2/tenant/tickets');
+        $response = $client->get('/tenant/tickets');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
         $this->assertResponseNonEmptyPaginateList($response, 'No ticket is created');
 
         // delete ticket
-        $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
+        $response = $client->delete('/tenant/tickets/' . $t['id']);
         $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
 
@@ -131,19 +131,19 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
      */
     public function testCreateTikcet()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
-        $response = $client->post('/api/v2/tenant/tickets', array(
+        $response = $client->post('/tenant/tickets', array(
             'type' => 'bug',
             'subject' => 'test ticket',
-            'description' => 'it is not possible to test',
+            'description' => 'it is not possible to test'
         ));
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
@@ -151,11 +151,9 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
         $t = json_decode($response->content, true);
 
         // delete ticket
-        $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
+        $response = $client->delete('/tenant/tickets/' . $t['id']);
         $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
-
-
 
     /**
      * Get a ticket
@@ -164,19 +162,19 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
      */
     public function testGetTikcet()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // create tecket
-        $response = $client->post('/api/v2/tenant/tickets', array(
+        $response = $client->post('/tenant/tickets', array(
             'type' => 'bug',
             'subject' => 'test ticket',
-            'description' => 'it is not possible to test',
+            'description' => 'it is not possible to test'
         ));
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
@@ -184,13 +182,12 @@ class Tenant_REST_TicketsTest extends AbstractBasicTestMt
 
         // Get tecket
         $t = json_decode($response->content, true);
-        $response = $client->get('/api/v2/tenant/tickets/' . $t['id']);
+        $response = $client->get('/tenant/tickets/' . $t['id']);
         $this->assertResponseNotAnonymousModel($response, 'Ticket is not find');
 
         // delete ticket
-        $response = $client->delete('/api/v2/tenant/tickets/' . $t['id']);
+        $response = $client->delete('/tenant/tickets/' . $t['id']);
         $this->assertResponseStatusCode($response, 200, 'Ticket is removed');
     }
-
 }
 

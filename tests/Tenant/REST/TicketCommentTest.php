@@ -16,17 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant\Rest;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTestMt;
+use Tenant_Comment;
+use Tenant_Ticket;
+use User_Account;
 
 /**
+ *
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
+class TicketCommentsTest extends AbstractBasicTestMt
 {
-    private static function getApi(){
+
+    private static function getApi()
+    {
         $myAPI = array(
             array(
                 'app' => 'Tenant',
@@ -44,17 +51,18 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         return $myAPI;
     }
 
-    private static function getApiV2(){
+    private static function getApiV2()
+    {
         $myAPI = array(
             array(
                 'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
+                'regex' => '#^/tenant#',
                 'base' => '',
                 'sub' => include 'Tenant/urls-v2.php'
             ),
             array(
                 'app' => 'User',
-                'regex' => '#^/api/v2/user#',
+                'regex' => '#^/user#',
                 'base' => '',
                 'sub' => include 'User/urls-v2.php'
             )
@@ -71,9 +79,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testFindTikcetComments()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -92,7 +100,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $t->create();
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -108,9 +116,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testFindTikcetCommentSNotEmpty()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -136,7 +144,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $c->create();
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response);
@@ -154,9 +162,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testGetTikcetComment()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -182,7 +190,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $c->create();
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $c->id);
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments/' . $c->id);
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponseAsModel($response);
@@ -200,9 +208,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testCreateTikcetComment()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -221,7 +229,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $t->create();
 
         // find comments
-        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
+        $response = $client->post('/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -229,7 +237,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $tc = json_decode($response->content, true);
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response);
@@ -248,9 +256,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testUpdateTikcetComment()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -269,7 +277,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $t->create();
 
         // find comments
-        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
+        $response = $client->post('/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -277,14 +285,14 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $tc = json_decode($response->content, true);
 
         // update
-        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $tc['id'], array(
+        $response = $client->post('/tenant/tickets/' . $t->id . '/comments/' . $tc['id'], array(
             'title' => 'test new title',
             'description' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200);
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response);
@@ -303,9 +311,9 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
      */
     public function testDeleteTikcetComment()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -324,7 +332,7 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $t->create();
 
         // find comments
-        $response = $client->post('/api/v2/tenant/tickets/' . $t->id . '/comments', array(
+        $response = $client->post('/tenant/tickets/' . $t->id . '/comments', array(
             'title' => 'test',
             'description' => 'test'
         ));
@@ -332,11 +340,11 @@ class Tenant_REST_TicketCommentsTest extends AbstractBasicTestMt
         $tc = json_decode($response->content, true);
 
         // update
-        $response = $client->delete('/api/v2/tenant/tickets/' . $t->id . '/comments/' . $tc['id']);
+        $response = $client->delete('/tenant/tickets/' . $t->id . '/comments/' . $tc['id']);
         $this->assertResponseStatusCode($response, 200);
 
         // find comments
-        $response = $client->get('/api/v2/tenant/tickets/' . $t->id . '/comments');
+        $response = $client->get('/tenant/tickets/' . $t->id . '/comments');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response);

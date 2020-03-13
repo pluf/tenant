@@ -33,7 +33,7 @@ class Tenant_Views extends Pluf_Views
     /**
      * Gets current tenant
      *
-     * @return Tenant_CurrentTenant current tenant
+     * @return Tenant_Tenant current tenant
      */
     public function getCurrent($request, $match, $params)
     {
@@ -49,7 +49,7 @@ class Tenant_Views extends Pluf_Views
             $result = GraphQL::executeQuery($schema, $query, $request);
             $result = $result->toArray();
             if (array_key_exists('errors', $result)) {
-                throw new Pluf_Exception('Fail to run GraphQl query: ' /*. $result['errors'] */);
+                throw new \Pluf\Exception('Fail to run GraphQl query: ' /*. $result['errors'] */);
             }
             if (!array_key_exists('data', $result)) {
                 return array();

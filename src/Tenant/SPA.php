@@ -237,6 +237,9 @@ class Tenant_SPA extends Pluf_Model
      */
     public function getResourcePath($name)
     {
+        if(!isset($name) || strlen($name) == 0){
+            $name = $this->main_page;
+        }
         return $this->getRootPath() . '/' . $name;
     }
 }

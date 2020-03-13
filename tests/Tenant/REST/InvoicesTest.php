@@ -16,52 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant\Rest;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Base\AbstractBasicTestMt;
+use Tenant_Invoice;
+use Pluf\Test\Client;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
+class InvoicesTest extends AbstractBasicTestMt
 {
-
-    private static function getApi(){
-        $myAPI = array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/user#',
-                'base' => '',
-                'sub' => include 'User/urls.php'
-            )
-        );
-        return $myAPI;
-    }
-
-    private static function getApiV2(){
-        $myAPI = array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            )
-        );
-        return $myAPI;
-    }
 
     /**
      * Getting invoice list
@@ -69,21 +31,21 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
      * @test
      */
     public function shouldSupportMultipleLogin()
-{
-    // login
-    for ($i = 0; $i < 10; $i ++) {
-        $client = new Test_Client(self::getApiV2());
-        $response = $client->post('/api/v2/user/login', array(
-            'login' => 'test',
-            'password' => 'test'
-        ));
-        $this->assertResponseStatusCode($response, 200, 'Fail to login');
-        // Current user is valid
-        $response = $client->get('/api/v2/user/accounts/current');
-        $this->assertResponseStatusCode($response, 200, 'Fail to login');
-        $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+    {
+        // login
+        for ($i = 0; $i < 10; $i ++) {
+            $client = new Client();
+            $response = $client->post('/user/login', array(
+                'login' => 'test',
+                'password' => 'test'
+            ));
+            $this->assertResponseStatusCode($response, 200, 'Fail to login');
+            // Current user is valid
+            $response = $client->get('/user/accounts/current');
+            $this->assertResponseStatusCode($response, 200, 'Fail to login');
+            $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
+        }
     }
-}
 
     /**
      * Getting invoice list
@@ -92,22 +54,22 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
      */
     public function testFindInvoices()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
 
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Current user is valid
-        $response = $client->get('/api/v2/user/accounts/current');
+        $response = $client->get('/user/accounts/current');
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
         $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
 
         // find
-        $response = $client->get('/api/v2/tenant/invoices');
+        $response = $client->get('/tenant/invoices');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -122,16 +84,16 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
      */
     public function testFindInvoicesNonEmpty()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
 
         // Current user is valid
-        $response = $client->get('/api/v2/user/accounts/current');
+        $response = $client->get('/user/accounts/current');
         $this->assertResponseStatusCode($response, 200, 'Fail to login');
         $this->assertResponseNotAnonymousModel($response, 'Current user is anonymous');
 
@@ -143,7 +105,7 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
         $i->create();
 
         // find
-        $response = $client->get('/api/v2/tenant/invoices');
+        $response = $client->get('/tenant/invoices');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -153,7 +115,6 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
         $i->delete();
     }
 
-
     /**
      * Getting invoice
      *
@@ -161,9 +122,9 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
      */
     public function testGetInvoice()
     {
-        $client = new Test_Client(self::getApiV2());
+        $client = new Client();
         // login
-        $response = $client->post('/api/v2/user/login', array(
+        $response = $client->post('/user/login', array(
             'login' => 'test',
             'password' => 'test'
         ));
@@ -177,7 +138,7 @@ class Tenant_REST_InvoicesTest extends AbstractBasicTestMt
         $i->create();
 
         // find
-        $response = $client->get('/api/v2/tenant/invoices/'. $i->id);
+        $response = $client->get('/tenant/invoices/' . $i->id);
         $this->assertResponseNotNull($response);
         $this->assertResponseStatusCode($response, 200);
         $this->assertResponseNotAnonymousModel($response, 'Invoice not foudn');

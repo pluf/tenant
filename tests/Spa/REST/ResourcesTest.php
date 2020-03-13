@@ -16,20 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Spa\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Tenant_Service;
+use Tenant_SpaService;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Spa_REST_ResourcesTest extends AbstractBasicTest
+class ResourcesTest extends AbstractBasicTest
 {
 
     private static $client = null;
-    
+
     /**
      *
      * @beforeClass
@@ -38,27 +36,8 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            ),
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-app-v2.php'
-            )
-        ));
-        
+        self::$client = new Client();
+
         // default spa
         $path = dirname(__FILE__) . '/../resources/testDefault.zip';
         Tenant_Service::setSetting('spa.default', 'testDefault');
@@ -66,8 +45,9 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
         $path = dirname(__FILE__) . '/../resources/testResource.zip';
         Tenant_SpaService::installFromFile($path);
     }
-    
+
     /**
+     *
      * @test
      */
     public function getMainFileOfDefaultSpa()
@@ -79,6 +59,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getResourceOfDefaultSpa()
@@ -90,6 +71,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getMainFileOfTestSpa()
@@ -101,6 +83,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getResourceOfTestSpa()
@@ -112,6 +95,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getInternalStateOfDefaultSpa()
@@ -123,6 +107,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @test
      */
     public function getInternalStateOfTestSpa()
@@ -134,6 +119,7 @@ class Spa_REST_ResourcesTest extends AbstractBasicTest
     }
 
     /**
+     *
      * @expectedException Pluf_Exception
      * @test
      */

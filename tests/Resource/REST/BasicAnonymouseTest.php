@@ -16,16 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'Pluf.php';
+namespace Pluf\Test\Resource\REST;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Client;
+use Pluf\Test\Base\AbstractBasicTest;
+use Tenant_Resource;
 
-/**
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
-class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
+class BasicAnonymouseTest extends AbstractBasicTest
 {
 
     private static $client = null;
@@ -40,25 +37,7 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
     {
         parent::installApps();
         // Anonymouse client
-        self::$client = new Test_Client(array(
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^/api/v2/tenant#',
-                'base' => '',
-                'sub' => include 'Tenant/urls-v2.php'
-            ),
-            array(
-                'app' => 'User',
-                'regex' => '#^/api/v2/user#',
-                'base' => '',
-                'sub' => include 'User/urls-v2.php'
-            ),
-            array(
-                'app' => 'Tenant',
-                'regex' => '#^#',
-                'sub' => include 'Tenant/urls-app-v2.php'
-            )
-        ));
+        self::$client = new Client();
         self::$client->clean(true);
     }
 
@@ -70,7 +49,7 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
      */
     public function anonymousCanGetListOfSettings()
     {
-        $response = self::$client->get('/api/v2/tenant/resources');
+        $response = self::$client->get('/tenant/resources');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -90,31 +69,31 @@ class Setting_REST_BasicAnonymouseTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        $response = self::$client->post('/api/v2/tenant/resources', $values);
+        self::$client->post('/tenant/resources', $values);
     }
-    
-    
+
     /**
      * Create a new setting in system
      *
      * @test
      */
-    public function anonymousCanAccessResourceWithPath(){
-        
+    public function anonymousCanAccessResourceWithPath()
+    {
+
         // create resource
         $r1 = new Tenant_Resource();
         $r1->path = '/path/to.test/resource-' . rand();
         $r1->title = 'A test resource';
         $r1->description = 'Is created automaticl';
         $r1->create();
-        
+
         // upload resource value
         $testContent = 'test content:' . rand();
         $myfile = fopen($r1->getAbsloutPath(), "w") or die("Unable to open resource file!");
         fwrite($myfile, $testContent);
         fclose($myfile);
         $r1->update();
-        
+
         $response = self::$client->get($r1->path);
         $this->assertEquals($response->status_code, 200);
         // FIXME: maso, 2019: check if the content value is match with test content

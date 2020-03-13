@@ -16,36 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Setting;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Base\AbstractBasicTest;
+use Pluf_Template;
+use Tenant_Service;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
 class PlufSettingTemplateTest extends AbstractBasicTest
 {
+
     /**
+     *
      * @test
      */
     public function testSetting1()
     {
         $folders = array(
-            __DIR__ . '/../templates'
+            __DIR__ . '/../../templates'
         );
         $tmpl = new Pluf_Template('tpl-setting1.html', $folders);
         $this->assertEquals(Tenant_Service::setting('setting1', 'default value'), $tmpl->render());
     }
 
     /**
+     *
      * @test
      */
     public function testSetting2()
     {
         $folders = array(
-            __DIR__ . '/../templates'
+            __DIR__ . '/../../templates'
         );
         $value = 'Random val:' . rand();
         Tenant_Service::setSetting('setting2', $value);

@@ -67,7 +67,7 @@ class Tenant_SPA_Manager_Remote implements Tenant_SPA_Manager
      */
     public function apply($spa, $action)
     {
-        $machine = new Workflow_Machine();
+        $machine = new \Pluf\Workflow\Machine();
         $machine->setStates(self::$STATE_MACHINE)
             ->setSignals(array(
             'Tenant_SPA::stateChange'

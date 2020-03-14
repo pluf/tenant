@@ -113,7 +113,7 @@ class OwnerTest extends TestCase
     public static function uninstallApps()
     {
         $m = new Pluf_Migration();
-        $m->unInstall();
+        $m->uninstall();
     }
 
     /**

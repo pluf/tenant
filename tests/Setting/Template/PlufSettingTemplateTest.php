@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -17,50 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Pluf\Test\Tenant;
+namespace Pluf\Test\Setting;
 
 use Pluf\Test\Base\AbstractBasicTest;
-use Pluf;
-use Pluf_Tenant;
+use Pluf_Template;
+use Tenant_Service;
 
-class PlufTenantSingleEmptyTest extends AbstractBasicTest
+class PlufSettingTemplateTest extends AbstractBasicTest
 {
 
     /**
      *
      * @test
      */
-    public function testDefaultTenant()
+    public function testSetting1()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-
-        // check id
-        $id = $tenant->id;
-        $this->assertNotNull($id);
-
-        // check title
-        $title = $tenant->title;
-        $this->assertNotNull($title);
-
-        // check description
-        $desc = $tenant->description;
-        $this->assertNotNull($desc);
+        $folders = array(
+            __DIR__ . '/../../templates'
+        );
+        $tmpl = new Pluf_Template('tpl-setting1.html', $folders);
+        $this->assertEquals(Tenant_Service::setting('setting1', 'default value'), $tmpl->render());
     }
 
     /**
      *
      * @test
      */
-    public function testStoragePath()
+    public function testSetting2()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-
-        $storage = $tenant->storagePath();
-        $this->assertNotNull($storage);
-        $this->assertEquals(Pluf::f('upload_path'), $storage);
+        $folders = array(
+            __DIR__ . '/../../templates'
+        );
+        $value = 'Random val:' . rand();
+        Tenant_Service::setSetting('setting2', $value);
+        $tmpl = new Pluf_Template('tpl-setting2.html', $folders);
+        $this->assertEquals($value, $tmpl->render());
     }
 }
-
 

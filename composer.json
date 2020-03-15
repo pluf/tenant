@@ -1,8 +1,10 @@
 {
 	"name" : "pluf/tenant",
+	"version" : "6.0.5",
 	"description" : "A pluf module to manage current tenant",
 	"type" : "library",
 	"license" : "MIT",
+	"homepage" : "https://github.com/pluf/tenant",
 	"authors" : [{
 			"name" : "Mostafa Barmshory",
 			"email" : "mostafa.barmshory@dpq.co.ir",
@@ -15,25 +17,6 @@
 			"role" : "developer"
 		}
 	],
-	"minimum-stability" : "stable",
-	"require" : {
-		"pluf/core" : "5.13.x",
-		"pluf/user" : "5.13.x",
-		"pluf/discount" : "5.13.x",
-		"pluf/bank" : "5.13.x",
-		"pluf/monitor" : "5.13.x",
-		"pluf/workflow" : "5.13.x",
-		"pluf/backup" : "5.13.x",
-		"guzzlehttp/guzzle" : "^6.2.0"
-	},
-	"require-dev" : {
-		"pluf/test" : "5.13.x",
-		"pluf/user" : "5.13.x"
-	},
-	"include-path" : [
-		"src/"
-	],
-	"homepage" : "https://github.com/pluf/tenant",
 	"support" : {
 		"email" : "info@pluf.ir",
 		"issues" : "https://github.com/pluf/tenant/issues",
@@ -46,5 +29,99 @@
 		"php",
 		"pluf-module",
 		"tenant"
+	],
+	"minimum-stability" : "stable",
+	"require" : {
+		"pluf/core" : "6.x",
+		"pluf/user" : "6.x",
+		"pluf/workflow" : "6.x",
+		"pluf/discount" : "6.x",
+		"pluf/bank" : "6.x",
+		"pluf/monitor" : "6.x",
+		"guzzlehttp/guzzle" : "^6.2.0"
+	},
+	"require-dev" : {
+		"pluf/test" : "6.x"
+	},
+	"include-path" : [
+		"src/"
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Pluf\\Tenant\\" : "src6"
+		},
+		"psr-0" : {
+			"" : "src"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"Pluf\\Test\\" : "tests"
+		}
+	},
+	"repositories" : [{
+			"type" : "path",
+			"url" : "../core",
+			"name" : "pluf/core",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../test",
+			"name" : "pluf/test",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../http2",
+			"name" : "pluf/http2",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../user",
+			"name" : "pluf/user",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../workflow",
+			"name" : "pluf/workflow",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../discount",
+			"name" : "pluf/discount",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../bank",
+			"name" : "pluf/bank",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../monitor",
+			"name" : "pluf/monitor",
+			"options" : {
+				"symlink" : true
+			}
+		}, {
+			"type" : "path",
+			"url" : "../backup",
+			"name" : "pluf/backup",
+			"options" : {
+				"symlink" : true
+			}
+		}
 	]
 }

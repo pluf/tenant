@@ -16,29 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
+namespace Pluf\Test\Tenant;
 
-require_once 'Pluf.php';
+use Pluf\Test\TestCase;
+use Pluf;
+use Tenant_BankReceipt;
+use Tenant_Tenant;
+use Tenant_BankBackend;
+use Tenant_Comment;
+use Tenant_Configuration;
+use Tenant_Setting;
+use Tenant_Invoice;
+use Tenant_Resource;
+use Tenant_SPA;
+use Tenant_Owner;
+use Tenant_SubtenantConfiguration;
+use Tenant_Ticket;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
 class Tenant_ApiTest extends TestCase
 {
 
     /**
+     *
      * @before
      */
-    public function setUpTest ()
+    public function setUpTest()
     {
-        Pluf::start(__DIR__. '/../conf/config.php');
+        Pluf::start(__DIR__ . '/../conf/config.php');
     }
 
     /**
+     *
      * @test
      */
-    public function testClassInstance ()
+    public function testClassInstance()
     {
         $object = new Tenant_Tenant();
         $this->assertTrue(isset($object), 'Tenant_Tenant could not be created!');

@@ -16,18 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Base;
+
+use Pluf\Exception;
+use Pluf\Test\TestCase;
+use Pluf;
+use Pluf_Migration;
+use Pluf_Tenant;
+use Tenant_Service;
+use User_Account;
+use User_Credential;
+use User_Role;
 
 /**
  * It is a basic class for tests which includes common processes for unit tests.
  * It loads config and create an default tenant, a default account (with username 'test') and a default
  * credential for this account (with password 'test').
  * It also includes uninstall process after finishint tests.
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
  */
 abstract class AbstractBasicTestMt extends TestCase
 {
@@ -38,27 +43,20 @@ abstract class AbstractBasicTestMt extends TestCase
      */
     public static function installApps()
     {
+        // Create and init default tenant
         $cfg = include __DIR__ . '/../conf/config.php';
         $cfg['multitenant'] = true;
         Pluf::start($cfg);
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
+        $m = new Pluf_Migration();
         $m->install();
 
-        // Test tenant
-        $tenant = new Pluf_Tenant();
-        $tenant->domain = 'localhost';
-        $tenant->subdomain = 'www';
-        $tenant->validate = true;
-        if (true !== $tenant->create()) {
-            throw new Pluf_Exception('Faile to create new tenant');
-        }
-
-        $m->init($tenant);
-
-        if (! isset($GLOBALS['_PX_request'])) {
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
-        $GLOBALS['_PX_request']->tenant = $tenant;
+        $tenant = Tenant_Service::createNewTenant(array(
+            'domain' => 'localhost',
+            'subdomain' => 'www',
+            'validate' => true
+        ));
+        
+        Pluf_Tenant::setCurrent($tenant);
 
         // Test user
         $user = new User_Account();
@@ -87,8 +85,8 @@ abstract class AbstractBasicTestMt extends TestCase
      */
     public static function uninstallApps()
     {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
+        $m = new Pluf_Migration();
+        $m->uninstall();
     }
 
     /**

@@ -45,11 +45,11 @@ class Tenant_BankService
      * @param Pluf_Model $owner
      * @return Bank_Receipt
      */
-    public static function create ($param, $owner = null, $ownerId = null)
+    public static function create($param, $owner = null, $ownerId = null)
     {
         $form = new Tenant_Form_BankReceiptNew($param);
         $receipt = $form->save(false);
-//         $backend = Pluf::factory('Tenant_BankBackend', $receipt->backend);
+        // $backend = Pluf::factory('Tenant_BankBackend', $receipt->backend);
         $backend = $receipt->get_backend();
         $engine = $backend->get_engine();
         $engine->create($receipt);
@@ -63,5 +63,4 @@ class Tenant_BankService
         $receipt->create();
         return $receipt;
     }
-    
 }

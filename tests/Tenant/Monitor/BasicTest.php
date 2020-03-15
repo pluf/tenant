@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -17,50 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Pluf\Test\Tenant;
+namespace Pluf\Test\Tenant\Monitor;
 
+use Pluf\Test\Client;
 use Pluf\Test\Base\AbstractBasicTest;
-use Pluf;
-use Pluf_Tenant;
+use User_Account;
 
-class PlufTenantSingleEmptyTest extends AbstractBasicTest
+class User_Monitor_BasicsTest extends AbstractBasicTest
 {
 
     /**
      *
      * @test
      */
-    public function testDefaultTenant()
+    public function getOwnerMonitor()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
+        $client = new Client();
 
-        // check id
-        $id = $tenant->id;
-        $this->assertNotNull($id);
+        // Change detail
+        $user = new User_Account();
+        $user = $user->getUser('test');
 
-        // check title
-        $title = $tenant->title;
-        $this->assertNotNull($title);
+        // Login
+        $response = $client->post('/user/login', array(
+            'login' => 'test',
+            'password' => 'test'
+        ));
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
 
-        // check description
-        $desc = $tenant->description;
-        $this->assertNotNull($desc);
-    }
-
-    /**
-     *
-     * @test
-     */
-    public function testStoragePath()
-    {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-
-        $storage = $tenant->storagePath();
-        $this->assertNotNull($storage);
-        $this->assertEquals(Pluf::f('upload_path'), $storage);
+        // Monitor owner
+        $response = $client->get('/monitor/tags/user/metrics/owner');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponseAsModel($response, 'Is not a valid model');
     }
 }
-
 

@@ -33,13 +33,13 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
      * @var array
      */
     static $STATE_MACHINE = array(
-        Workflow_Machine::STATE_UNDEFINED => array(
+        \Pluf\Workflow\Machine::STATE_UNDEFINED => array(
             'next' => 'Enable',
             'visible' => false,
             'action' => array(
                 'Tenant_SPA_Manager_Simple',
                 'init'
-            ),
+            )
         ),
         // State
         'Enable' => array(
@@ -119,7 +119,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
      */
     public function apply($spa, $action)
     {
-        $machine = new Workflow_Machine();
+        $machine = new \Pluf\Workflow\Machine();
         return $machine->setStates(self::$STATE_MACHINE)
             ->setSignals(array(
             'Tenant_SPA::stateChange'
@@ -170,7 +170,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
     {
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
-        $path = '/api/v2/marketplace/spas/' . $object->name . '/file';
+        $path = '/marketplace/spas/' . $object->name . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request
         $client = new GuzzleHttp\Client();
@@ -179,30 +179,31 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
         ]);
         return Tenant_SpaService::updateFromFile($object, $file, true);
     }
-    
+
     /**
      * Reutn deleted object
-     * 
+     *
      * @param Pluf_HTTP_Request $request
      * @param Tenant_SPA $object
      * @return Tenant_SPA
      */
-    public static function delete($request, $object) {
+    public static function delete($request, $object)
+    {
         $object->delete();
         return $object;
     }
-    
+
     /**
      * Reutn init object
-     * 
+     *
      * @param Pluf_HTTP_Request $request
      * @param Tenant_SPA $object
      * @return Tenant_SPA
      */
-    public static function init($request, $object) {
+    public static function init($request, $object)
+    {
         $object->state = 'Enable';
         $object->update();
         return $object;
     }
-    
 }

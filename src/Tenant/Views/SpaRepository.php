@@ -34,7 +34,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     {
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
-        $path = '/api/v2/marketplace/spas';
+        $path = '/marketplace/spas';
         $param = $request->REQUEST;
         
         // Do request
@@ -60,7 +60,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
         
         // request param
         $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
-        $path = '/api/v2/marketplace/spas/'.$match['modelId'];
+        $path = '/marketplace/spas/'.$match['modelId'];
         $param = $request->REQUEST;
         
         // Do request

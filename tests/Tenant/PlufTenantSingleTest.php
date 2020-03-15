@@ -16,47 +16,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Tenant;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . '/../Base/');
+use Pluf\Test\Base\AbstractBasicTest;
+use Pluf;
+use Pluf_Tenant;
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
 class PlufTenantSingleTest extends AbstractBasicTest
 {
 
     /**
+     *
      * @test
      */
     public function testDefaultTenant()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
-        
+
         // check id
         $id = $tenant->id;
         $this->assertNotNull($id);
-        
+
         // check title
         $title = $tenant->title;
         $this->assertNotNull($title);
-        
+
         // check description
         $desc = $tenant->description;
         $this->assertNotNull($desc);
     }
 
     /**
+     *
      * @test
      */
     public function testStoragePath()
     {
         $tenant = Pluf_Tenant::current();
         $this->assertNotNull($tenant);
-        
+
         $storage = $tenant->storagePath();
         $this->assertNotNull($storage);
         $this->assertEquals(Pluf::f('upload_path'), $storage);

@@ -34,6 +34,7 @@ class Tenant_BankReceipt extends Bank_Receipt
 {
 
     /**
+     *
      * @see Bank_Receipt::init()
      */
     function init()
@@ -49,5 +50,4 @@ class Tenant_BankReceipt extends Bank_Receipt
             )
         ));
     }
-
 }

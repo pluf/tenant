@@ -16,18 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\IncompleteTestError;
-require_once 'Pluf.php';
+namespace Pluf\Test\Base;
+
+use Pluf\Exception;
+use Pluf\Test\TestCase;
+use Pluf;
+use Pluf_Migration;
+use User_Account;
+use User_Credential;
+use User_Role;
 
 /**
  * It is a basic class for tests which includes common processes for unit tests.
  * It loads config and create an default tenant, a default account (with username 'test') and a default
  * credential for this account (with password 'test').
  * It also includes uninstall process after finishint tests.
- *
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
  */
 abstract class AbstractBasicTest extends TestCase
 {
@@ -38,17 +41,10 @@ abstract class AbstractBasicTest extends TestCase
      */
     public static function installApps()
     {
-        $cfg = include __DIR__ . '/../conf/config.php';
-        $cfg['multitenant'] = false;
-        Pluf::start($cfg);
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
+        Pluf::start(__DIR__ . '/../conf/config.php');
+        $m = new Pluf_Migration();
         $m->install();
-
         $m->init();
-
-        if (! isset($GLOBALS['_PX_request'])) {
-            $GLOBALS['_PX_request'] = new Pluf_HTTP_Request('/');
-        }
 
         // Test user
         $user = new User_Account();
@@ -77,8 +73,8 @@ abstract class AbstractBasicTest extends TestCase
      */
     public static function uninstallApps()
     {
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
-        $m->unInstall();
+        $m = new Pluf_Migration();
+        $m->uninstall();
     }
 }
 

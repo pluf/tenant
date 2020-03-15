@@ -114,25 +114,36 @@ class Tenant_Service
 
     public static function createNewTenant($data)
     {
+        /*
+         * Data validation
+         */
         if (! Pluf::f('multitenant', false)) {
             throw new Pluf_Exception_Forbidden('The server does not support multitenancy!');
         }
         if (! Tenant_Service::validateSubdomainFormat($data['subdomain'])) {
             throw new Pluf_Exception_BadRequest('The subdomain is not valid.');
         }
-        // Create a tenant
-        $tenant = new Pluf_Tenant();
         // Set domain from subdomain if domain is not set in the request
         if (! isset($data['domain'])) {
             $data['domain'] = $data['subdomain'] . '.' . Pluf::f('general_domain', 'pluf.ir');
         }
-        // Set current tenant as the parent tenant
-        $tenant->_a['cols']['parent_id']['editable'] = true;
-        $currentTenant = Pluf_Tenant::current();
-        $data['parent_id'] = $currentTenant->id;
 
-        $form = Pluf_Shortcuts_GetFormForModel($tenant, $data);
-        $tenant = $form->save();
+        /*
+         * Create tenant
+         */
+        $tenant = new Pluf_Tenant();
+        $tenant->setFromFormData($data);
+
+        // Set current tenant as the parent tenant
+        $currentTenant = Pluf_Tenant::getCurrent();
+        if (isset($currentTenant)) {
+            $tenant->parent_id = $currentTenant;
+        }
+        $tenant->create();
+
+        /*
+         * Init tenant
+         */
         // Set path to initial data. It should be done before switching to the new tenant.
         $data['initial_default_data'] = Tenant_Service::setting('initial_default_data');
         // Initialize the newly created tenant
@@ -144,53 +155,62 @@ class Tenant_Service
 
     /**
      * Initiates some necessary data for given tenant.
+     *
      * @param Pluf_Tenant $tenant
      * @throws Pluf_Exception
      * @return Pluf_Tenant
      */
-    public static function initiateTenant($tenant){
+    public static function initiateTenant($tenant)
+    {
         // Init the Tenant
-        $m = new Pluf_Migration(Pluf::f('installed_apps'));
+        $m = new Pluf_Migration();
         $m->init($tenant);
-        
+
         // TODO: hadi, 97-06-18: create account and credential base on given data by user in request
         // For example: login, password, list of modules to install and so on.
-        
+
+        $current = Pluf_Tenant::current();
+
         // Set password for all users of tenant. Default password is equla to its login.
-        $user = new User_Account();
-        $members = $user->getList();
-        foreach ($members as $member) {
-            $user = $user->getUser($member->login);
-            $credit = new User_Credential();
-            $credit->setFromFormData(array(
-                'account_id' => $user->id
-            ));
-            $credit->setPassword($member->login);
-            $credit->create();
-        }
-        
-        // Set admin as the owner
-        $user = $user->getUser('admin');
-        $role = User_Role::getFromString('tenant.owner');
-        $user->setAssoc($role);
-        
-        // install SPAcs
-        $spas = Pluf::f('spas', array());
-        if (sizeof($spas) > 0 && class_exists('Tenant_SpaService')) {
-            try {
-                Pluf::loadFunction('Tenant_Shortcuts_SpaManager');
-                Tenant_Service::setSetting('spa.default', $spas[0]);
-                foreach ($spas as $spa) {
-                    $myspa = Tenant_SpaService::installFromRepository($spa);
-                    Tenant_Shortcuts_SpaManager($myspa)->apply($myspa, 'create');
-                }
-            } catch (Throwable $e) {
-                throw new Pluf_Exception("Impossible to install spas from market.", 5000, $e, 500);
+        try {
+            Pluf_Tenant::setCurrent($tenant);
+            $user = new User_Account();
+            $members = $user->getList();
+            foreach ($members as $member) {
+                $user = $user->getUser($member->login);
+                $credit = new User_Credential();
+                $credit->setFromFormData(array(
+                    'account_id' => $user->id
+                ));
+                $credit->setPassword($member->login);
+                $credit->create();
             }
+
+            // Set admin as the owner
+            $user = $user->getUser('admin');
+            $role = User_Role::getFromString('tenant.owner');
+            $user->setAssoc($role);
+
+            // install SPAcs
+            $spas = Pluf::f('spas', array());
+            if (sizeof($spas) > 0 && class_exists('Tenant_SpaService')) {
+                try {
+                    Pluf::loadFunction('Tenant_Shortcuts_SpaManager');
+                    Tenant_Service::setSetting('spa.default', $spas[0]);
+                    foreach ($spas as $spa) {
+                        $myspa = Tenant_SpaService::installFromRepository($spa);
+                        Tenant_Shortcuts_SpaManager($myspa)->apply($myspa, 'create');
+                    }
+                } catch (Exception $e) {
+                    throw new \Pluf\Exception("Impossible to install spas from market.", 5000, $e, 500);
+                }
+            }
+            return $tenant;
+        } finally {
+            Pluf_Tenant::setCurrent($current);
         }
-        return $tenant;
     }
-    
+
     public static function validateSubdomainFormat($subdomain)
     {
         $regex = '/^[A-Za-z0-9][A-Za-z0-9_\-]{1,61}[A-Za-z0-9]$/';
@@ -207,7 +227,7 @@ class Tenant_Service
             $file = Pluf::f('temp_folder', '/tmp') . '/content-' . rand() . '.zip';
             // Do request
             $client = new GuzzleHttp\Client();
-            $response = $client->request('GET', $path, [
+            $client->request('GET', $path, [
                 'sink' => $file
             ]);
             Pluf\Backup\Service::loadData($file);

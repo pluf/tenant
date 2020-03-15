@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Pluf Framework, a simple PHP Application Framework.
  * Copyright (C) 2010-2020 Phoinex Scholars Co. (http://dpq.co.ir)
@@ -17,50 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Pluf\Test\Tenant;
+namespace Pluf\Test\Spa\REST;
 
+use Pluf\Test\Client;
 use Pluf\Test\Base\AbstractBasicTest;
-use Pluf;
-use Pluf_Tenant;
 
-class PlufTenantSingleEmptyTest extends AbstractBasicTest
+class BasicsTest extends AbstractBasicTest
 {
 
+    private static $client = null;
+
     /**
      *
-     * @test
+     * @beforeClass
      */
-    public function testDefaultTenant()
+    public static function installApps()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-
-        // check id
-        $id = $tenant->id;
-        $this->assertNotNull($id);
-
-        // check title
-        $title = $tenant->title;
-        $this->assertNotNull($title);
-
-        // check description
-        $desc = $tenant->description;
-        $this->assertNotNull($desc);
+        parent::installApps();
+        // Anonymouse client
+        self::$client = new Client();
     }
 
     /**
      *
      * @test
      */
-    public function testStoragePath()
+    public function listSapsRestTest()
     {
-        $tenant = Pluf_Tenant::current();
-        $this->assertNotNull($tenant);
-
-        $storage = $tenant->storagePath();
-        $this->assertNotNull($storage);
-        $this->assertEquals(Pluf::f('upload_path'), $storage);
+        $response = self::$client->get('/tenant/spas');
+        $this->assertResponseNotNull($response, 'Find result is empty');
+        $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
+        $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
     }
 }
+
 
 

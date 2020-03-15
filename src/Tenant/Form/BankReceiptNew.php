@@ -53,7 +53,7 @@ class Tenant_Form_BankReceiptNew extends Bank_Form_ReceiptNew
     {
         if (! $this->isValid()) {
             // TODO: maso, 1395: باید از خطای مدل فرم استفاده شود.
-            throw new Pluf_Exception(
+            throw new \Pluf\Exception(
                 'Cannot save a receipt from an invalid form.');
         }
         // Set attributes
@@ -63,7 +63,7 @@ class Tenant_Form_BankReceiptNew extends Bank_Form_ReceiptNew
         // موجودیت قرار گیرد.
         if ($commit) {
             if (! $receipt->create()) {
-                throw new Pluf_Exception('fail to create the recipt.');
+                throw new \Pluf\Exception('fail to create the recipt.');
             }
         }
         return $receipt;

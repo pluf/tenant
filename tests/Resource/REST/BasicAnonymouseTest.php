@@ -20,6 +20,7 @@ namespace Pluf\Test\Resource\REST;
 
 use Pluf\Test\Client;
 use Pluf\Test\Base\AbstractBasicTest;
+use Pluf;
 use Tenant_Resource;
 
 class BasicAnonymouseTest extends AbstractBasicTest
@@ -36,6 +37,12 @@ class BasicAnonymouseTest extends AbstractBasicTest
     public static function installApps()
     {
         parent::installApps();
+        
+        
+        $conf = include __DIR__ . '/../../conf/config.php';
+        $conf['view_prefix'] = '/api/v2';
+        Pluf::start($conf);
+        
         // Anonymouse client
         self::$client = new Client();
         self::$client->clean(true);
@@ -45,7 +52,7 @@ class BasicAnonymouseTest extends AbstractBasicTest
      * Getting list of properties
      *
      * @test
-     * @expectedException Pluf_Exception_Unauthorized
+     * @expectedException \Pluf\Exception
      */
     public function anonymousCanGetListOfSettings()
     {

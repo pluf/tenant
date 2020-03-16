@@ -58,8 +58,9 @@ class OwnerTest extends TestCase
         $m->install();
 
         $dftTnt = Tenant_Service::createNewTenant(array(
-            'subdomain' => 'www',
-            'domain' => 'www.domain.ir'
+            'subdomain' => 'localhost',
+            'domain' => 'localhost',
+            'validate' => true
         ));
         Pluf_Tenant::setCurrent($dftTnt);
         
@@ -122,10 +123,10 @@ class OwnerTest extends TestCase
      */
     public function init()
     {
-        // Anonymouse client
+        
         $this->anonymousClient = new Client();
-        // Member client
         $this->memberClient = new Client();
+        
         // Login
         $response = $this->memberClient->post('/user/login', array(
             'login' => 'test_member',

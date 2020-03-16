@@ -3,6 +3,9 @@
 	<name>tenant</name>
 	<comment></comment>
 	<projects>
+		<project>core</project>
+		<project>http2</project>
+		<project>test</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

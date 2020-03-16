@@ -65,7 +65,7 @@ class Tenant_SpaService
         $key = 'spa-' . md5(microtime() . rand(0, 123456789));
         $dir = Pluf_Tenant::storagePath() . '/spa/' . $key;
         if (! mkdir($dir, 0777, true)) {
-            throw new Pluf_Exception('Failed to create folder in temp');
+            throw new \Pluf\Exception('Failed to create folder in temp: ' . $dir);
         }
 
         // Unzip to temp folder
@@ -74,14 +74,14 @@ class Tenant_SpaService
             $zip->extractTo($dir);
             $zip->close();
         } else {
-            throw new Pluf_Exception('Unable to unzip SPA.');
+            throw new \Pluf\Exception('Unable to unzip SPA.');
         }
         if ($deleteFile) {
             unlink($path);
         }
 
         // 2- load infor
-        $filename = $dir . '/' . Pluf::f('spa_config', 'spa.json');
+        $filename = $dir . '/' . Pluf::f('tenant_spa_config', 'spa.json');
         $myfile = fopen($filename, 'r') or die('Unable to open file!');
         $json = fread($myfile, filesize($filename));
         fclose($myfile);

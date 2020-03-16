@@ -20,6 +20,7 @@ namespace Pluf\Test\Spa\REST;
 
 use Pluf\Test\Client;
 use Pluf\Test\Base\AbstractBasicTest;
+use Pluf;
 use Tenant_Service;
 use Tenant_SpaService;
 
@@ -37,8 +38,13 @@ class BasePathTest extends AbstractBasicTest
         parent::installApps();
         // Anonymouse client
         self::$client = new Client();
+
+        $conf = include __DIR__ . '/../../conf/config.php';
+        $conf['view_prefix'] = '/api/v2';
+        Pluf::start($conf);
+
         // default spa
-        $path = dirname(__FILE__) . '/../resources/testManifest.zip';
+        $path = __DIR__ . '/../resources/testManifest.zip';
         Tenant_Service::setting('spa.default', 'testManifest');
         Tenant_SpaService::installFromFile($path);
     }
@@ -56,15 +62,17 @@ class BasePathTest extends AbstractBasicTest
     }
 
     /**
+     * The request does not exist and client follow redirect response
      *
      * @test
      */
     public function getFakeFileOfDefaultSpa()
     {
+        // client follow redirect
         $response = self::$client->get('/alaki/path');
         $this->assertResponseNotNull($response, 'Fail to load main file of default tenant');
         $this->assertResponseStatusCode($response, 200, 'Result status code is not 200');
-        $this->assertEquals('<html manifest="/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
+        $this->assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
 
     /**
@@ -91,6 +99,7 @@ class BasePathTest extends AbstractBasicTest
         $this->assertEquals('<html manifest="/testManifest/"><h1>test_spa</h1></html>', $response->content, 'Base path replacement is not correct');
     }
 }
+
 
 
 

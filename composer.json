@@ -59,7 +59,7 @@
 			"Pluf\\Test\\" : "tests"
 		}
 	},
-	"repositories" : [{
+	"repositories~" : [{
 			"type" : "path",
 			"url" : "../core",
 			"name" : "pluf/core",

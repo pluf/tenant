@@ -192,7 +192,7 @@ class Tenant_Service
             $user->setAssoc($role);
 
             // install SPAcs
-            $spas = Pluf::f('spas', array());
+            $spas = Pluf::f('tenant_spa_default', array());
             if (sizeof($spas) > 0 && class_exists('Tenant_SpaService')) {
                 try {
                     Pluf::loadFunction('Tenant_Shortcuts_SpaManager');

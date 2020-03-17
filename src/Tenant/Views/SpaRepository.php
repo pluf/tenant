@@ -33,7 +33,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     public function find($request, $match)
     {
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
         $path = '/marketplace/spas';
         $param = $request->REQUEST;
         
@@ -59,7 +59,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     {
         
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/'.$match['modelId'];
         $param = $request->REQUEST;
         

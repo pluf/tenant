@@ -106,7 +106,7 @@ class Tenant_SpaService
     public static function installFromRepository($id)
     {
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/' . $id . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request

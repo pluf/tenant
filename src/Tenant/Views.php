@@ -119,11 +119,11 @@ class Tenant_Views extends Pluf_Views
      */
     public function validateSubdomain($subdomain)
     {
-        $minLength = Pluf::f('subdomain_min_length', 1);
+        $minLength = Pluf::f('tenant_subdomains_min_length', 1);
         if (strlen($subdomain) < $minLength) {
             throw new Pluf_Exception_BadRequest('Invalid subdomain. Subdomain should be at least ' . $minLength . ' character.');
         }
-        $reservedSubdomains = Pluf::f('reserved_subdomains', array());
+        $reservedSubdomains = Pluf::f('tenant_subdomains_reserved', array());
         if (in_array($subdomain, $reservedSubdomains, TRUE)) {
             throw new Pluf_Exception_BadRequest('Subdomain is reserved.');
         }

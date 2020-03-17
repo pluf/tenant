@@ -25,7 +25,7 @@ class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
             return false;
         }
 
-        $viewPrefix = Pluf::f('view_prefix', null);
+        $viewPrefix = Pluf::f('view_api_prefix', null);
 
         if (! isset($viewPrefix) || strstr($request->query, $viewPrefix)) {
             return false;

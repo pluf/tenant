@@ -40,7 +40,7 @@ class BasePathTest extends AbstractBasicTest
         self::$client = new Client();
 
         $conf = include __DIR__ . '/../../conf/config.php';
-        $conf['view_prefix'] = '/api/v2';
+        $conf['view_api_prefix'] = '/api/v2';
         Pluf::start($conf);
 
         // default spa

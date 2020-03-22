@@ -30,6 +30,8 @@ class BasicAnonymouseTest extends AbstractBasicTest
 
     private static $ownerClient = null;
 
+    private const PREFIX = '/api/v2';
+
     /**
      *
      * @beforeClass
@@ -37,12 +39,11 @@ class BasicAnonymouseTest extends AbstractBasicTest
     public static function installApps()
     {
         parent::installApps();
-        
-        
+
         $conf = include __DIR__ . '/../../conf/config.php';
-        $conf['view_api_prefix'] = '/api/v2';
+        $conf['view_api_prefix'] = self::PREFIX;
         Pluf::start($conf);
-        
+
         // Anonymouse client
         self::$client = new Client();
         self::$client->clean(true);
@@ -56,7 +57,7 @@ class BasicAnonymouseTest extends AbstractBasicTest
      */
     public function anonymousCanGetListOfSettings()
     {
-        $response = self::$client->get('/tenant/resources');
+        $response = self::$client->get(self::PREFIX . '/tenant/resources');
         $this->assertResponseNotNull($response, 'Find result is empty');
         $this->assertResponseStatusCode($response, 200, 'Find status code is not 200');
         $this->assertResponsePaginateList($response, 'Find result is not JSON paginated list');
@@ -76,7 +77,7 @@ class BasicAnonymouseTest extends AbstractBasicTest
             'title' => 'NOT SET',
             'description' => 'This is a test resources'
         );
-        self::$client->post('/tenant/resources', $values);
+        self::$client->post(self::PREFIX . '/tenant/resources', $values);
     }
 
     /**

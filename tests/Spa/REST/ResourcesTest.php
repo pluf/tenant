@@ -128,7 +128,7 @@ class ResourcesTest extends AbstractBasicTest
 
 //     /** NOTE: we redirect the invalid resource path to default spa
 //      *
-//      * @expectedException Pluf_Exception
+//      * @expectedException \Pluf\Exception
 //      * @test
 //      */
 //     public function shouldThrowExceptionFoNotFoundResource()

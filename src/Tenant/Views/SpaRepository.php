@@ -44,7 +44,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
         ]);
         
         if("200" != $response->getStatusCode()){
-            throw new Pluf_Exception($response->getBody()->getContents());
+            throw new \Pluf\Exception($response->getBody()->getContents());
         }
         $contents = $response->getBody()->getContents();
         return json_decode($contents, true);
@@ -70,7 +70,7 @@ class Tenant_Views_SpaRepository extends Pluf_Views
         ]);
         
         if("200" != $response->getStatusCode()){
-            throw new Pluf_Exception($response->getBody()->getContents());
+            throw new \Pluf\Exception($response->getBody()->getContents());
         }
         $contents = $response->getBody()->getContents();
         $spa = new Tenant_SPA();

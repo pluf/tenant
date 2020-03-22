@@ -32,12 +32,12 @@ class Tenant_Form_BankReceiptNew extends Bank_Form_ReceiptNew
     {
         $backend = Pluf::factory('Tenant_BankBackend', $this->cleaned_data['backend']);
         if ($backend->isAnonymous()) {
-            throw new Pluf_Exception('backend not found');
+            throw new \Pluf\Exception('backend not found');
         }
         // Check if backend blong to main tenant
         $mainTenant = Tenant_Shortcuts_GetMainTenant();
         if ($backend->tenant !== $mainTenant->getId()) {
-            throw new Pluf_Exception('backend is not valid for this payment');
+            throw new \Pluf\Exception('backend is not valid for this payment');
         }
         // XXX: maso, 1395: گرفتن پشتوانه
         return $backend->id;
@@ -46,7 +46,7 @@ class Tenant_Form_BankReceiptNew extends Bank_Form_ReceiptNew
     /**
      *
      * @param string $commit
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      * @return Tenant_BankBackend
      */
     function save ($commit = true)

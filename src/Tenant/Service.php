@@ -157,7 +157,7 @@ class Tenant_Service
      * Initiates some necessary data for given tenant.
      *
      * @param Pluf_Tenant $tenant
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      * @return Pluf_Tenant
      */
     public static function initiateTenant($tenant)

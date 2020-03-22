@@ -188,7 +188,7 @@ class Tenant_SPA extends Pluf_Model
     /**
      * مسیر دایرکتوری ریشه spa را برمی گرداند.
      *
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      * @return
      *
      */

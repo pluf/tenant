@@ -42,7 +42,7 @@ class Tenant_SpaService
      *
      * @param String $path
      * @param string $deleteFile
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      */
     public static function installFromFile($path, $deleteFile = false)
     {

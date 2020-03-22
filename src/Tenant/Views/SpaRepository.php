@@ -33,13 +33,15 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     public function find($request, $match)
     {
         // request param
-        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
         $path = '/marketplace/spas';
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '');
+        $rest = $backend . $apiPrefix . $path;
         $param = $request->REQUEST;
         
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $rest, [
             'query' => $param
         ]);
         
@@ -59,13 +61,15 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     {
         
         // request param
-        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/'.$match['modelId'];
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '');
+        $rest = $backend . $apiPrefix . $path;
         $param = $request->REQUEST;
         
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $rest, [
             'query' => $param
         ]);
         

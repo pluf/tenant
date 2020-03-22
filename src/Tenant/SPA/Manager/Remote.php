@@ -68,13 +68,13 @@ class Tenant_SPA_Manager_Remote implements Tenant_SPA_Manager
     public function apply($spa, $action)
     {
         $machine = new \Pluf\Workflow\Machine();
-        $machine->setStates(self::$STATE_MACHINE)
+        $res = $machine->setStates(self::$STATE_MACHINE)
             ->setSignals(array(
             'Tenant_SPA::stateChange'
         ))
             ->setProperty('state')
             ->apply($spa, $action);
-        return true;
+        return $res;
     }
 
     /**
@@ -101,6 +101,8 @@ class Tenant_SPA_Manager_Remote implements Tenant_SPA_Manager
     public static function install($request, $object)
     {
         $spa = Tenant_SpaService::installFromRepository($object->id);
-        return Tenant_Shortcuts_SpaManager($spa)->apply($spa, 'create');
+        $manager = Tenant_Shortcuts_SpaManager($spa);
+        $manager->apply($spa, 'create');
+        return $spa;
     }
 }

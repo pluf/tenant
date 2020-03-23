@@ -169,7 +169,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
     public static function update($request, $object)
     {
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'http://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/' . $object->name . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request

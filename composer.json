@@ -1,6 +1,6 @@
 {
 	"name" : "pluf/tenant",
-	"version" : "6.0.6",
+	"version" : "6.0.7",
 	"description" : "A pluf module to manage current tenant",
 	"type" : "library",
 	"license" : "MIT",
@@ -59,7 +59,7 @@
 			"Pluf\\Test\\" : "tests"
 		}
 	},
-	"repositories" : [{
+	"repositories~" : [{
 			"type" : "path",
 			"url" : "../core",
 			"name" : "pluf/core",

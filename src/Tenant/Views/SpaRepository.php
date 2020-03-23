@@ -33,18 +33,20 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     public function find($request, $match)
     {
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
         $path = '/marketplace/spas';
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '');
+        $rest = $backend . $apiPrefix . $path;
         $param = $request->REQUEST;
         
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $rest, [
             'query' => $param
         ]);
         
         if("200" != $response->getStatusCode()){
-            throw new Pluf_Exception($response->getBody()->getContents());
+            throw new \Pluf\Exception($response->getBody()->getContents());
         }
         $contents = $response->getBody()->getContents();
         return json_decode($contents, true);
@@ -59,18 +61,20 @@ class Tenant_Views_SpaRepository extends Pluf_Views
     {
         
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/'.$match['modelId'];
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '');
+        $rest = $backend . $apiPrefix . $path;
         $param = $request->REQUEST;
         
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $rest, [
             'query' => $param
         ]);
         
         if("200" != $response->getStatusCode()){
-            throw new Pluf_Exception($response->getBody()->getContents());
+            throw new \Pluf\Exception($response->getBody()->getContents());
         }
         $contents = $response->getBody()->getContents();
         $spa = new Tenant_SPA();

@@ -42,7 +42,7 @@ class Tenant_SpaService
      *
      * @param String $path
      * @param string $deleteFile
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      */
     public static function installFromFile($path, $deleteFile = false)
     {
@@ -57,6 +57,7 @@ class Tenant_SpaService
             $spa->delete();
             throw $ex;
         }
+        return $spa;
     }
 
     public static function updateFromFile($spa, $path, $deleteFile = false)
@@ -65,23 +66,24 @@ class Tenant_SpaService
         $key = 'spa-' . md5(microtime() . rand(0, 123456789));
         $dir = Pluf_Tenant::storagePath() . '/spa/' . $key;
         if (! mkdir($dir, 0777, true)) {
-            throw new Pluf_Exception('Failed to create folder in temp');
+            throw new \Pluf\Exception('Failed to create folder in temp: ' . $dir);
         }
 
         // Unzip to temp folder
         $zip = new ZipArchive();
-        if ($zip->open($path) === TRUE) {
+        $isOk = $zip->open($path);
+        if ($isOk === TRUE) {
             $zip->extractTo($dir);
             $zip->close();
         } else {
-            throw new Pluf_Exception('Unable to unzip SPA.');
+            throw new \Pluf\Exception('Unable to unzip SPA. Error code: ' . $isOk);
         }
         if ($deleteFile) {
             unlink($path);
         }
 
         // 2- load infor
-        $filename = $dir . '/' . Pluf::f('spa_config', 'spa.json');
+        $filename = $dir . '/' . Pluf::f('tenant_spa_config', 'spa.json');
         $myfile = fopen($filename, 'r') or die('Unable to open file!');
         $json = fread($myfile, filesize($filename));
         fclose($myfile);
@@ -106,15 +108,19 @@ class Tenant_SpaService
     public static function installFromRepository($id)
     {
         // request param
-        $backend = Pluf::f('marketplace.backend', 'http://marketplace.viraweb123.ir');
         $path = '/marketplace/spas/' . $id . '/file';
+        $backend = Pluf::f('tenant_spa_marketplace_backend', 'https://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '');
+        $rest = $backend . $apiPrefix . $path;
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $rest, [
             'sink' => $file
         ]);
-
+        if($response->getStatusCode() !== 200){
+            throw new Pluf_HTTP_Error500('Faild to get SPA from marketplace. Reason: ' . $response->getReasonPhrase());
+        }
         // install
         return self::installFromFile($file, true);
     }

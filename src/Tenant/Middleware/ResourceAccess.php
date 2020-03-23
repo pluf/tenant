@@ -16,7 +16,7 @@
  *
  * @author maso<mostafa.barmshory@dpq.co.ir>
  */
-class Tenant_Middleware_ResourceAccess
+class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
 {
 
     function process_request(Pluf_HTTP_Request &$request)
@@ -25,18 +25,23 @@ class Tenant_Middleware_ResourceAccess
             return false;
         }
 
-        $viewPrefix = Pluf::f('view_prefix', null);
+        $viewPrefix = Pluf::f('view_api_prefix', null);
 
-        if (isset($viewPrefix) && strstr($request->query, $viewPrefix)) {
+        if (! isset($viewPrefix) || strstr($request->query, $viewPrefix)) {
             return false;
+        }
+
+        if (strcmp($request->query, "/") == 0) {
+            return $this->redirectToDefaultSpa();
         }
 
         // First part of path
         $match = [];
         preg_match('#^/(?P<firstPart>[^/]+)/(?P<remainPart>.*)$#', $request->query, $match);
-        // First part of path
-        $firstPart = $match['firstPart'];
-        // Remain part of path
+        $firstPart = '';
+        if (array_key_exists('firstPart', $match)) {
+            $firstPart = $match['firstPart'];
+        }
         $remainPart = '';
         if (array_key_exists('remainPart', $match)) {
             $remainPart = $match['remainPart'];
@@ -44,23 +49,32 @@ class Tenant_Middleware_ResourceAccess
 
         $spa = Tenant_SPA::getSpaByName($firstPart);
 
+        /*
+         * SPA resource
+         */
         if (isset($spa)) { // SPA is valid
             $path = $remainPart;
             $resPath = $spa->getResourcePath($path);
-        } else {
-            // first part is not an SPA so use default SPA
-            $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
-            // find a resource
-            $res = $this->findTenantResource('/' . $path);
-            if (isset($res) && !$res->isAnonymous()) {
-                $resPath = $res->getAbsloutPath();
-            } elseif (! isset($viewPrefix)) {
-                return false;
+            if (! file_exists($resPath) || !isset($remainPart) || strlen($remainPart) == 0) {
+                $resPath = $spa->getMainPagePath();
+                return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath), $firstPart);
             } else {
-                return $this->redirectToDefaultSpa();
+                return new Pluf_HTTP_Response_File($resPath, Pluf_FileUtil::getMimeType($resPath));
             }
         }
 
+        /*
+         * Tenant resource
+         */
+        // first part is not an SPA so use default SPA
+        $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
+        // find a resource
+        $res = $this->findTenantResource('/' . $path);
+        if (isset($res) && ! $res->isAnonymous()) {
+            $resPath = $res->getAbsloutPath();
+        } else {
+            return $this->redirectToDefaultSpa($path);
+        }
         return new Pluf_HTTP_Response_File($resPath, Pluf_FileUtil::getMimeType($resPath));
     }
 
@@ -86,7 +100,7 @@ class Tenant_Middleware_ResourceAccess
         return null;
     }
 
-    private function redirectToDefaultSpa()
+    private function redirectToDefaultSpa($path = '')
     {
         // maso, 2020: find default spa
         $name = Tenant_Service::setting('spa.default', 'wb');
@@ -94,7 +108,17 @@ class Tenant_Middleware_ResourceAccess
         if (! isset($spa)) {
             throw new \Pluf\Exception('No SPA found');
         }
-        $path = '/' . $name . '/';
+        $path = '/' . $name . '/' . (isset($path) ? $path : '');
         return new Pluf_HTTP_Response_Redirect($path, 302);
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Pluf\Middleware::process_response()
+     */
+    public function process_response(Pluf_HTTP_Request $request, Pluf_HTTP_Response $response): Pluf_HTTP_Response
+    {
+        return $response;
     }
 }

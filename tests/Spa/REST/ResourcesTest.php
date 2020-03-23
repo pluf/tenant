@@ -20,6 +20,7 @@ namespace Pluf\Test\Spa\REST;
 
 use Pluf\Test\Client;
 use Pluf\Test\Base\AbstractBasicTest;
+use Pluf;
 use Tenant_Service;
 use Tenant_SpaService;
 
@@ -35,13 +36,20 @@ class ResourcesTest extends AbstractBasicTest
     public static function installApps()
     {
         parent::installApps();
+        
+        $conf = include __DIR__ . '/../../conf/config.php';
+        $conf['view_api_prefix'] = '/api/v2';
+        Pluf::start($conf);
+        
         // Anonymouse client
         self::$client = new Client();
 
         // default spa
         $path = dirname(__FILE__) . '/../resources/testDefault.zip';
-        Tenant_Service::setSetting('spa.default', 'testDefault');
         Tenant_SpaService::installFromFile($path);
+        Tenant_Service::setSetting('spa.default', 'testDefault');
+        
+        
         $path = dirname(__FILE__) . '/../resources/testResource.zip';
         Tenant_SpaService::installFromFile($path);
     }
@@ -118,15 +126,15 @@ class ResourcesTest extends AbstractBasicTest
         $this->assertTrue(preg_match('/.*\/index\.html$/', $response->filePath) === 1, 'File path is not correct');
     }
 
-    /**
-     *
-     * @expectedException Pluf_Exception
-     * @test
-     */
-    public function shouldThrowExceptionFoNotFoundResource()
-    {
-        self::$client->get('/appendixes.annotations.html');
-    }
+//     /** NOTE: we redirect the invalid resource path to default spa
+//      *
+//      * @expectedException \Pluf\Exception
+//      * @test
+//      */
+//     public function shouldThrowExceptionFoNotFoundResource()
+//     {
+//         self::$client->get('/appendixes.annotations.html');
+//     }
 }
 
 

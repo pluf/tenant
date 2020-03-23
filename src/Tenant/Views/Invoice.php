@@ -46,7 +46,7 @@ class Tenant_Views_Invoice
         $be = new Tenant_BankBackend($backend);
         $mainTenant = Tenant_Shortcuts_GetMainTenant();
         if($be->tenant !== $mainTenant->id){
-            throw new Pluf_Exception('Invalid backend. Backend should be blong to main tenant.');
+            throw new \Pluf\Exception('Invalid backend. Backend should be blong to main tenant.');
         }
         
         // check for discount

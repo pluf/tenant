@@ -20,25 +20,17 @@ $cfg['url_format'] = 'simple';
 $cfg['tmp_folder'] = '/tmp';
 $cfg['upload_path'] = '/tmp';
 $cfg['middleware_classes'] = array(
+     '\Pluf\Middleware\Tenant',
     'Tenant_Middleware_ResourceAccess',
-    
-    'Pluf_Middleware_Session',
+    '\Pluf\Middleware\Session',
     'User_Middleware_Session',
-    
-     // find tenant
-     // TODO: replace with tenant midleware
-     'Pluf_Middleware_TenantEmpty',
-     'Pluf_Middleware_TenantFromHeader',
-     'Pluf_Middleware_TenantFromDomain',
-     'Pluf_Middleware_TenantFromSubDomain', // It should be used only in multitenant state
-     'Pluf_Middleware_TenantFromConfig',
 );
 $cfg['secret_key'] = '5a8d7e0f2aad8bdab8f6eef725412850';
 
 // -------------------------------------------------------------------------
 // Template manager and compiler
 // -------------------------------------------------------------------------
-$cfg['templates_folder'] = array(
+$cfg['templates_folders'] = array(
     dirname(__FILE__) . '/../templates'
 );
 $cfg['template_tags'] = array(
@@ -59,7 +51,7 @@ $cfg['log_appender'] = '\Pluf\LoggerAppender\Console';
 // Tenants
 // -------------------------------------------------------------------------
 
-// multitenant
+$cfg['multitenant'] = false;
 
 // -------------------------------------------------------------------------
 // user

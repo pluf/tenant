@@ -188,7 +188,7 @@ class Tenant_SPA extends Pluf_Model
     /**
      * مسیر دایرکتوری ریشه spa را برمی گرداند.
      *
-     * @throws Pluf_Exception
+     * @throws \Pluf\Exception
      * @return
      *
      */
@@ -221,12 +221,13 @@ class Tenant_SPA extends Pluf_Model
      *            نام
      * @param Pluf_Tenant $tenant
      */
-    public static function getSpaByName($name)
+    public static function getSpaByName($name): ?Tenant_SPA
     {
         $sql = new Pluf_SQL('name=%s', array(
             $name
         ));
-        return Pluf::factory('Tenant_SPA')->getOne($sql->gen());
+        $t = new Tenant_SPA();
+        return $t->getOne($sql->gen());
     }
 
     /**
@@ -237,7 +238,7 @@ class Tenant_SPA extends Pluf_Model
      */
     public function getResourcePath($name)
     {
-        if(!isset($name) || strlen($name) == 0){
+        if (! isset($name) || strlen($name) == 0) {
             $name = $this->main_page;
         }
         return $this->getRootPath() . '/' . $name;

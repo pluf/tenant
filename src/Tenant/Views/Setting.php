@@ -118,6 +118,9 @@ class Tenant_Views_Setting extends Pluf_Views
             // Note: Hadi, 2020-3: create setting if does not existed
             // throw new Pluf_Exception_DoesNotExist('Setting not found');
             $model = new Tenant_Setting();
+            if(!array_key_exists('key', $request->REQUEST)){
+                $request->REQUEST['key'] = $match['key'];
+            }
             $form = Pluf_Shortcuts_GetFormForModel($model, $request->REQUEST);
         } else {
             $form = Pluf_Shortcuts_GetFormForUpdateModel($model, $request->REQUEST);

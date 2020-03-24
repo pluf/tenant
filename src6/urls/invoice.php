@@ -1,8 +1,17 @@
 <?php
 return array( // **************************************************************** Invoices
+    array( // schema
+        'regex' => '#^/invoices/schema$#',
+        'model' => 'Tenant_Views_Invoice',
+        'method' => 'getSchema',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Invoice'
+        )
+    ),
     array( // Read (list)
         'regex' => '#^/invoices$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Invoice',
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
@@ -14,7 +23,7 @@ return array( // ***************************************************************
     ),
     array( // Read
         'regex' => '#^/invoices/(?P<modelId>\d+)$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Invoice',
         'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(

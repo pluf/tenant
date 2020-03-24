@@ -18,6 +18,15 @@
  */
 return array(
     // **************************************************************** Configurations of a Tenant
+    array( // schema
+        'regex' => '#^/configurations/schema$#',
+        'model' => 'Tenant_Views_Configuration',
+        'method' => 'getSchema',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Configuration'
+        )
+    ),
     array( // Read (list)
         'regex' => '#^/configurations$#',
         'model' => 'Tenant_Views_Configuration',

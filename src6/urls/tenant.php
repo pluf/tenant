@@ -16,9 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 return array(
     // **************************************************************** Current Tenant
+    array( // schema
+        'regex' => '#^/tenants/schema$#',
+        'model' => 'Tenant_Views',
+        'method' => 'getSchema',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Tenant'
+        )
+    ),
     array( // Get current tenant
         'regex' => '#^/tenants/current$#',
         'model' => 'Tenant_Views',

@@ -24,7 +24,7 @@ Pluf::loadFunction('Pluf_Shortcuts_GetFormForModel');
  *
  * @author maso<mostafa.barmshory@dpq.co.ir>
  */
-class Tenant_Views_Ticket
+class Tenant_Views_Ticket extends Pluf_Views
 {
 
     /**

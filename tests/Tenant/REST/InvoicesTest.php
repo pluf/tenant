@@ -146,5 +146,18 @@ class InvoicesTest extends AbstractBasicTestMt
         // delete
         $i->delete();
     }
+
+    /**
+     * Getting invoice schema
+     *
+     * @test
+     */
+    public function testGetInvoiceSchema()
+    {
+        $client = new Client();
+        $response = $client->get('/tenant/invoices/schema');
+        $this->assertResponseNotNull($response);
+        $this->assertResponseStatusCode($response, 200);
+    }
 }
 

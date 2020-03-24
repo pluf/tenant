@@ -23,7 +23,7 @@
  * @author hadi <mohammad.hadi.mansouri@dpq.co.ir>
  *        
  */
-class Tenant_Views_Receipt
+class Tenant_Views_Receipt extends Pluf_Views
 {
 
     /**

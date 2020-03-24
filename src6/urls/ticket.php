@@ -1,9 +1,19 @@
 <?php
 return array(
     // **************************************************************** Ticket
+    array( // schema
+        'regex' => '#^/tickets/schema$#',
+        'model' => 'Tenant_Views_Ticket',
+        'method' => 'getSchema',
+        'http-method' => 'GET',
+        'params' => array(
+            'model' => 'Tenant_Ticket'
+        )
+    ),
+    
     array( // Create
         'regex' => '#^/tickets$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'createObject',
         'http-method' => 'POST',
         'precond' => array(
@@ -15,7 +25,7 @@ return array(
     ),
     array( // Read (list)
         'regex' => '#^/tickets$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'findObject',
         'http-method' => 'GET',
         'precond' => array(
@@ -27,7 +37,7 @@ return array(
     ),
     array( // Read
         'regex' => '#^/tickets/(?P<modelId>\d+)$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'getObject',
         'http-method' => 'GET',
         'precond' => array(
@@ -39,7 +49,7 @@ return array(
     ),
     array( // Update
         'regex' => '#^/tickets/(?P<modelId>\d+)$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'updateObject',
         'http-method' => 'POST',
         'precond' => array(
@@ -51,7 +61,7 @@ return array(
     ),
     array( // Delete
         'regex' => '#^/tickets/(?P<modelId>\d+)$#',
-        'model' => 'Pluf_Views',
+        'model' => 'Tenant_Views_Ticket',
         'method' => 'deleteObject',
         'http-method' => 'DELETE',
         'precond' => array(

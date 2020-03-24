@@ -34,7 +34,7 @@ class Tenant_Views_Ticket extends Pluf_Views
      * @param array $match
      * @param array $p
      */
-    public function createManyToOne($request, $match)
+    public function createManyToOne($request, $match, $p = [])
     {
         $parent = Pluf_Shortcuts_GetObjectOr404('Tenant_Ticket', $match['parentId']);
         $object = new Tenant_Comment();

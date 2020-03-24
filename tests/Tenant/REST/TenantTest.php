@@ -271,5 +271,18 @@ class TenantTest extends AbstractBasicTestMt
         $this->assertResponseNotNull($response, 'Collection result is empty');
         $this->assertResponseStatusCode($response, 200, 'Collection status code is not 200');
     }
+
+    /**
+     * Getting tenant schema
+     *
+     * @test
+     */
+    public function getttingSchemaOfTenants()
+    {
+        $client = new Client();
+        $response = $client->get('/tenant/tenants/schema');
+        $this->assertNotNull($response);
+        $this->assertEquals($response->status_code, 200);
+    }
 }
 

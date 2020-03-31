@@ -14,31 +14,31 @@ class Tenant_Ticket extends Pluf_Model
         $this->_a['verbose'] = 'Tenant Tickets';
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true
             ),
             'type' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 256
             ),
             'subject' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => false,
                 'is_null' => false,
                 'size' => 256
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 2048
             ),
             'status' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => false,
                 'is_null' => false,
                 'size' => 50,
@@ -46,14 +46,14 @@ class Tenant_Ticket extends Pluf_Model
                 'readable' => true
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'is_null' => true,
                 'editable' => false,
                 'readable' => true
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'is_null' => true,
                 'editable' => false,
@@ -63,7 +63,7 @@ class Tenant_Ticket extends Pluf_Model
              * Relations
              */
             'requester_id' => array(
-                'type' => 'Pluf_DB_Field_Foreignkey',
+                'type' => 'Foreignkey',
                 'model' => 'User_Account',
                 'blank' => false,
                 'editable' => false,

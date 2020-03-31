@@ -14,13 +14,13 @@ class Tenant_Invoice extends Pluf_Model
         $this->_a['verbose'] = 'Tenant Invoice';
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'blank' => false,
                 'editable' => false,
                 'readable' => true
             ),
             'title' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 256,
@@ -28,7 +28,7 @@ class Tenant_Invoice extends Pluf_Model
                 'readable' => true
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 500,
@@ -36,19 +36,19 @@ class Tenant_Invoice extends Pluf_Model
                 'readable' => true
             ),
             'amount' => array(
-                'type' => 'Pluf_DB_Field_Integer',
+                'type' => 'Integer',
                 'blank' => false,
                 'is_null' => false
             ),
             'due_dtime' => array(
-                'type' => 'Pluf_DB_Field_Date',
+                'type' => 'Date',
                 'blank' => false,
                 'is_null' => false,
                 'editable' => true,
                 'readable' => true
             ),
             'status' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => false,
                 'is_null' => false,
                 'size' => 50,
@@ -56,7 +56,7 @@ class Tenant_Invoice extends Pluf_Model
                 'readable' => true
             ),
             'discount_code' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 50,
@@ -64,14 +64,14 @@ class Tenant_Invoice extends Pluf_Model
                 'readable' => true
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'is_null' => true,
                 'editable' => false,
                 'readable' => true
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'is_null' => true,
                 'editable' => false,
@@ -81,7 +81,7 @@ class Tenant_Invoice extends Pluf_Model
              * Foreign Keys
              */
             'payment_id' => array(
-                'type' => 'Pluf_DB_Field_Foreignkey',
+                'type' => 'Foreignkey',
                 'model' => 'Tenant_BankReceipt',
                 'blank' => false,
                 'editable' => false,

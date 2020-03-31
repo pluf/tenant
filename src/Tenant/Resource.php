@@ -37,41 +37,41 @@ class Tenant_Resource extends Pluf_Model
         $this->_a['cols'] = array(
             // Identifier
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'is_null' => false,
                 'editable' => false
             ),
             // Fields
             'path' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'size' => 64,
                 'unique' => true,
                 'editable' => true
             ),
             'title' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'default' => '',
                 'editable' => true
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 2048,
                 'default' => 'auto created content',
                 'editable' => true
             ),
             'mime_type' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 64,
                 'default' => 'application/octet-stream',
                 'editable' => true
             ),
             'media_type' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 64,
                 'default' => 'application/octet-stream',
@@ -80,7 +80,7 @@ class Tenant_Resource extends Pluf_Model
                 'editable' => true
             ),
             'file_name' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'size' => 250,
                 'default' => 'unknown',
@@ -89,7 +89,7 @@ class Tenant_Resource extends Pluf_Model
                 'editable' => false
             ),
             'file_size' => array(
-                'type' => 'Pluf_DB_Field_Integer',
+                'type' => 'Integer',
                 'is_null' => false,
                 'default' => 'no title',
                 'verbose' => 'file size',
@@ -97,7 +97,7 @@ class Tenant_Resource extends Pluf_Model
                 'editable' => false
             ),
             'downloads' => array(
-                'type' => 'Pluf_DB_Field_Integer',
+                'type' => 'Integer',
                 'is_null' => false,
                 'default' => 0,
                 'help_text' => 'content downloads number',

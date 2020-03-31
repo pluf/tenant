@@ -20,29 +20,29 @@ class Tenant_Tenant extends Pluf_Model
         $this->_a['mapped'] = true;
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'blank' => true,
                 'editable' => false
             ),
             'level' => array(
-                'type' => 'Pluf_DB_Field_Integer',
+                'type' => 'Integer',
                 'blank' => true,
                 'editable' => false
             ),
             'title' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'size' => 100
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'size' => 1024,
                 'editable' => true
             ),
             'domain' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'is_null' => true,
                 'unique' => true,
@@ -50,7 +50,7 @@ class Tenant_Tenant extends Pluf_Model
                 'editable' => true
             ),
             'subdomain' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => false,
                 'is_null' => false,
                 'unique' => true,
@@ -58,32 +58,32 @@ class Tenant_Tenant extends Pluf_Model
                 'editable' => true
             ),
             'validate' => array(
-                'type' => 'Pluf_DB_Field_Boolean',
+                'type' => 'Boolean',
                 'default' => false,
                 'blank' => true,
                 'editable' => true
             ),
             'email' => array(
-                'type' => 'Pluf_DB_Field_Email',
+                'type' => 'Email',
                 'blank' => true,
                 'verbose' => 'Owner email',
                 'editable' => true,
                 'readable' => true
             ),
             'phone' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'blank' => true,
                 'verbose' => 'Owner phone',
                 'editable' => true,
                 'readable' => true
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'editable' => false
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'blank' => true,
                 'editable' => false
             ),
@@ -91,7 +91,7 @@ class Tenant_Tenant extends Pluf_Model
              * Relations
              */
             'parent_id' => array(
-                'type' => 'Pluf_DB_Field_Foreignkey',
+                'type' => 'Foreignkey',
                 'model' => 'Tenant_Tenant',
                 'blank' => true,
                 'name' => 'parent',
@@ -101,7 +101,7 @@ class Tenant_Tenant extends Pluf_Model
                 'readable' => true
             ),
             'owners' => array(
-                'type' => 'Pluf_DB_Field_Manytomany',
+                'type' => 'Manytomany',
                 'blank' => true,
                 'model' => 'Tenant_Owner',
                 'relate_name' => 'tenants',

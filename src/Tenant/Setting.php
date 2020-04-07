@@ -48,18 +48,19 @@ class Tenant_Setting extends Pluf_Model
         $this->_a['verbose'] = 'Tenant Setting';
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'blank' => true,
                 'editable' => false,
                 'readable' => true
             ),
             'mode' => array(
-                'type' => 'Pluf_DB_Field_Integer',
+                'type' => 'Integer',
                 'is_null' => false,
-                'editable' => false
+                'editable' => false,
+                'default' => self::MOD_PUBLIC
             ),
             'key' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'unique' => true,
                 'is_null' => false,
                 'size' => 250,
@@ -67,21 +68,21 @@ class Tenant_Setting extends Pluf_Model
                 'readable' => true
             ),
             'value' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'verbose' => __('creation date'),
                 'help_text' => __('Creation date of the configuration.'),
@@ -89,7 +90,7 @@ class Tenant_Setting extends Pluf_Model
                 'readable' => true
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'verbose' => __('modification date'),
                 'help_text' => __('Modification date of the configuration.'),

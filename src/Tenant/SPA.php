@@ -47,59 +47,59 @@ class Tenant_SPA extends Pluf_Model
         $this->_a['table'] = 'tenant_spas';
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
-                'blank' => true
+                'type' => 'Sequence',
+                'is_null' => false
             ),
             'state' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
-                'is_null' => false,
+                'type' => 'Varchar',
+                'is_null' => true,
                 'size' => 50,
                 'readable' => true,
                 'editable' => false
             ),
             'name' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'size' => 50,
                 'readable' => true,
                 'editable' => true
             ),
             'version' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
-                'is_null' => false,
+                'type' => 'Varchar',
+                'is_null' => true,
                 'size' => 100,
                 'readable' => true,
                 'editable' => false
             ),
             'last_version' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
-                'is_nulls' => false,
+                'type' => 'Varchar',
+                'is_nulls' => true,
                 'size' => 100,
                 'readable' => true,
                 'editable' => false
             ),
             'title' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 50,
                 'readable' => true,
                 'editable' => true
             ),
             'license' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'readable' => true,
                 'editable' => false
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'editable' => true
             ),
             'path' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'size' => 100,
                 'verbose' => 'SPA installation path',
@@ -107,7 +107,7 @@ class Tenant_SPA extends Pluf_Model
                 'editable' => false
             ),
             'main_page' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'default' => 'index.html',
                 'size' => 100,
@@ -115,18 +115,18 @@ class Tenant_SPA extends Pluf_Model
                 'editable' => false
             ),
             'homepage' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 100
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'readable' => true,
                 'editable' => false
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'readable' => true,
                 'editable' => false

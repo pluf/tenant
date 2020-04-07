@@ -40,7 +40,7 @@ class Tenant_SubtenantConfiguration extends Tenant_Configuration
             // relations
             // Tenant properties
             'tenant' => array(
-                'type' => 'Pluf_DB_Field_Foreignkey',
+                'type' => 'Foreignkey',
                 'model' => 'Tenant_Tenant',
                 'is_null' => false,
                 'editable' => false,

@@ -25,7 +25,7 @@ use GraphQL\Type\Schema;
  * لایه نمایش مدیریت گروه‌ها را به صورت پیش فرض ایجاد می‌کند
  *
  * @author maso
- *
+ *        
  */
 class Tenant_Views extends Pluf_Views
 {
@@ -51,7 +51,7 @@ class Tenant_Views extends Pluf_Views
             if (array_key_exists('errors', $result)) {
                 throw new \Pluf\Exception('Fail to run GraphQl query: ' /*. $result['errors'] */);
             }
-            if (!array_key_exists('data', $result)) {
+            if (! array_key_exists('data', $result)) {
                 return array();
             }
             return $result['data'];
@@ -232,34 +232,41 @@ class Tenant_Views extends Pluf_Views
      * @throws Pluf_Exception_PermissionDenied if requested tenant is not a sub-tenant of the current tenant.
      * @return Tenant_Tenant
      */
-    private static function getSubTenant($tenantId, $parentTenantId){
+    private static function getSubTenant($tenantId, $parentTenantId)
+    {
         $tenant = Pluf_Shortcuts_GetObjectOr404('Tenant_Tenant', $tenantId);
         if ($tenant->id == $parentTenantId || $tenant->parent_id == $parentTenantId) {
             return $tenant;
         }
         throw new Pluf_Exception_PermissionDenied('You have not access to the information of the requested tenant. It does not belong to the current tenant.');
     }
-    
+
     public static function getOwners($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
         $owner = new Tenant_Owner();
-        $ownerTable = Pluf_ModelUtils::getTable($owner);
-        $assocTable = Pluf_ModelUtils::getAssocTable($owner, $tenant);
-        $owner->_a['views']['myView'] = array(
-            'select' => $owner->getSelect(),
-            'join' => 'LEFT JOIN ' . $assocTable . ' ON ' . $ownerTable . '.id=' . $assocTable . '.' . Pluf_ModelUtils::getAssocField($owner)
-        );
-        
+
+        $engine = $owner->getEngine();
+        $schema = $engine->getSchema();
+
+        $ownerTable = $schema->getTableName($owner);
+        $assocTable = $schema->getRelationTable($owner, $tenant);
+        $owner_fk = $schema->getAssocField($owner);
+
+        $owner->setView('myView', array(
+//             'select' => $owner->getSelect(),
+            'join' => 'LEFT JOIN ' . $assocTable . ' ON ' . $ownerTable . '.id=' . $assocTable . '.' . $owner_fk
+        ));
+
         $builder = new Pluf_Paginator_Builder($owner);
         return $builder->setWhereClause(new Pluf_SQL(Pluf_ModelUtils::getAssocField($tenant) . '=%s', array(
             $tenant->id
         )))
-        ->setView('myView')
-        ->setRequest($request)
-        ->build();
+            ->setView('myView')
+            ->setRequest($request)
+            ->build();
     }
-    
+
     public static function addOwner($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
@@ -270,9 +277,9 @@ class Tenant_Views extends Pluf_Views
         }
         $owner = Pluf_Shortcuts_GetObjectOr404('Tenant_Owner', $ownerId);
         $tenant->setAssoc($owner);
-        return $owner;   
+        return $owner;
     }
-    
+
     public static function removeOwner($request, $match)
     {
         $tenant = self::getSubTenant($match['tenantId'], $request->tenant->id);
@@ -285,5 +292,4 @@ class Tenant_Views extends Pluf_Views
         $tenant->delAssoc($owner);
         return $owner;
     }
-
 }

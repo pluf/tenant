@@ -38,13 +38,13 @@ class Tenant_Configuration extends Pluf_Model
 //         $this->_a['multitenant'] = false;
         $this->_a['cols'] = array(
             'id' => array(
-                'type' => 'Pluf_DB_Field_Sequence',
+                'type' => 'Sequence',
                 'blank' => true,
                 'editable' => false,
                 'readable' => true
             ),
             'key' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => false,
                 'unique' => true,
                 'size' => 250,
@@ -52,27 +52,27 @@ class Tenant_Configuration extends Pluf_Model
                 'readable' => true
             ),
             'value' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'description' => array(
-                'type' => 'Pluf_DB_Field_Varchar',
+                'type' => 'Varchar',
                 'is_null' => true,
                 'size' => 250,
                 'editable' => true,
                 'readable' => true
             ),
             'creation_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'editable' => false,
                 'readable' => true
             ),
             'modif_dtime' => array(
-                'type' => 'Pluf_DB_Field_Datetime',
+                'type' => 'Datetime',
                 'is_null' => true,
                 'editable' => false,
                 'readable' => true
@@ -80,7 +80,7 @@ class Tenant_Configuration extends Pluf_Model
 
 //             // Tenant properties
 //             'tenant' => array(
-//                 'type' => 'Pluf_DB_Field_Foreignkey',
+//                 'type' => 'Foreignkey',
 //                 'model' => 'Tenant_Tenant',
 //                 'is_null' => false,
 //                 'editable' => false,

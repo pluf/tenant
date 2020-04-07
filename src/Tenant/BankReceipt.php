@@ -43,7 +43,7 @@ class Tenant_BankReceipt extends Bank_Receipt
         // Change class type of backend foreingkey from Bank_Backend to Tenant_BankBackend
         $this->_a['cols'] = array_merge($this->_a['cols'], array(
             'backend_id' => array(
-                'type' => 'Pluf_DB_Field_Foreignkey',
+                'type' => 'Foreignkey',
                 'model' => 'Tenant_BankBackend',
                 'blank' => false,
                 'relate_name' => 'backend'

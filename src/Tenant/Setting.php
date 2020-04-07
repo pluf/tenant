@@ -56,7 +56,8 @@ class Tenant_Setting extends Pluf_Model
             'mode' => array(
                 'type' => 'Integer',
                 'is_null' => false,
-                'editable' => false
+                'editable' => false,
+                'default' => self::MOD_PUBLIC
             ),
             'key' => array(
                 'type' => 'Varchar',

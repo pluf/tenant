@@ -48,11 +48,11 @@ class Tenant_SPA extends Pluf_Model
         $this->_a['cols'] = array(
             'id' => array(
                 'type' => 'Sequence',
-                'blank' => true
+                'is_null' => false
             ),
             'state' => array(
                 'type' => 'Varchar',
-                'is_null' => false,
+                'is_null' => true,
                 'size' => 50,
                 'readable' => true,
                 'editable' => false
@@ -66,14 +66,14 @@ class Tenant_SPA extends Pluf_Model
             ),
             'version' => array(
                 'type' => 'Varchar',
-                'is_null' => false,
+                'is_null' => true,
                 'size' => 100,
                 'readable' => true,
                 'editable' => false
             ),
             'last_version' => array(
                 'type' => 'Varchar',
-                'is_nulls' => false,
+                'is_nulls' => true,
                 'size' => 100,
                 'readable' => true,
                 'editable' => false

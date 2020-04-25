@@ -1,22 +1,11 @@
 <?php
 
 /**
- * If the request points to a resource with get, then the resource is returned as
- * response.
+ * Returns a redirect response to the default SPA if requested path has not defined spa
  *
- * There is no need to check secureity access for a resource, this middleware check
- * the request and return the resource if the request is GET.
- * 
- * There are two types of resources:
- * 
- * - SPA resources
- * - User loaded resources
- * 
- * This middleware support both of them
- *
- * @author maso<mostafa.barmshory@dpq.co.ir>
+ * @author hadi<mohammad.hadi.mansouri@dpq.co.ir>
  */
-class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
+class Tenant_Middleware_DefaultSpaRedirect implements \Pluf\Middleware
 {
 
     function process_request(Pluf_HTTP_Request &$request)
@@ -29,6 +18,10 @@ class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
 
         if (! isset($viewPrefix) || strstr($request->query, $viewPrefix)) {
             return false;
+        }
+
+        if (strcmp($request->query, "/") == 0) {
+            return $this->redirectToDefaultSpa();
         }
 
         // First part of path
@@ -48,30 +41,23 @@ class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
         /*
          * SPA resource
          */
-        if (isset($spa)) { // If SPA is valid, so resource is blong to SPA
-            $path = $remainPart;
-            $resPath = $spa->getResourcePath($path);
-            if (! file_exists($resPath) || ! isset($remainPart) || strlen($remainPart) == 0) {
-                $resPath = $spa->getMainPagePath();
-                return new Tenant_HTTP_Response_SpaMain($resPath, Pluf_FileUtil::getMimeType($resPath), $firstPart);
-            } else {
-                return new Pluf_HTTP_Response_File($resPath, Pluf_FileUtil::getMimeType($resPath));
-            }
+        if (isset($spa)) { // SPA is valid
+            return false;
         }
 
         /*
          * Tenant resource
          */
-        // Requested resource is a tenant resource
+        // first part is not an SPA so use default SPA
         $path = isset($remainPart) && ! empty($remainPart) ? $firstPart . '/' . $remainPart : $firstPart;
         // find a resource
         $res = $this->findTenantResource('/' . $path);
         if (isset($res) && ! $res->isAnonymous()) {
-            $resPath = $res->getAbsloutPath();
-            return new Pluf_HTTP_Response_File($resPath, Pluf_FileUtil::getMimeType($resPath));
+            return false;
         } else {
-            throw new Pluf_HTTP_Error404("Resource not found (/" . $path . ")");
+            return $this->redirectToDefaultSpa($path);
         }
+        return false;
     }
 
     /**
@@ -94,6 +80,18 @@ class Tenant_Middleware_ResourceAccess implements \Pluf\Middleware
             return $item[0];
         }
         return null;
+    }
+
+    private function redirectToDefaultSpa($path = '')
+    {
+        // maso, 2020: find default spa
+        $name = Tenant_Service::setting('spa.default', 'wb');
+        $spa = Tenant_SPA::getSpaByName($name);
+        if (! isset($spa)) {
+            throw new \Pluf\Exception('No SPA found');
+        }
+        $path = '/' . $name . '/' . (isset($path) ? $path : '');
+        return new Pluf_HTTP_Response_Redirect($path, 302);
     }
 
     /**

@@ -100,9 +100,9 @@ class Tenant_Owner extends Pluf_Model
     public static function getOwner($login)
     {
         $model = new Tenant_Owner();
-        $where = 'login = ' . $model->_toDb($login, 'login');
+        $where = new Pluf_SQL('login = %s', $model->_toDb($login, 'login'));
         $users = $model->getList(array(
-            'filter' => $where
+            'filter' => $where->gen()
         ));
         if ($users === false or count($users) !== 1) {
             return false;

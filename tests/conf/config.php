@@ -21,6 +21,7 @@ $cfg['tmp_folder'] = '/tmp';
 $cfg['upload_path'] = '/tmp';
 $cfg['middleware_classes'] = array(
      '\Pluf\Middleware\Tenant',
+    'Tenant_Middleware_DefaultSpaRedirect',
     'Tenant_Middleware_ResourceAccess',
     '\Pluf\Middleware\Session',
     'User_Middleware_Session',

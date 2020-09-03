@@ -45,6 +45,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
         'Enable' => array(
             'checkUpdate' => array(
                 'next' => 'Enable',
+                'title' => 'Check Update',
                 'visible' => true,
                 'action' => array(
                     'Tenant_SPA_Manager_Simple',
@@ -57,6 +58,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
             ),
             'update' => array(
                 'next' => 'Enable',
+                'title' => 'Update',
                 'visible' => true,
                 'action' => array(
                     'Tenant_SPA_Manager_Simple',
@@ -71,8 +73,21 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
                 'next' => 'Enable',
                 'visible' => false
             ),
+            'setAsDefault' => array(
+                'next' => 'Enable',
+                'title' => 'Set as Default',
+                'visible' => true,
+                'action' => array(
+                    'Tenant_SPA_Manager_Simple',
+                    'setAsDefault'
+                ),
+                'preconditions' => array(
+                    'User_Precondition::isOwner'
+                )
+            ),
             'delete' => array(
                 'next' => 'Deleted',
+                'title' => 'Delete',
                 'visible' => true,
                 'action' => array(
                     'Tenant_SPA_Manager_Simple',
@@ -84,6 +99,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
             ),
             'disable' => array(
                 'next' => 'Disabled',
+                'title' => 'Disable',
                 'visible' => true,
                 'preconditions' => array(
                     'User_Precondition::isOwner'
@@ -93,6 +109,7 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
         'Disabled' => array(
             'enable' => array(
                 'next' => 'Enable',
+                'title' => 'Enable',
                 'visible' => true,
                 'preconditions' => array(
                     'User_Precondition::isOwner'
@@ -170,11 +187,12 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
     {
         // request param
         $backend = Pluf::f('tenant_spa_marketplace_backend', 'http://marketplace.viraweb123.ir');
+        $apiPrefix = Pluf::f('tenant_spa_marketplace_api_prefix', '/api/v2');
         $path = '/marketplace/spas/' . $object->name . '/file';
         $file = Pluf::f('temp_folder', '/tmp') . '/spa-' . rand();
         // Do request
         $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', $backend . $path, [
+        $response = $client->request('GET', $backend . $apiPrefix .$path, [
             'sink' => $file
         ]);
         return Tenant_SpaService::updateFromFile($object, $file, true);
@@ -204,6 +222,19 @@ class Tenant_SPA_Manager_Simple implements Tenant_SPA_Manager
     {
         $object->state = 'Enable';
         $object->update();
+        return $object;
+    }
+    
+    /**
+     * Sets a SPA as the default SPA of the tenant
+     *
+     * @param Pluf_HTTP_Request $request
+     * @param Tenant_SPA $object
+     * @return Tenant_SPA
+     */
+    public static function setAsDefault($request, $object)
+    {
+        Tenant_Service::setSetting('spa.default', $object->name);
         return $object;
     }
 }

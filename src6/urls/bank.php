@@ -54,7 +54,7 @@ return array( // ***************************************************************
         ),
         'params' => array(
             'model' => 'Bank_Receipt',
-            'sql' => new Pluf_SQL('owner_class="tenant-invoice"')
+            'sql' => 'owner_class="tenant-invoice"'
         )
     ),
     array( // Read

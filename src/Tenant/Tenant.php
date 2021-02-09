@@ -26,13 +26,14 @@ class Tenant_Tenant extends Pluf_Model
             ),
             'level' => array(
                 'type' => 'Integer',
-                'blank' => true,
-                'editable' => false
+                'is_null' => true,
+                'editable' => true
             ),
             'title' => array(
                 'type' => 'Varchar',
-                'blank' => true,
-                'size' => 100
+                'is_null' => true,
+                'size' => 100,
+                'editable' => true,
             ),
             'description' => array(
                 'type' => 'Varchar',
@@ -60,19 +61,19 @@ class Tenant_Tenant extends Pluf_Model
             'validate' => array(
                 'type' => 'Boolean',
                 'default' => false,
-                'blank' => true,
+                'is_null' => true,
                 'editable' => true
             ),
             'email' => array(
                 'type' => 'Email',
-                'blank' => true,
+                'is_null' => true,
                 'verbose' => 'Owner email',
                 'editable' => true,
                 'readable' => true
             ),
             'phone' => array(
                 'type' => 'Varchar',
-                'blank' => true,
+                'is_null' => true,
                 'verbose' => 'Owner phone',
                 'editable' => true,
                 'readable' => true

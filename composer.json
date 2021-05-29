@@ -1,6 +1,6 @@
 {
 	"name" : "pluf/tenant",
-	"version" : "6.0.21",
+	"version" : "6.0.22",
 	"description" : "A pluf module to manage current tenant",
 	"type" : "library",
 	"license" : "MIT",
